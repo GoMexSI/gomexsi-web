@@ -1,6 +1,8 @@
 gomexsi - TAMUCC..
 =======
 
+[![Build Status](https://travis-ci.org/jhpoelen/gomexsi.png)](https://travis-ci.org/jhpoelen/gomexsi)
+
 ## Running tests
 
 In order to make sure that our backend php connector is working as expecting, we're using travis-cli.org and phpunit.
