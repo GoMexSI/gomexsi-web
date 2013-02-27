@@ -2,8 +2,10 @@
 
 include 'TrophicService.php';
 
-class TrophicServiceREST implements TrophicService {
-    public function findPreyForPredator($predatorScientificName) {
+class TrophicServiceREST implements TrophicService 
+{
+    public function findPreyForPredator($predatorScientificName) 
+    {
         $url_prefix = 'http://46.4.36.142:8080/predator/';
         $url_suffix = '/listPrey';
         $url = $url_prefix . rawurlencode($predatorScientificName) . $url_suffix;
