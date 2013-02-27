@@ -1,6 +1,7 @@
 <?php
 
-interface TrophicService {
+interface TrophicService 
+{
     public function findPreyForPredator($predatorScientificName);
 }
 

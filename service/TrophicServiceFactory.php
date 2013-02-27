@@ -5,8 +5,10 @@ include 'TrophicServiceMock.php';
 
 class UnknownTrophicServiceTypeException extends Exception {}
 
-class TrophicServiceFactory {
-    public static function createServiceOfType($type) {
+class TrophicServiceFactory 
+{
+    public static function createServiceOfType($type) 
+    {
         $trophicService;
         switch ($type) {
             case 'REST':
@@ -20,7 +22,6 @@ class TrophicServiceFactory {
         }
         return $trophicService;
     }
-
 }
 
 ?>

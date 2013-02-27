@@ -2,9 +2,11 @@
 
 include 'service/TrophicServiceFactory.php';
 
-class TrophicServiceFactoryTest extends PHPUnit_Framework_TestCase {
+class TrophicServiceFactoryTest extends PHPUnit_Framework_TestCase 
+{
 
-    public function testValidTypes() {
+    public function testValidTypes() 
+    {
         TrophicServiceFactory::createServiceOfType('REST');
         TrophicServiceFactory::createServiceOfType('mock');
     }
@@ -12,7 +14,8 @@ class TrophicServiceFactoryTest extends PHPUnit_Framework_TestCase {
     /**
      * @expectedException UnknownTrophicServiceTypeException
      */
-    public function testFindPreyForPredatorUnknownType() {
+    public function testFindPreyForPredatorUnknownType() 
+    {
         TrophicServiceFactory::createServiceOfType('thisTypeIsNotSupported');
     }
 
