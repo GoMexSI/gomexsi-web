@@ -2,7 +2,7 @@
 
 // URL to which we should send query.
 //$target_url = 'http://46.4.36.142:8080/predator/Micropogonias%20undulatus/listPrey';
-$target_url = 'http://local.gomexsi.tamucc.edu/gomexsi/query-test-return.php';
+$target_url = 'http://gomexsi.tamucc.edu/gomexsi/query-test-return.php';
 
 
 
