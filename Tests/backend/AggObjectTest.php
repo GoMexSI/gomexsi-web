@@ -14,7 +14,20 @@ class AggObjectTest extends PHPUnit_Framework_TestCase
 
 		$response->subjects[] = $predScientificName;
 
-		$predOne = '{"scientificName":"Scomberomorus cavalla", "subjectInstances": [ { "scientificName" : "Synalpheus latastei" }, {"scientificName" : "Lutjanus jocu" } }';
+		$predOne = '{
+					    "scientificName": "Scomberomorus cavalla",
+					    "subjectInstances": {
+					        "prey": [
+					            {
+					                "scientificName": "Synalpheus latastei"
+					            },
+					            {
+					                "scientificName": "Lutjanus jocu"
+					            }
+					        ]
+					    }
+					}';
+
 		$expectedJSON = "[$predOne]";
 
 		$this->assertEquals($expectedJSON, $this->writeToJSON($response));
