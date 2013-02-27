@@ -15,12 +15,20 @@ class LogicalObjectDirector{
 	private $aggObject;
 	public function __construct(){
 		echo ": inside LogicalObjectDirector __constructer";
-		$this->dbInvoke = new DataBaseInvoker();
+		try
+		{
+			$this->dbInvoke = new DataBaseInvoker();
+		}
+		catch(Exception $e)
+		{
+			echo "Exception caught: " . $e . "\n" ;
+		}
+
 		$this->aggObject = new aggregateObject();
 	}
 
 
-	public function standAlonePredator($params)
+	public function standAlonePredator($params) # @todo pick a better, more readable name than params
 	{
 		$theSubject = new aSubject(); #create a new subject that will be part of aggObject
 
@@ -182,11 +190,14 @@ class DataBaseInvoker{
 
 	public $dbconnect;
 
+	/*
+		@todo Need to chagne this, need to remove sensitive information from the opensource code base
+	*/
 	public function __construct()
 	{
 		$this->dbconnect = pg_connect('host=owl1.tamucc.edu port=5432 dbname=gomexsi user=gomexsi password=6870Geek');
 		if(!$this->dbconnect){
-			echo "<h3>An error occured</h3>";
+			throw new Exception("Unable to connect");
 			exit;
 		}
 	}
