@@ -1,7 +1,6 @@
 <?php
 
 include 'RequestParser.php';
-include 'service/TrophicServiceFactory.php';
 
 $request = $_POST;
 
