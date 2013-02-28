@@ -2,7 +2,7 @@
 
 include 'RequestParser.php';
 include 'RequestJSONResponse.php';
-//include 'service/TrophicServiceFactory.php';
+include 'service/TrophicServiceFactory.php';
 
 $request = $_POST;
 
@@ -28,12 +28,12 @@ class RequestHandler
     	$parser = new RequestParser();
     	return $parser->parse($urlPost);
     }
-/*    public function getTrophicService()
+    public function getTrophicService()
     {
     	$serviceFactory = new TrophicServiceFactory();
     	$trophicService = $serviceFactory->createServiceOfType('mock');
     	return $trophicService;
-    }*/
+    }
 /*    public function creatJSONResponse()
     {
         $jsonConverter = new RequestJSONResponse();
