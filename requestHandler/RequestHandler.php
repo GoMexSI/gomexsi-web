@@ -1,6 +1,7 @@
 <?php
 
 include 'RequestParser.php';
+include 'RequestJSONResponse.php';
 
 $request = $_POST;
 
@@ -19,6 +20,7 @@ class RequestHandler
     {
     	$this->parsePOST($urlPost); #Parse Post
     	$this->getTrophicService();
+        $this->creatJSONResponse();
     }
     public function parsePOST($urlPost)
     {
@@ -33,7 +35,9 @@ class RequestHandler
     }
     public function creatJSONResponse()
     {
-
+        $jsonConverter = new RequestJSONResponse();
+        $jsonString = $jsonConverter->RequestJSONResponse("");
+        #send post to Reeds code here
     }
 }
 

@@ -26,8 +26,27 @@ class RequestHandlerTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals($trophicService[$iterator], $value);
 			$iterator++;
 		}
-		
+	}
+	public function testCreatJSONResponse()
+	{
+		$jsonTestString = '[
+							    {
+							        "scientificName": "Scomberomorus cavalla",
+							        "subjectInstances": {
+							            "prey": [
+							                {
+							                    "scientificName": "Synalpheus latastei"
+							                },
+							                {
+							                    "scientificName": "Lutjanus jocu"
+							                }
+							            ]
+							        }
+							    }
+							]';
 
+		$jsonObject = $this->handler->creatJSONResponse('');
+		$this->assertEquals($jsonTestString, $jsonObject);
 	}
 }
 ?>
