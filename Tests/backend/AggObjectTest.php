@@ -1,6 +1,6 @@
 <?php
 
-include 'backend/AggObject.php';
+include 'backend/aggObject.php';
 
 class AggObjectTest extends PHPUnit_Framework_TestCase
 {
