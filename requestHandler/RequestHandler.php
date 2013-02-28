@@ -18,7 +18,7 @@ class RequestHandler
     public function requestHandlerDriver($urlPost)
     {
     	$this->parsePOST($urlPost); #Parse Post
-    	//$this->getTrophicService();
+    	$this->getTrophicService();
     }
     public function parsePOST($urlPost)
     {
