@@ -35,7 +35,19 @@ class AggObjectTest extends PHPUnit_Framework_TestCase
 
 	public function writeToJSON($response)
 	{
-		return "";
+		return '[{
+					    "scientificName": "Scomberomorus cavalla",
+					    "subjectInstances": {
+					        "prey": [
+					            {
+					                "scientificName": "Synalpheus latastei"
+					            },
+					            {
+					                "scientificName": "Lutjanus jocu"
+					            }
+					        ]
+					    }
+					}]';
 	}
 }
 ?>

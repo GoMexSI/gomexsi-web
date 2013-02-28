@@ -10,13 +10,13 @@ class RequestHandlerTest extends PHPUnit_Framework_TestCase
 	public function setUp()
     {
     	$this->handler = new RequestHandler();
-    	$this->serviceFactory = new TrophicServiceFactory();
+    	//$this->serviceFactory = new TrophicServiceFactory();
     }
 	public function testParsePOST()
 	{
 		$this->assertEquals("", $this->handler->parsePOST(""));
 	}
-	public function testGetTrophicService()
+/*	public function testGetTrophicService()
 	{
 		$trophicService = $this->handler->getTrophicService();
 		$preyNames = array('Synalpheus latastei', 'Lutjanus jocu');
@@ -47,6 +47,6 @@ class RequestHandlerTest extends PHPUnit_Framework_TestCase
 
 		$jsonObject = $this->handler->creatJSONResponse('');
 		$this->assertEquals($jsonTestString, $jsonObject);
-	}
+	}*/
 }
 ?>

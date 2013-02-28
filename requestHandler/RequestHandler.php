@@ -2,6 +2,7 @@
 
 include 'RequestParser.php';
 include 'RequestJSONResponse.php';
+//include 'service/TrophicServiceFactory.php';
 
 $request = $_POST;
 
@@ -19,26 +20,26 @@ class RequestHandler
     public function requestHandlerDriver($urlPost)
     {
     	$this->parsePOST($urlPost); #Parse Post
-    	$this->getTrophicService();
-        $this->creatJSONResponse();
+    	//$this->getTrophicService();
+        //$this->creatJSONResponse();
     }
     public function parsePOST($urlPost)
     {
     	$parser = new RequestParser();
     	return $parser->parse($urlPost);
     }
-    public function getTrophicService()
+/*    public function getTrophicService()
     {
     	$serviceFactory = new TrophicServiceFactory();
     	$trophicService = $serviceFactory->createServiceOfType('mock');
     	return $trophicService;
-    }
-    public function creatJSONResponse()
+    }*/
+/*    public function creatJSONResponse()
     {
         $jsonConverter = new RequestJSONResponse();
-        $jsonString = $jsonConverter->RequestJSONResponse("");
+        $jsonString = $jsonConverter->convertToJSONObject("");
         #send post to Reeds code here
-    }
+    }*/
 }
 
 ?>
