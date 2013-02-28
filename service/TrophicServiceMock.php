@@ -4,8 +4,12 @@ class TrophicServiceMock implements TrophicService
 {
     public function findPreyForPredator($predatorScientificName) 
     {
-        $preyNames = array('Synalpheus latastei', 'Lutjanus jocu');
-        return $preyNames;
+        return array('Synalpheus latastei', 'Lutjanus jocu');
+    }
+
+    public function findPredatorForPrey($preyScientificName)
+    {
+    	return array('Ariopsis felis', 'Scomberomorus cavalla');
     }
 }
 

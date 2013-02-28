@@ -6,10 +6,17 @@ class TrophicServiceREST implements TrophicService
 {
     public function findPreyForPredator($predatorScientificName) 
     {
-        $url_prefix = 'http://46.4.36.142:8080/predator/';
-        $url_suffix = '/listPrey';
-        $url = $url_prefix . rawurlencode($predatorScientificName) . $url_suffix;
-    
+        return $this->query('predator', $predatorScientificName, 'listPrey');
+    }
+
+    public function findPredatorForPrey($preyScientificName)
+    {
+        return $this->query('prey', $preyScientificName, 'listPredators');
+    }
+
+    private function query($method, $name, $operation) {
+        $url_prefix = 'http://46.4.36.142:8080/' . $method . '/';
+        $url = $url_prefix . rawurlencode($name) . '/' . $operation;
         $response = file_get_contents($url);
         $response = json_decode($response);
         $columns = $response->{'columns'};
@@ -22,6 +29,8 @@ class TrophicServiceREST implements TrophicService
         }
         return $preyNames;
     }
+
+    
 }
 
 ?>
