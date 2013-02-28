@@ -27,26 +27,13 @@ class RequestHandlerTest extends PHPUnit_Framework_TestCase
 			$iterator++;
 		}
 	}
-/*	public function testCreatJSONResponse()
+	public function testCreatJSONResponse()
 	{
-		$jsonTestString = '[
-							    {
-							        "scientificName": "Scomberomorus cavalla",
-							        "subjectInstances": {
-							            "prey": [
-							                {
-							                    "scientificName": "Synalpheus latastei"
-							                },
-							                {
-							                    "scientificName": "Lutjanus jocu"
-							                }
-							            ]
-							        }
-							    }
-							]';
+		$jsonTestString = '[{"scientificName": "Scomberomorus cavalla", "subjectInstances": {"prey": [{"scientificName": "Synalpheus latastei"}, {"scientificName": "Lutjanus jocu"}]}}]';
+		// http://jsonlint.com/ will format this for anyone who wants to look at it in a more readable structure 
 
 		$jsonObject = $this->handler->creatJSONResponse('');
 		$this->assertEquals($jsonTestString, $jsonObject);
-	}*/
+	}
 }
 ?>
