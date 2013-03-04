@@ -1,6 +1,6 @@
 <?php
 
-include 'service/TrophicServiceFactory.php';
+require_once 'service/TrophicServiceFactory.php';
 
 class TrophicServiceFactoryTest extends PHPUnit_Framework_TestCase 
 {

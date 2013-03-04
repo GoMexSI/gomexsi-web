@@ -1,6 +1,6 @@
 <?php
 
-include 'backend/HelloWorld.php';
+require_once 'backend/HelloWorld.php';
 
 class HelloWorldTest extends PHPUnit_Framework_TestCase
 {
