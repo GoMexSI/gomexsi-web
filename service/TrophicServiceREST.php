@@ -1,6 +1,6 @@
 <?php
 
-include 'TrophicService.php';
+require_once 'TrophicService.php';
 
 class TrophicServiceREST implements TrophicService 
 {

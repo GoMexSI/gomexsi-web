@@ -1,7 +1,7 @@
 <?php
 
-include 'TrophicServiceREST.php';
-include 'TrophicServiceMock.php';
+require_once 'TrophicServiceREST.php';
+require_once 'TrophicServiceMock.php';
 
 class UnknownTrophicServiceTypeException extends Exception {}
 

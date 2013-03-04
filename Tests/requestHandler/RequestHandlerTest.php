@@ -1,6 +1,6 @@
 <?php
 
-include 'requestHandler/RequestHandler.php';
+require_once 'requestHandler/RequestHandler.php';
 
 class RequestHandlerTest extends PHPUnit_Framework_TestCase
 {

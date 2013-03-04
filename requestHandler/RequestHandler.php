@@ -1,8 +1,8 @@
 <?php
 
-include 'RequestParser.php';
-include 'RequestJSONResponse.php';
-//include 'service/TrophicServiceFactory.php';
+require_once 'RequestParser.php';
+require_once 'RequestJSONResponse.php';
+require_once 'service/TrophicServiceFactory.php'; 
 
 $request = $_POST;
 
@@ -12,6 +12,7 @@ $handler->requestHandlerDriver($request);
 
 class RequestHandler
 {
+    private $serviceType; # 'mock', 'REST'
 
 	public function __construct()
     {
@@ -20,8 +21,8 @@ class RequestHandler
     public function requestHandlerDriver($urlPost)
     {
     	$this->parsePOST($urlPost); #Parse Post
-    	//$this->getTrophicService();
-        //$this->creatJSONResponse();
+    	$this->getTrophicService();
+        $this->creatJSONResponse();
     }
     public function parsePOST($urlPost)
     {
