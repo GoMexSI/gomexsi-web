@@ -14,11 +14,15 @@ class TrophicServiceFactory
             case 'REST':
                 $trophicService = new TrophicServiceREST;
                 break;
+
             case 'mock':
                 $trophicService = new TrophicServiceMock;
                 break;
+
             default: 
-                throw new UnknownTrophicServiceTypeException('type [' . $type . '] not supported');    
+                throw new UnknownTrophicServiceTypeException('type [' . $type . '] not supported');
+                break;
+                
         }
         return $trophicService;
     }

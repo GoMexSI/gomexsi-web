@@ -7,6 +7,13 @@ class RequestParser
 	{
 		return "";
 	}
+	public function determineSearchType($toParse)
+	{
+		#usecase number one - findPreyForPredator
+		if(!empty($toParse['predName']) && empty($toParse['preyName'])){
+			return 'findPreyForPredator';
+		}
+	}
 }
 
 ?>
