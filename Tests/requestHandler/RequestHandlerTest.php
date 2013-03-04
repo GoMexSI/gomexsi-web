@@ -5,12 +5,10 @@ require_once 'requestHandler/RequestHandler.php';
 class RequestHandlerTest extends PHPUnit_Framework_TestCase
 {
 	private $handler;
-	private $serviceFactory;
 
 	public function setUp()
     {
     	$this->handler = new RequestHandler();
-    	//$this->serviceFactory = new TrophicServiceFactory();
     }
 	public function testParsePOST()
 	{

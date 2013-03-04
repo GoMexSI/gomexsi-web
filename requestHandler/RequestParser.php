@@ -1,5 +1,6 @@
 <?php
 
+class CorruptSearchTypeParameterException extends Exception {}
 
 class RequestParser
 {
@@ -9,9 +10,12 @@ class RequestParser
 	}
 	public function determineSearchType($toParse)
 	{
-		#usecase number one - findPreyForPredator
-		if(!empty($toParse['predName']) && empty($toParse['preyName'])){
-			return 'findPreyForPredator';
+		if(!empty($toParse['predName']) && empty($toParse['preyName'])) {
+			return 'findPreyForPredator'; #usecase number one
+		} elseif(!empty($toParse['preyName']) && empty($toParse['predName'])) {
+			return 'findPreyForPredator'; #usecase number two
+		}else{
+			throw new CorruptSearchTypeParameterException('Search Type could not be determined based on parameters given');
 		}
 	}
 }
