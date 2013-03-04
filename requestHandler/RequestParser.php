@@ -13,7 +13,7 @@ class RequestParser
 		if(!empty($toParse['predName']) && empty($toParse['preyName'])) {
 			return 'findPreyForPredator'; #usecase number one
 		} elseif(!empty($toParse['preyName']) && empty($toParse['predName'])) {
-			return 'findPreyForPredator'; #usecase number two
+			return 'findPredatorForPrey'; #usecase number two
 		}else{
 			throw new CorruptSearchTypeParameterException('Search Type could not be determined based on parameters given');
 		}

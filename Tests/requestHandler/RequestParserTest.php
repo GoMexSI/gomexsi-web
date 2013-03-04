@@ -10,6 +10,14 @@ class RequestParserTest extends PHPUnit_Framework_TestCase
     {
     	$this->requestParse = new RequestParser();
     }
+    public function testDetermineSearchType()
+    {
+		$toParseA = array('predName' => 'Scomberomorus cavalla');
+		$this->assertEquals('findPreyForPredator', $this->requestParse->determineSearchType($toParseA));
+
+		$toParseB = array('preyName' => 'Scomberomorus cavalla');
+		$this->assertEquals('findPredatorForPrey',  $this->requestParse->determineSearchType($toParseB));
+    }
 	public function testParse()
 	{
 		$toParseA = array('predName' => 'Scomberomorus cavalla');
