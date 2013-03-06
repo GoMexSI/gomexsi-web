@@ -4,10 +4,10 @@ require_once 'RequestParser.php';
 require_once 'RequestJSONResponse.php';
 require_once 'service/TrophicServiceFactory.php'; 
 
-$request = $_POST;
+/*$request = $_POST;
 
 $handler = new RequestHandler();
-$handler->requestHandlerDriver($request);
+$handler->requestHandlerDriver($request);*/
 
 class RequestHandler
 {
@@ -44,13 +44,13 @@ class RequestHandler
     {
     	$serviceFactory = new TrophicServiceFactory();
     	$this->trophicService = $serviceFactory->createServiceOfType($this->serviceType);
-    	return $trophicService;
+    	return $this->trophicService;
     }
     public function creatJSONResponse()
     {
         $jsonConverter = new RequestJSONResponse();
 
-        switch ($searchType) {
+        switch ($this->searchType) {
             case 'findPreyForPredator':
                 $phpServiceObject = $this->trophicService->findPreyForPredator($this->predatorName);
                 break;
@@ -60,7 +60,7 @@ class RequestHandler
                 break;
 
             default:
-                throw new CorruptSearchTypeParameterException('Search Type [' . $searchType . '] not supported, JSON object abandoned');
+                throw new CorruptSearchTypeParameterException('Search Type [' . $this->searchType . '] not supported, JSON object abandoned');
                 break;
         }
 

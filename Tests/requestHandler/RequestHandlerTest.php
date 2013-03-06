@@ -1,8 +1,8 @@
 <?php
 
-//require_once 'requestHandler/RequestHandler.php';
+require_once 'requestHandler/RequestHandler.php';
 
-/*class RequestHandlerTest extends PHPUnit_Framework_TestCase
+class RequestHandlerTest extends PHPUnit_Framework_TestCase
 {
 	private $handler;
 
@@ -15,8 +15,11 @@
 		$mockURL = array("serviceType" => "mock", "predName" => "Scomberomorus cavalla");
 		$this->assertEquals("", $this->handler->parsePOST($mockURL));
 	}
-	public function testGetTrophicService()
+	public function testGetTrophicServiceMock()
 	{
+		$mockURL = array("serviceType" => "mock", "predName" => "Scomberomorus cavalla");
+		$this->handler->parsePOST($mockURL);
+
 		$trophicService = $this->handler->getTrophicService();
 		$preyNames = array("Synalpheus latastei", "Lutjanus jocu");
 
@@ -26,13 +29,17 @@
 			$iterator++;
 		}
 	}
-	public function testCreatJSONResponse()
+	public function testCreatJSONResponseMock()
 	{
+		$mockURL = array("serviceType" => "mock", "predName" => "Scomberomorus cavalla");
+		$this->handler->parsePOST($mockURL);
+		$this->handler->getTrophicService();
+
 		$jsonTestString = '[{"scientificName": "Scomberomorus cavalla", "subjectInstances": {"prey": [{"scientificName": "Synalpheus latastei"}, {"scientificName": "Lutjanus jocu"}]}}]';
 		// http://jsonlint.com/ will format this for anyone who wants to look at it in a more readable structure 
 
 		$jsonObject = $this->handler->creatJSONResponse('');
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
-}*/
+}
 ?>
