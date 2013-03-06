@@ -1,12 +1,12 @@
 <?php
 
-require_once 'requestHandler/RequestHandler.php';
+//require_once 'requestHandler/RequestHandler.php';
 
-class RequestHandlerTest extends PHPUnit_Framework_TestCase
+/*class RequestHandlerTest extends PHPUnit_Framework_TestCase
 {
 	private $handler;
 
-/*	public function setUp()
+	public function setUp()
     {
     	$this->handler = new RequestHandler();
     }
@@ -14,8 +14,8 @@ class RequestHandlerTest extends PHPUnit_Framework_TestCase
 	{
 		$mockURL = array("serviceType" => "mock", "predName" => "Scomberomorus cavalla");
 		$this->assertEquals("", $this->handler->parsePOST($mockURL));
-	}*/
-/*	public function testGetTrophicService()
+	}
+	public function testGetTrophicService()
 	{
 		$trophicService = $this->handler->getTrophicService();
 		$preyNames = array("Synalpheus latastei", "Lutjanus jocu");
@@ -33,6 +33,6 @@ class RequestHandlerTest extends PHPUnit_Framework_TestCase
 
 		$jsonObject = $this->handler->creatJSONResponse('');
 		$this->assertEquals($jsonTestString, $jsonObject);
-	}*/
-}
+	}
+}*/
 ?>

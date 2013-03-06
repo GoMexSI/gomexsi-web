@@ -11,16 +11,6 @@ class RequestParser
 
 	public function parse($toParse)
 	{
-
-
-		if(array_key_exists('predName', $toParse)){
-			return "9";
-		}
-		else{
-			return "FALSE";
-		}
-
-
 		$this->determineServiceType($toParse);
 		$this->determineSearchType($toParse);
 		return "";
@@ -34,7 +24,7 @@ class RequestParser
 			$this->searchType = 'findPredatorForPrey'; #usecase number two
 			$this->preyName = $toParse['preyName'];
 		}else{
-			throw new CorruptSearchTypeParameterException('Search Type could not be determined based on parameters given: ' . $toParse['predName']);
+			throw new CorruptSearchTypeParameterException('Search Type could not be determined based on parameters given');
 		}
 
 		return $this->searchType;
