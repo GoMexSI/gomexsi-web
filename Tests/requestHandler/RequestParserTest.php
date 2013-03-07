@@ -5,34 +5,37 @@ require_once 'requestHandler/RequestParser.php';
 class RequestParserTest extends PHPUnit_Framework_TestCase
 {
 	private $requestParse;
+	private $predParse;
+	private $preyParse;
 
 	public function setUp()
     {
     	$this->requestParse = new RequestParser();
+    	$this->predParse = array('predName' => 'Scomberomorus cavalla');
+    	$this->preyParse = array('preyName' => 'Scomberomorus cavalla');
     }
+    public function testParse()
+	{
+		$this->assertEquals($this->requestParse->parse($this->predParse), "");
+		$this->assertEquals($this->requestParse->parse($this->preyParse), "");
+	}
     public function testDetermineSearchType()
     {
-		$toParseA = array('predName' => 'Scomberomorus cavalla');
-		$this->assertEquals('findPreyForPredator', $this->requestParse->determineSearchType($toParseA));
+		$this->requestParse->parse($this->predParse);
+		$this->assertEquals('findPreyForPredator', $this->requestParse->getSearchType());
 
-		$toParseB = array('preyName' => 'Scomberomorus cavalla');
-		$this->assertEquals('findPredatorForPrey',  $this->requestParse->determineSearchType($toParseB));
+		$this->requestParse->parse($this->preyParse);
+		$this->assertEquals('findPredatorForPrey',  $this->requestParse->getSearchType());
     }
-	public function testParse()
-	{
-		$toParseA = array('predName' => 'Scomberomorus cavalla');
-		$this->assertEquals($this->requestParse->parse($toParseA), "");
 
-		$toParseB = array('preyName' => 'Scomberomorus cavalla');
-		$this->assertEquals($this->requestParse->parse($toParseB), "");
-	}
     /**
      * @expectedException CorruptSearchTypeParameterException
      */
 	public function testCorruptSearchTypeParameters()
 	{
 		$badURL = array('nonValidKey' => '', );
-		$this->requestParse->determineSearchType($badURL);
+		$this->requestParse->parse($badURL);
+		$this->requestParse->getSearchType();
 	}
 	
 }

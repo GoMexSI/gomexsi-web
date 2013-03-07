@@ -15,7 +15,7 @@ class RequestParser
 		$this->determineSearchType($toParse);
 		return "";
 	}
-	public function determineSearchType($toParse)
+	private function determineSearchType($toParse)
 	{
 		if(!empty($toParse['predName']) && empty($toParse['preyName'])) {
 			$this->searchType = 'findPreyForPredator'; #usecase number one
@@ -29,7 +29,7 @@ class RequestParser
 
 		return $this->searchType;
 	}
-	public function determineServiceType($toParse)
+	private function determineServiceType($toParse)
 	{
 		if(!empty($toParse['serviceType'])){
 			$this->serviceType = $toParse['serviceType'];

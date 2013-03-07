@@ -66,7 +66,8 @@ class RequestHandler
 
         $jsonString = $jsonConverter->convertToJSONObject($phpServiceObject);
         return $jsonString;
-        #send post to Reeds code here
+        echo $jsonString;
+        echo $this->searchType;
     }
 }
 
