@@ -1,0 +1,1 @@
+<div class="copyright">&copy;<?php echo date('Y'); ?> Center for Coastal Studies. All Rights Reserved. <a href="http://www.tamucc.edu/about/privacy.html" target="_blank">TAMUCC Privacy Policy</a>.</div>
