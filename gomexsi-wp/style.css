@@ -193,6 +193,12 @@ body.search #content article.page {
 	padding-bottom: 1em;
 }
 
+.entry-content.no-left-margin {
+	margin-left: 0;
+	padding-left: 0;
+	border-left: 0;
+}
+
 .entry-footer {
 	padding-top: 1em;
 	padding-bottom: 1em;

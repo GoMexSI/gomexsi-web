@@ -3,16 +3,18 @@
    ========================================================================== */
 
 jQuery(document).ready(function($) {
-	$('a#login-link').click(function(e){
+	$('a#login-link, a.login-link').click(function(e){
 		e.preventDefault();
 		$('#registrationform').hide(250);
 		$('#loginform').toggle(250);
+		$('#loginform input#user_login').focus();
 	});
 
-	$('#registration-link a').click(function(e){
+	$('#registration-link a, a.registration-link').click(function(e){
 		e.preventDefault();
 		$('#loginform').hide(250);
 		$('#registrationform').toggle(250);
+		$('#registrationform input#user_login').focus();
 	});
 	
 	$('form#registrationform').submit(function(e){
@@ -79,4 +81,34 @@ jQuery(document).ready(function($) {
 			}
 		);
 	});
+	
+	if($('body.page-template-data-query-php').length){
+		// Data query form submit action.
+		$('form#test-form').submit(function(e){
+		
+			// Prevent actual form submission.  We'll do this with AJAX.
+			e.preventDefault();
+			
+			$.post(
+				Ajax.url,
+				{
+					action: 'rhm_data_query',
+					species : $('input#species').val()
+				},
+				function(data, textStatus, jqXHR){
+					$('#status').html(textStatus);
+					$('#results').html(data);
+				}
+			).fail(function(jqXHR, textStatus, errorThrown){
+				$('#status').html(textStatus);
+				$('#results').html('');
+			});
+		});
+		
+		// Clear results.
+		$('a#clear').click(function(e){
+			e.preventDefault();
+			$('#results').html('');
+		});
+	}
 });

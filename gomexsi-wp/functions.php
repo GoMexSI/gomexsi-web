@@ -14,9 +14,13 @@ function rhm_child_theme_setup(){
 
 	// Ajax login action.
 	add_action( 'wp_ajax_nopriv_rhm_ajax_login', 'rhm_ajax_login' );
+
+	// Ajax data query.
+	add_action( 'wp_ajax_nopriv_rhm_data_query', 'rhm_data_query' );
+	add_action( 'wp_ajax_rhm_data_query', 'rhm_data_query' );
 }
 
-
+// Comments off by default for pages (but not posts).
 function rhm_override_comment_default($post_content, $post){
 	if($post->post_type)
 	switch($post->post_type){
@@ -27,7 +31,8 @@ function rhm_override_comment_default($post_content, $post){
 	return $post_content;
 }
 
-
+// Handles user authentication.
+// Javascript will display error or refresh the page if this returns successfully.
 function rhm_ajax_login(){
 	$user = wp_signon();
 	if(is_wp_error($user)){
@@ -39,14 +44,8 @@ function rhm_ajax_login(){
 	}
 }
 
-/**
- * Based on function in wp-login.php
- * Handles registering a new user.
- *
- * @param string $user_login User's username for logging in
- * @param string $user_email User's email address to send password and add
- * @return int|WP_Error Either user's ID or error on failure.
- */
+// Handles registering a new user.
+// Based on function in wp-login.php.
 function rhm_ajax_register(){
 	$user_login = '';
 	$user_email = '';
@@ -102,4 +101,9 @@ function rhm_ajax_register(){
 	echo '<strong>Success!</strong> Your registration is complete. A randomly-generated password has been emailed to you.';
 	
 	die();
+}
+
+// Handle data query.
+function rhm_data_query(){
+	include 'data-query-logic.php';
 }
