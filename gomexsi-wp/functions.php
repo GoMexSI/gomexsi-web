@@ -49,8 +49,12 @@ function rhm_ajax_login(){
 
 // Logout redirect to home page.
 function rhm_logout_redirect($logouturl, $redirect){
-	$redirect = get_option('siteurl');
-	return $logouturl . '&amp;redirect_to=' . urlencode($redirect);
+	if(is_admin()){
+		$redirect = get_option('siteurl');
+		return $logouturl . '&amp;redirect_to=' . urlencode($redirect);
+	} else {
+		return $logouturl;
+	}
 }
 
 // Handles registering a new user.
