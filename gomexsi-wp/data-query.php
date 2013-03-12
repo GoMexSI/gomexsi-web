@@ -23,11 +23,11 @@
 						
 						<h2>Query Form</h2>
 						
-						<form action="<?php echo $target_url; ?>" id="test-form">
+						<form action="" id="data-query">
 							<label>Species Name:
 								<input type="text" id="species" />
 							</label>
-							<input type="submit" value="Query" /> <span id="satus"></span>
+							<input type="submit" value="Query" /> <span id="status"></span>
 						</form>
 						
 						<hr style="margin: 2em 0;" />
