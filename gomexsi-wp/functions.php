@@ -18,6 +18,9 @@ function rhm_child_theme_setup(){
 	// Ajax data query.
 	add_action( 'wp_ajax_nopriv_rhm_data_query', 'rhm_data_query' );
 	add_action( 'wp_ajax_rhm_data_query', 'rhm_data_query' );
+	
+	// Redirect to home page after logging out.
+	add_filter('logout_url', 'rhm_logout_redirect', 10, 2);
 }
 
 // Comments off by default for pages (but not posts).
@@ -42,6 +45,12 @@ function rhm_ajax_login(){
 		echo '<strong>Success!</strong> Logging in...';
 		die();
 	}
+}
+
+// Logout redirect to home page.
+function rhm_logout_redirect($logouturl, $redirect){
+	$redirect = get_option('siteurl');
+	return $logouturl . '&amp;redirect_to=' . urlencode($redirect);
 }
 
 // Handles registering a new user.
