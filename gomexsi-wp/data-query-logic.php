@@ -4,10 +4,16 @@
 
 // Target URL, which will give the results.
 $url = 'http://gomexsi.tamucc.edu/gomexsi/query-test-return.php';
+//$url = 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php';
 
 // Build the query for POST.
 $query = array();
-$query['species'] = $_POST['species'];
+foreach($_POST as $key => $value){
+	// Ignore the 'action' parameter. It was used by WordPress earlier and is not needed downstream.
+	if($key != 'action'){
+		$query[$key] = $value;
+	}
+}
 
 // POST array to string.
 $query_string = http_build_query($query);

@@ -24,10 +24,30 @@
 						<h2>Query Form</h2>
 						
 						<form action="" id="data-query">
-							<label>Species Name:
-								<input type="text" id="species" />
-							</label>
-							<input type="submit" value="Query" /> <span id="status"></span>
+							<p>
+								<label>Predator Name:
+									<input type="text" class="query-var" name="predName" />
+								</label>
+							</p>
+							
+							<p>
+								<label>Prey Name:
+									<input type="text" class="query-var" name="preyName" />
+								</label>
+							</p>
+							
+							<p>
+								<label>Service Type:
+									<select class="query-var" name="serviceType">
+										<option value="static">Static</option>
+										<option value="rest">REST</option>
+										<option value="">Live</option>
+									</select>
+								</label>
+							</p>
+							
+
+							<p><input type="submit" value="Query" /> <span id="status"></span></p>
 						</form>
 						
 						<hr style="margin: 2em 0;" />

@@ -13,18 +13,29 @@ jQuery(document).ready(function($) {
 			// Prevent actual form submission.  We'll do this with AJAX.
 			e.preventDefault();
 			
+			// Clear the status container.
+			$('#status').html('');
+			
+			// The query object that we'll submit via POST.
+			var queryObj = {};
+			
+			// The "action" tells WordPress what to run.  Defined in functions.php.
+			queryObj.action = 'rhm_data_query';
+			
+			// Loop through the form elements that have the class "query-var".
+			$('form#data-query .query-var').each(function(){
+				// Use the name attribute as the key and the value as the value.
+				queryObj[$(this).attr('name')] = $(this).val();
+			});
+			
 			// POST to the WordPress Ajax system.
 			$.post(
 				
 				// URL to the WordPress Ajax system.
 				'/wp-admin/admin-ajax.php',
-				{
-					// Tell WordPress which action to run. Defined in functions.php.
-					action: 'rhm_data_query',
-					
-					// Get value from form.
-					species : $('input#species').val()
-				},
+				
+				// The object containing the POST data.
+				queryObj,
 				
 				// Success callback function.
 				function(data, textStatus, jqXHR){
