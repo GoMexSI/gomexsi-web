@@ -1,5 +1,4 @@
 <?php
-
 require_once 'TrophicService.php';
 
 class TrophicServiceREST implements TrophicService 
@@ -32,5 +31,12 @@ class TrophicServiceREST implements TrophicService
 
     
 }
+
+/*$test = new TrophicServiceREST();
+$results = $test->findPreyForPredator("Caranx hippos");
+
+foreach ($results as $value) {
+    echo $value . "\n";
+}*/
 
 ?>

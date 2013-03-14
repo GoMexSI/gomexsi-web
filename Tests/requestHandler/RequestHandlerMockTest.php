@@ -2,7 +2,7 @@
 
 require_once 'requestHandler/RequestHandler.php';
 
-class RequestHandlerTest extends PHPUnit_Framework_TestCase
+class RequestHandlerMockTest extends PHPUnit_Framework_TestCase
 {
 	private $handler;
 
@@ -14,15 +14,20 @@ class RequestHandlerTest extends PHPUnit_Framework_TestCase
     //Test for Use case One
 	public function testGetTrophicServiceMockFindPreyForPredator()
 	{
+		$trophicResultString = array();
+		$expectedPreyNames = array("Synalpheus latastei", "Lutjanus jocu");
+
     	$mockURL = array("serviceType" => "mock", "predName" => "Scomberomorus cavalla");
     	$this->handler->parsePOST($mockURL);
 
 		$trophicService = $this->handler->getTrophicService();
-		$preyNames = array("Synalpheus latastei", "Lutjanus jocu");
+		$trophicResultString = $trophicService->findPreyForPredator("Scomberomorus cavalla");
+		
+		$this->assertEquals(count($expectedPreyNames), count($trophicResultString));
 
 		$iterator = 0;
-		foreach ($trophicService as $value) {
-			$this->assertEquals($value, $preyNames[$iterator]);
+		foreach ($trophicResultString as $value) {
+			$this->assertEquals($value, $expectedPreyNames[$iterator]);
 			$iterator++;
 		}
 	}
@@ -43,15 +48,21 @@ class RequestHandlerTest extends PHPUnit_Framework_TestCase
 	//Test for Use case Two
 	public function testGetTrophicServiceMockFindPredatorForPrey()
 	{
+
+		$trophicResultString = array();
+		$expectedPredNames =array("Ariopsis felis", "Scomberomorus cavalla");
+
     	$mockURL = array("serviceType" => "mock", "preyName" => "Mugil cephalus");
     	$this->handler->parsePOST($mockURL);
 
 		$trophicService = $this->handler->getTrophicService();
-		$predNames = array("Ariopsis felis", "Scomberomorus cavalla");
+		$trophicResultString = $trophicService->findPredatorForPrey("Mugil cephalus");
+		
+		$this->assertEquals(count($expectedPredNames), count($trophicResultString));
 
-		$iterator= 0;
-		foreach ($trophicService as $value) {
-			$this->assertEquals($value, $predNames[$iterator]);
+		$iterator = 0;
+		foreach ($trophicResultString as $value) {
+			$this->assertEquals($value, $expectedPredNames[$iterator]);
 			$iterator++;
 		}
 	}

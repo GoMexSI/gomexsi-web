@@ -52,17 +52,19 @@ class RequestHandler
         switch ($this->searchType) {
             case 'findPreyForPredator':
                 $phpServiceObject = $this->trophicService->findPreyForPredator($this->predatorName);
+                $speciesSubject = $this->predatorName;
                 break;
 
             case 'findPredatorForPrey':
                 $phpServiceObject = $this->trophicService->findPredatorForPrey($this->preyName);
+                $speciesSubject = $this->preyName;
                 break;
 
             default:
                 throw new CorruptSearchTypeParameterException('Search Type [' . $this->searchType . '] not supported, JSON object abandoned');
                 break;
         }
-        $phpObject = $jsonConverter->populateReturnObject($phpServiceObject, $this->searchType, $this->predatorName);
+        $phpObject = $jsonConverter->populateReturnObject($phpServiceObject, $this->searchType, $speciesSubject);
         $jsonString = $jsonConverter->convertToJSONObject($phpObject);
         return $jsonString;
         echo $jsonString;

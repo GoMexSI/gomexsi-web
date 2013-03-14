@@ -15,7 +15,6 @@ class RequestJSONResponse
 
 		switch ($searchType) {
             case 'findPreyForPredator':
-
                 $i = 0;
                 $preyList = array();
                 foreach ($serviceObject as $thePrey) {
@@ -31,7 +30,18 @@ class RequestJSONResponse
                 break;
 
             case 'findPredatorForPrey':
-                
+                $i = 0;
+                $predList = array();
+                foreach ($serviceObject as $thePred) {
+                    $predList[$i] = $thePred;
+                    $i++;
+                }
+                $pred = array('pred' => $predList);
+
+                $responseObject->scientificName = $speciesSubject;
+                $responseObject->subjectInstances[0] = $pred;
+
+                $responseObjectContainer[0] = $responseObject;
                 break;
 
             default:

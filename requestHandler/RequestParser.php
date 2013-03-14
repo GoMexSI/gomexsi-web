@@ -11,9 +11,10 @@ class RequestParser
 
 	public function parse($toParse)
 	{
-		$this->determineServiceType($toParse);
-		$this->determineSearchType($toParse);
-		return "";
+		$typeValues = array();
+		$typeValues['serviceType'] = $this->determineServiceType($toParse);
+		$typeValues['searchType'] = $this->determineSearchType($toParse);
+		return $typeValues;
 	}
 	private function determineSearchType($toParse)
 	{
