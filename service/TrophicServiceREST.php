@@ -33,7 +33,7 @@ class TrophicServiceREST implements TrophicService
 }
 
 /*$test = new TrophicServiceREST();
-$results = $test->findPreyForPredator("Caranx hippos");
+$results = $test->findPredatorForPrey("Foraminifera");
 
 foreach ($results as $value) {
     echo $value . "\n";
