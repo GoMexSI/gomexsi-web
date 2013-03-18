@@ -33,7 +33,11 @@ class RequestParser
 	private function determineServiceType($toParse)
 	{
 		if(!empty($toParse['serviceType'])){
-			$this->serviceType = $toParse['serviceType'];
+			if($toParse['serviceType'] == 'rest' || $toParse['serviceType'] == 'REST') {
+				$this->serviceType = 'REST';
+			} else {
+				$this->serviceType = $toParse['serviceType'];
+			}
 		}else{
 			$this->serviceType = 'live';
 		}

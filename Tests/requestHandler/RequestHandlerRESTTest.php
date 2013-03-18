@@ -10,6 +10,14 @@ class RequestHandlerRESTTest extends PHPUnit_Framework_TestCase
     {
     	$this->handler = new RequestHandler();
     }
+    public function testRequestHandlerDriver()
+    {
+    	$postArray = array('serviceType' => 'rest', 'predName' => 'Zalieutes mcgintyi');
+    	$jsonTestString = '[{"scientificName":"Zalieutes mcgintyi","subjectInstances":[{"prey":["Foraminifera","Goniadella","Goniada maculata","Teleostei","Crustacea","Animalia","Rhachotropis","Paraonidae","Phyllodoce arenae","Opheliidae","Ophiodromus","Spionidae","Amphipoda","Nematoda","Lumbrineridae","Onuphidae","Anchialina typica","Nemertea","Bathymedon","Sediment","Xanthoidea"]}]}]';
+    	$returnValue = $this->handler->requestHandlerDriver($postArray);
+
+    	$this->assertEquals($jsonTestString, $returnValue);
+    }
     //Test for Use case One
 	public function testGetTrophicServiceRESTFindPreyForPredator()
 	{

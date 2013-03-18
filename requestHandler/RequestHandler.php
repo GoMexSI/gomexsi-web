@@ -25,7 +25,7 @@ class RequestHandler
     {
     	$this->parsePOST($urlPost); #Parse Post
     	$this->getTrophicService();
-        $this->creatJSONResponse();
+        return $this->creatJSONResponse();
     }
     public function parsePOST($urlPost)
     {
@@ -66,9 +66,9 @@ class RequestHandler
         }
         $phpObject = $jsonConverter->populateReturnObject($phpServiceObject, $this->searchType, $speciesSubject);
         $jsonString = $jsonConverter->convertToJSONObject($phpObject);
-        return $jsonString;
         echo $jsonString;
         echo $this->searchType;
+        return $jsonString;
     }
 }
 
