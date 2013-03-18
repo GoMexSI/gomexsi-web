@@ -24,7 +24,7 @@ class RequestParser
 		} elseif(!empty($toParse['preyName']) && empty($toParse['predName'])) {
 			$this->searchType = 'findPredatorForPrey'; #usecase number two
 			$this->preyName = $toParse['preyName'];
-		}else{
+		} else {
 			throw new CorruptSearchTypeParameterException('Search Type could not be determined based on parameters given');
 		}
 

@@ -12,10 +12,18 @@ class TrophicServiceREST implements TrophicService
     {
         return $this->query('prey', $preyScientificName, 'listPredators');
     }
-
+    public function findCloseTaxonNameMatches($name)
+    {
+        return $this->query('findTaxon', $name);
+    }
     private function query($method, $name, $operation) {
         $url_prefix = 'http://46.4.36.142:8080/' . $method . '/';
-        $url = $url_prefix . rawurlencode($name) . '/' . $operation;
+
+        if (isset($operation)){
+            $url = $url_prefix . rawurlencode($name) . '/' . $operation;
+        } else {
+            $url = $url_prefix . rawurlencode($name);
+        }
         $response = file_get_contents($url);
         $response = json_decode($response);
         $columns = $response->{'columns'};

@@ -6,6 +6,7 @@ interface TrophicService
 
     public function findPredatorForPrey($preyScientificName);
 
+    public function findCloseTaxonNameMatches($name);
 }
 
 ?>

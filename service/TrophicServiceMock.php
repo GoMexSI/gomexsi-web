@@ -11,6 +11,11 @@ class TrophicServiceMock implements TrophicService
     {
     	return array('Ariopsis felis', 'Scomberomorus cavalla');
     }
+
+    public function findCloseTaxonNameMatches($name)
+    {
+    	return array('Ariopsis felis', 'Scomberomorus cavalla');
+    }
 }
 
 ?>
