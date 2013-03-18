@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Data Query
+ * Template Name: Data Query No Ajax
  */
 ?>
 
@@ -23,7 +23,8 @@
 						
 						<h2>Query Form</h2>
 						
-						<form action="" id="data-query">
+						<form action="http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php" method="post" id="data-query">
+<!-- 						<form action="http://gomexsi.tamucc.edu/gomexsi/query-test-return.php" method="post" id="data-query"> -->
 							<p>
 								<label>Predator Name:
 									<input type="text" class="query-var" name="predName" />
@@ -46,25 +47,9 @@
 								</label>
 							</p>
 							
-							<p>
-								<label>Request URL:
-									<select class="query-var" name="url">
-										<option value="http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php">RequestHandler.php</option>
-										<option value="http://gomexsi.tamucc.edu/gomexsi/query-test-return.php">query-test-return.php</option>
-									</select>
-								</label>
-							</p>
-							
 							<p><input type="submit" value="Query" /> <span id="status"></span></p>
 						</form>
 						
-						<hr style="margin: 2em 0;" />
-						
-						<div style="float: right;"><a href="#" id="clear">Clear Results</a></div>
-						
-						<h2>Results:</h2>
-						<pre id="results" style="min-height: 100px;"></pre>
-
 					<?php else : ?>
 						<hr style="margin: 1em 0 2em;" />
 
