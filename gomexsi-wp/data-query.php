@@ -26,7 +26,7 @@
 						<form action="" id="data-query">
 							<p>
 								<label>Predator Name:
-									<input type="text" class="query-var" name="predName" />
+									<input type="text" class="query-var" name="predName" value="Scomberomorus cavalla" />
 								</label>
 							</p>
 							
@@ -39,8 +39,8 @@
 							<p>
 								<label>Service Type:
 									<select class="query-var" name="serviceType">
-										<option value="mock">Mock</option>
 										<option value="rest">REST</option>
+										<option value="mock">Mock</option>
 										<option value="">Live</option>
 									</select>
 								</label>
@@ -62,8 +62,13 @@
 						
 						<div style="float: right;"><a href="#" id="clear">Clear Results</a></div>
 						
-						<h2>Results:</h2>
+						<h2>Formatted Results:</h2>
 						<pre id="results" style="min-height: 100px;"></pre>
+
+						<hr style="margin: 2em 0;" />
+						
+						<h2>Raw Results:</h2>
+						<pre id="raw-results" style="min-height: 100px;"></pre>
 
 					<?php else : ?>
 						<hr style="margin: 1em 0 2em;" />

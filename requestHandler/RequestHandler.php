@@ -4,10 +4,10 @@ require_once 'RequestParser.php';
 require_once 'RequestJSONResponse.php';
 require_once '../service/TrophicServiceFactory.php';
 
-$request = $_POST;
+/*$request = $_POST;
 
 $handler = new RequestHandler();
-$handler->requestHandlerDriver($request);
+$handler->requestHandlerDriver($request);*/
 
 class RequestHandler
 {
