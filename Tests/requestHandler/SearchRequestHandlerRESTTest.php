@@ -1,15 +1,16 @@
 <?php
 
-require_once 'requestHandler/RequestHandler.php';
+require_once 'requestHandler/SearchRequestHandler.php';
 
-class RequestHandlerRESTTest extends PHPUnit_Framework_TestCase
+class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 {
 	private $handler;
 
 	public function setUp()
     {
-    	$this->handler = new RequestHandler();
+    	$this->handler = new SearchRequestHandler();
     }
+
     public function testRequestHandlerDriver()
     {
     	$postArray = array('serviceType' => 'rest', 'predName' => 'Zalieutes mcgintyi');
@@ -18,7 +19,7 @@ class RequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
     	$this->assertEquals($jsonTestString, $returnValue);
     }
-    //Test for Use case One
+
 	public function testGetTrophicServiceRESTFindPreyForPredator()
 	{
 		$trophicResultString = array();
@@ -38,7 +39,7 @@ class RequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$iterator++;
 		}
 	}
-	//Test for Use case One
+
 	public function testCreatJSONResponseMockFindPreyForPredator()
 	{
 		$RESTURL = array("serviceType" => "REST", "predName" => "Zalieutes mcgintyi");
@@ -52,7 +53,7 @@ class RequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$jsonObject = $this->handler->creatJSONResponse();
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
-	//Test for Use case two
+
 	public function testGetTrophicServiceRESTFindPredatorForPrey()
 	{
 		$trophicResultString = array();
@@ -73,7 +74,7 @@ class RequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		}
 
 	}
-	//Test for Use case two
+
 	public function testCreatJSONResponseMockFindPredatorForPrey()
 	{
 		$RESTURL = array("serviceType" => "REST", "preyName" => "Foraminifera");

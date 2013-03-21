@@ -1,17 +1,16 @@
 <?php
 
-require_once 'requestHandler/RequestHandler.php';
+require_once 'requestHandler/SearchRequestHandler.php';
 
-class RequestHandlerMockTest extends PHPUnit_Framework_TestCase
+class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 {
 	private $handler;
 
 	public function setUp()
     {
-    	$this->handler = new RequestHandler();
-
+    	$this->handler = new SearchRequestHandler();
     }
-    //Test for Use case One
+
 	public function testGetTrophicServiceMockFindPreyForPredator()
 	{
 		$trophicResultString = array();
@@ -31,7 +30,7 @@ class RequestHandlerMockTest extends PHPUnit_Framework_TestCase
 			$iterator++;
 		}
 	}
-	//Test for Use case One
+
 	public function testCreatJSONResponseMockFindPreyForPredator()
 	{
 		$mockURL = array("serviceType" => "mock", "predName" => "Scomberomorus cavalla");
@@ -45,10 +44,9 @@ class RequestHandlerMockTest extends PHPUnit_Framework_TestCase
 		$jsonObject = $this->handler->creatJSONResponse();
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
-	//Test for Use case Two
+
 	public function testGetTrophicServiceMockFindPredatorForPrey()
 	{
-
 		$trophicResultString = array();
 		$expectedPredNames =array("Ariopsis felis", "Scomberomorus cavalla");
 
@@ -66,7 +64,7 @@ class RequestHandlerMockTest extends PHPUnit_Framework_TestCase
 			$iterator++;
 		}
 	}
-	//Test for Use case Two
+
 	public function testCreatJSONResponseMockFindPredatorForPrey()
 	{
 		$mockURL = array("serviceType" => "mock", "preyName" => "Mugil cephalus");

@@ -17,13 +17,14 @@ class TrophicServiceREST implements TrophicService
         return $this->query('findTaxon', $name);
     }
     private function query($method, $name, $operation) {
-        $url_prefix = 'http://46.4.36.142:8080/' . $method . '/';
+        $url_prefix = 'http://46.4.36.142:8080/' . $method . '/' . rawurlencode($name);
 
         if (isset($operation)){
-            $url = $url_prefix . rawurlencode($name) . '/' . $operation;
+            $url = $url_prefix . '/' . $operation;
         } else {
-            $url = $url_prefix . rawurlencode($name);
+            $url = $url_prefix;
         }
+        
         $response = file_get_contents($url);
         $response = json_decode($response);
         $columns = $response->{'columns'};
