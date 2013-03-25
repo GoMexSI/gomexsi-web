@@ -5,7 +5,21 @@ jQuery(document).ready(function($) {
    ========================================================================== */
 	
 	// Start by checking to see if we're on the data query page template.
-	if($('body.page-template-data-query-php').length){
+	if($('body.page-template-data-query-taxonomic-php').length){
+		$('input[name="subjectName"]').focus();
+		
+		// Conditional Switch
+		$('.switch').click(function(e){
+			var checked = $(this).prop('checked');
+			
+			var switchName = $(this).attr('data-switch');
+			
+			if(checked){
+				$('.conditional[data-switch="'+switchName+'"]').show().find('.query-var, .query-set').removeClass('null');
+			} else {
+				$('.conditional[data-switch="'+switchName+'"]').hide().find('.query-var, .query-set').addClass('null');
+			}
+		});
 		
 		// Data query form submit action.
 		$('form#data-query').submit(function(e){
@@ -25,7 +39,11 @@ jQuery(document).ready(function($) {
 			// Loop through the form elements that have the class "query-var".
 			$('form#data-query .query-var').each(function(){
 				// Use the name attribute as the key and the value as the value.
-				queryObj[$(this).attr('name')] = $(this).val();
+				if($(this).hasClass('null')){
+					queryObj[$(this).attr('name')] = '';
+				} else {
+					queryObj[$(this).attr('name')] = $(this).val();
+				}
 			});
 			
 			// POST to the WordPress Ajax system.
@@ -73,6 +91,7 @@ jQuery(document).ready(function($) {
 		function niceName(name){
 			// Table of names.
 			var niceName = {
+				pred: 'Predators',
 				prey: 'Prey',
 				scientificName: 'Scientific Name',
 				subjectInstances: 'Subject Instances'
@@ -89,84 +108,86 @@ jQuery(document).ready(function($) {
 		
 		// Process returned data.
 		function processData(data){
-			// Find the end of the array so we can trim any extra characters.
-			var trimLimit = data.lastIndexOf(']') + 1;
-			
-			// Trim any extra characters.
-			var results = data.substring(0, trimLimit);
-			
-			// Convert to JSON.
-			if(results){
-				results = JSON && JSON.parse(results) || $.parseJSON(results);
-			}
-			
 			log(results);
 			
 			// Clear the results container.
 			$('#results').html('');
 			
-			// Loop through the results.
-			$.each(results, function(i, subject){
-				if(!subject.scientificName){
-					// Log an error if there is no scientificName property.
-					log('Error: no scientific name.');
-				} else {
-					// Create a unique base ID for this subject.
-					var baseID = subject.scientificName.replace(' ', '-').toLowerCase();
-					
-					// Output the scientific name.
-					var sciNameID = baseID + '-sci-name';
-					$('#results').append('<p id="' + sciNameID + '">Scientific Name: ' + subject.scientificName + '</p>');
-					
-					if(!subject.subjectInstances){
-						// Log an error if there are no instances.
-						log('Error: no subject instances.');
-					} else {
-						// Output instance title.
-						var instancesTitleID = baseID + '-instances-title';
-						$('#results').append('<p id="' + instancesTitleID + '">Subject Instances:</p>');
-						
-						// Make a list for instances.
-						var instancesListID = baseID + '-instances-list';
-						$('#results').append('<ul id="' + instancesListID + '"/>');
-						var instancesList = $('ul#' + instancesListID);
-						
-						$.each(subject.subjectInstances, function(j, instance){
-							// Make list item for each instance.
-							var singleInstanceID = baseID + '-instance-' + (j + 1);
-							$(instancesList).append('<li id="' + singleInstanceID + '">Instance ' + (j + 1) + '</li>');
-							var singleInstance = $(instancesList).children('li#' + singleInstanceID);
-							
-							// Make sublist of instance properties.
-							var singleInstanceListID = singleInstanceID + '-list';
-							$(singleInstance).append('<ul id="' + singleInstanceListID + '" />');
-							var singleInstanceList = $('ul#' + singleInstanceListID);
-							
-							$.each(instance, function(propName, propValue){
-								// Make list item for each instance property.
-								var instancePropID = singleInstanceID + '-' + propName;
-								$(singleInstanceList).append('<li id="' + instancePropID + '">' + niceName(propName) + '</li>');
-								var instanceProp = $('li#' + instancePropID);
-								
-								if(typeof propValue == 'object'){
-									// If this property is an object (an array is an object), then make a list for its values.
-									var propListID = instancePropID + '-list';
-									$(singleInstanceList).append('<ul id="' + propListID + '" />');
-									var propList = $('ul#' + propListID);
-									
-									$.each(propValue, function(k, item){
-										// Make list items for each value.
-										$(propList).append('<li>' + item + '</li>');
-									});
-								} else {
-									// If this property is not an object (or an array), then just add the value to the property list item.
-									$(instanceProp).append(': ' + propValue)
-								}
-							});
-						});
-					}
+			if($('select[name="url"]').val() != 'http://gomexsi.tamucc.edu/gomexsi/query-test-return.php'){
+				// Find the end of the array so we can trim any extra characters.
+				var trimLimit = data.lastIndexOf(']') + 1;
+				
+				// Trim any extra characters.
+				var results = data.substring(0, trimLimit);
+				
+				// Convert to JSON.
+				if(results){
+					results = JSON && JSON.parse(results) || $.parseJSON(results);
 				}
-			});
+				
+				// Loop through the results.
+				$.each(results, function(i, subject){
+					if(!subject.scientificName){
+						// Log an error if there is no scientificName property.
+						log('Error: no scientific name.');
+					} else {
+						// Create a unique base ID for this subject.
+						var baseID = subject.scientificName.replace(' ', '-').toLowerCase();
+						
+						// Output the scientific name.
+						var sciNameID = baseID + '-sci-name';
+						$('#results').append('<p id="' + sciNameID + '">Scientific Name: ' + subject.scientificName + '</p>');
+						
+						if(!subject.subjectInstances){
+							// Log an error if there are no instances.
+							log('Error: no subject instances.');
+						} else {
+							// Output instance title.
+							var instancesTitleID = baseID + '-instances-title';
+							$('#results').append('<p id="' + instancesTitleID + '">Subject Instances:</p>');
+							
+							// Make a list for instances.
+							var instancesListID = baseID + '-instances-list';
+							$('#results').append('<ul id="' + instancesListID + '"/>');
+							var instancesList = $('ul#' + instancesListID);
+							
+							$.each(subject.subjectInstances, function(j, instance){
+								// Make list item for each instance.
+								var singleInstanceID = baseID + '-instance-' + (j + 1);
+								$(instancesList).append('<li id="' + singleInstanceID + '">Instance ' + (j + 1) + '</li>');
+								var singleInstance = $(instancesList).children('li#' + singleInstanceID);
+								
+								// Make sublist of instance properties.
+								var singleInstanceListID = singleInstanceID + '-list';
+								$(singleInstance).append('<ul id="' + singleInstanceListID + '" />');
+								var singleInstanceList = $('ul#' + singleInstanceListID);
+								
+								$.each(instance, function(propName, propValue){
+									// Make list item for each instance property.
+									var instancePropID = singleInstanceID + '-' + propName;
+									$(singleInstanceList).append('<li id="' + instancePropID + '">' + niceName(propName) + '</li>');
+									var instanceProp = $('li#' + instancePropID);
+									
+									if(typeof propValue == 'object'){
+										// If this property is an object (an array is an object), then make a list for its values.
+										var propListID = instancePropID + '-list';
+										$(singleInstanceList).append('<ul id="' + propListID + '" />');
+										var propList = $('ul#' + propListID);
+										
+										$.each(propValue, function(k, item){
+											// Make list items for each value.
+											$(propList).append('<li>' + item + '</li>');
+										});
+									} else {
+										// If this property is not an object (or an array), then just add the value to the property list item.
+										$(instanceProp).append(': ' + propValue)
+									}
+								});
+							});
+						}
+					}
+				});
+			}
 		}
 	}
 
