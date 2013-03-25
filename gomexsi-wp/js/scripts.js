@@ -20,11 +20,6 @@ jQuery(document).ready(function($) {
 		});
 		
 		// Fuzzy search suggestions.
-		$('input.taxonomic').focusout(function(e){
-			var taxWrap = $(this).parent('.tax-wrapper');
-			$(taxWrap).find('ul.tax-suggestions').remove();
-		});
-		
 		$('input.taxonomic').keydown(function(e){
 			var key = e.which;
 			var taxWrap = $(this).parent('.tax-wrapper');
@@ -68,32 +63,76 @@ jQuery(document).ready(function($) {
 			if($.inArray(key, noTriggerKeys) < 0){
 				clearTimeout(t);
 				var sugValue = $(this).val();
-				t = setTimeout(function(){
-					$.post(
-						'/wp-admin/admin-ajax.php',
-						{
-							action: 'rhm_data_query',
-							url: 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php',
-							suggestion: sugValue
-						},
-						function(data, textStatus, jqXHR){
-							log(data);
-							if($(taxWrap).find('ul.tax-suggestions').length){
-								$(taxWrap).find('ul.tax-suggestions').remove();
+				if(sugValue.length){
+					t = setTimeout(function(){
+						$.post(
+							'/gomexsi/gomexsi-wp/data-query-suggestions.php',
+							{ url: 'http://46.4.36.142:8080/findTaxon/' + encodeURI(sugValue) },
+							function(data, textStatus, jqXHR){
+								// Convert to JSON.
+								if(data){
+									results = JSON && JSON.parse(data) || $.parseJSON(data);
+								}
+								
+								var suggestions = results.data;
+								
+								if($(taxWrap).find('ul.tax-suggestions').length){
+									$(taxWrap).find('ul.tax-suggestions').remove();
+								}
+								
+								if(suggestions[0][0] != sugValue){
+									$(taxWrap).append('<ul class="tax-suggestions" />');
+									var taxSugList = $(taxWrap).find('ul.tax-suggestions');
+									
+									$.each(suggestions, function(i){
+										$(taxSugList).append('<li class="tax-suggestion">' + suggestions[i][0] + '</li>');
+									});
+									
+									suggestionClickListener();
+								}
 							}
-							$(taxWrap).append('<ul class="tax-suggestions" />')
-							$(taxWrap).find('ul.tax-suggestions').append('<li class="tax-suggestion">test</li>');
-						}
-					);
-				}, 500);
+						);
+/*
+						$.post(
+							'/wp-admin/admin-ajax.php',
+							{
+								action: 'rhm_data_query',
+								url: 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php',
+								suggestion: sugValue
+							},
+							function(data, textStatus, jqXHR){
+								log(data);
+								if($(taxWrap).find('ul.tax-suggestions').length){
+									$(taxWrap).find('ul.tax-suggestions').remove();
+								}
+								$(taxWrap).append('<ul class="tax-suggestions" />')
+								$(taxWrap).find('ul.tax-suggestions').append('<li class="tax-suggestion">test</li>');
+							}
+						);
+*/
+					}, 250);
+				} else {
+					$(taxWrap).find('ul.tax-suggestions').remove();
+				}
 			}
 		});
 
-				
-		$('li.tax-suggestion').click(function(e){
-			$(this).parent().children().removeClass('selected');
-			var value = $(this).addClass('selected').text();
-			$(this).closest('.tax-wrapper').children('input.taxonomic').val(value);
+		function suggestionClickListener(){
+			$('li.tax-suggestion').click(function(e){
+				e.stopPropagation();
+				$(this).parent().children().removeClass('selected');
+				var value = $(this).addClass('selected').text();
+				$(this).closest('.tax-wrapper').children('input.taxonomic').val(value);
+			});
+		}
+		
+		suggestionClickListener()
+		$('input.taxonomic').click(function(e){
+			e.stopPropagation();
+		});
+		
+		$('body').click(function(e){
+			$('ul.tax-suggestions').remove();
 		});
 		
 		// Data query form submit action.
@@ -151,7 +190,7 @@ jQuery(document).ready(function($) {
 				$('#status').html(textStatus);
 				
 				// Clear results area.
-				$('#results').html('');
+				$('#query-results').html('');
 				$('#raw-results').html('');
 			});
 		});
@@ -160,7 +199,7 @@ jQuery(document).ready(function($) {
 		$('a#clear').click(function(e){
 			e.preventDefault();
 			$('#status').html('');
-			$('#results').html('');
+			$('#query-results').html('');
 			$('#raw-results').html('');
 		});
 		
@@ -186,7 +225,7 @@ jQuery(document).ready(function($) {
 		// Process returned data.
 		function processData(data){
 			// Clear the results container.
-			$('#results').html('');
+			$('#query-results').html('');
 			
 			if($('select[name="url"]').val() != 'http://gomexsi.tamucc.edu/gomexsi/query-test-return.php'){
 				// Find the end of the array so we can trim any extra characters.
@@ -213,7 +252,7 @@ jQuery(document).ready(function($) {
 						
 						// Output the scientific name.
 						var sciNameID = baseID + '-sci-name';
-						$('#results').append('<p id="' + sciNameID + '">Scientific Name: ' + subject.scientificName + '</p>');
+						$('#query-results').append('<p id="' + sciNameID + '">Scientific Name: ' + subject.scientificName + '</p>');
 						
 						if(!subject.subjectInstances){
 							// Log an error if there are no instances.
@@ -221,11 +260,11 @@ jQuery(document).ready(function($) {
 						} else {
 							// Output instance title.
 							var instancesTitleID = baseID + '-instances-title';
-							$('#results').append('<p id="' + instancesTitleID + '">Subject Instances:</p>');
+							$('#query-results').append('<p id="' + instancesTitleID + '">Subject Instances:</p>');
 							
 							// Make a list for instances.
 							var instancesListID = baseID + '-instances-list';
-							$('#results').append('<ul id="' + instancesListID + '"/>');
+							$('#query-results').append('<ul id="' + instancesListID + '"/>');
 							var instancesList = $('ul#' + instancesListID);
 							
 							$.each(subject.subjectInstances, function(j, instance){

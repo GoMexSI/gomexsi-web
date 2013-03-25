@@ -4,27 +4,9 @@
 
 // Target URL, which will give the results.
 $url = $_POST['url'];
-//$url = 'http://gomexsi.tamucc.edu/gomexsi/query-test-return.php';
-//$url = 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php';
-
-// Build the query for POST.
-$query = array();
-foreach($_POST as $key => $value){
-	// Ignore the 'action' parameter. It was used by WordPress already and is not needed downstream.
-	if($key != 'action'){
-		$query[$key] = $value;
-	}
-}
-
-// POST array to string.
-$query_string = http_build_query($query);
 
 // Initialize cURL request.
 $curl = curl_init($url);
-
-// Setup POST.
-curl_setopt($curl, CURLOPT_POST, count($query));
-curl_setopt($curl, CURLOPT_POSTFIELDS, $query_string);
 
 // Fail if the other server gives an error.
 curl_setopt($curl, CURLOPT_FAILONERROR, true);
