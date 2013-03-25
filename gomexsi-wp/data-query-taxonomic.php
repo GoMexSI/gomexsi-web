@@ -22,7 +22,9 @@
 								<label>
 									<div class="section-label">Name</div>
 									<div class="section-input clearfix">
-										<input type="text" class="query-var" name="subjectName" placeholder="Any taxonomic level, scientific or common name" />
+										<div class="tax-wrapper">
+											<input type="text" class="query-var taxonomic" name="subjectName" placeholder="Any taxonomic level, scientific or common name" />
+										</div>
 									</div>
 								</label>
 							</div>
@@ -38,7 +40,9 @@
 										<div class="conditional" data-switch="filterPrey">
 											<label>
 												<span class="visuallyhidden">Limit prey results by name</span>
-												<input type="text" class="query-var filter" name="filterPrey" placeholder="Limit results by name" />
+												<div class="tax-wrapper">
+													<input type="text" class="query-var taxonomic filter" name="filterPrey" placeholder="Limit results by name" />
+												</div>
 											</label>
 										</div>
 									</div>
@@ -49,7 +53,9 @@
 										<div class="conditional" data-switch="filterPredators">
 											<label>
 												<span class="visuallyhidden">Limit predator results by name</span>
-												<input type="text" class="query-var filter" name="filterPredators" placeholder="Limit results by name" />
+												<div class="tax-wrapper">
+													<input type="text" class="query-var taxonomic filter" name="filterPredators" placeholder="Limit results by name" />
+												</div>
 											</label>
 										</div>
 									</div>
@@ -60,7 +66,9 @@
 										<div class="conditional" data-switch="filterParasites">
 											<label>
 												<span class="visuallyhidden">Limit parasites results by name</span>
-												<input type="text" class="query-var filter" name="filterParasites" placeholder="Limit results by name" />
+												<div class="tax-wrapper">
+													<input type="text" class="query-var taxonomic filter" name="filterParasites" placeholder="Limit results by name" />
+												</div>
 											</label>
 										</div>
 									</div>
@@ -71,7 +79,9 @@
 										<div class="conditional" data-switch="filterMutalists">
 											<label>
 												<span class="visuallyhidden">Limit mutalists results by name</span>
-												<input type="text" class="query-var filter" name="filterMutalists" placeholder="Limit results by name" />
+												<div class="tax-wrapper">
+													<input type="text" class="query-var taxonomic filter" name="filterMutalists" placeholder="Limit results by name" />
+												</div>
 											</label>
 										</div>
 									</div>
@@ -82,7 +92,9 @@
 										<div class="conditional" data-switch="filterCommonsals">
 											<label>
 												<span class="visuallyhidden">Limit commonsals results by name</span>
-												<input type="text" class="query-var filter" name="filterCommonsals" placeholder="Limit results by name" />
+												<div class="tax-wrapper">
+													<input type="text" class="query-var taxonomic filter" name="filterCommonsals" placeholder="Limit results by name" />
+												</div>
 											</label>
 										</div>
 									</div>
@@ -93,7 +105,9 @@
 										<div class="conditional" data-switch="filterAmensals">
 											<label>
 												<span class="visuallyhidden">Limit amensals results by name</span>
-												<input type="text" class="query-var filter" name="filterAmensals" placeholder="Limit results by name" />
+												<div class="tax-wrapper">
+													<input type="text" class="query-var taxonomic filter" name="filterAmensals" placeholder="Limit results by name" />
+												</div>
 											</label>
 										</div>
 									</div>
@@ -104,7 +118,9 @@
 										<div class="conditional" data-switch="filterPrimaryHosts">
 											<label>
 												<span class="visuallyhidden">Limit primary hosts results by name</span>
-												<input type="text" class="query-var filter" name="filterPrimaryHosts" placeholder="Limit results by name" />
+												<div class="tax-wrapper">
+													<input type="text" class="query-var taxonomic filter" name="filterPrimaryHosts" placeholder="Limit results by name" />
+												</div>
 											</label>
 										</div>
 									</div>
@@ -115,7 +131,9 @@
 										<div class="conditional" data-switch="filterSecondaryHosts">
 											<label>
 												<span class="visuallyhidden">Limit secondary hosts results by name</span>
-												<input type="text" class="query-var filter" name="filterSecondaryHosts" placeholder="Limit results by name" />
+												<div class="tax-wrapper">
+													<input type="text" class="query-var taxonomic filter" name="filterSecondaryHosts" placeholder="Limit results by name" />
+												</div>
 											</label>
 										</div>
 									</div>
@@ -206,6 +224,7 @@
 								<label>Request URL:
 									<select class="query-var" name="url">
 										<option value="http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php">RequestHandler.php</option>
+										<option value="http://gomexsi.tamucc.edu/gomexsi/query-full-mock.php">query-full-mock.php</option>
 										<option value="http://gomexsi.tamucc.edu/gomexsi/query-test-return.php">query-test-return.php</option>
 									</select>
 								</label>
@@ -222,8 +241,7 @@
 						
 						<div style="float: right;"><a href="#" id="clear">Clear Results</a></div>
 						
-						<h2>Formatted Results:</h2>
-						<pre id="results" style="min-height: 100px;"></pre>
+						<div id="query-results"></div>
 
 						<hr style="margin: 2em 0;" />
 						

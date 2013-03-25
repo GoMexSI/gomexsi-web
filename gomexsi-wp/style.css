@@ -372,6 +372,10 @@ form#data-query #form-section-find .spacer {
 	width: 130px;
 }
 
+form#data-query #form-section-find .conditional {
+	float: left;
+}
+
 form#data-query #form-section-find input.filter {
 	margin: -2px 0;
 	padding: 2px 3px;
@@ -408,6 +412,40 @@ form#data-query #form-submit {
 	background: -ms-linear-gradient(top,  #73bbe6 0%,#338dc1 100%); /* IE10+ */
 	background: linear-gradient(to bottom,  #73bbe6 0%,#338dc1 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#73bbe6', endColorstr='#338dc1',GradientType=0 ); /* IE6-8 */
+}
+
+form#data-query .tax-wrapper {
+	position: relative;
+}
+
+form#data-query ul.tax-suggestions {
+	display: block;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	list-style: none;
+	margin: -1px 0 0;
+	padding: 0;
+	border: 1px #808080 solid;
+	background: #fff;
+	box-shadow: 0 15px 30px rgba(0,0,0,.25);
+	z-index: 100;
+}
+
+form#data-query li.tax-suggestion {
+	margin: 0;
+	padding: 2px 20px 2px 8px;
+	cursor: pointer;
+}
+
+form#data-query li.selected {
+	background: #007abf;
+	color: #fff;
+	text-shadow: -1px -1px 0 #000;
+}
+
+#query-results {
+
 }
 
 

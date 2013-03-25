@@ -8,17 +8,92 @@ jQuery(document).ready(function($) {
 	if($('body.page-template-data-query-taxonomic-php').length){
 		$('input[name="subjectName"]').focus();
 		
-		// Conditional Switch
+		// Conditional switch.
 		$('.switch').click(function(e){
 			var checked = $(this).prop('checked');
-			
 			var switchName = $(this).attr('data-switch');
-			
 			if(checked){
 				$('.conditional[data-switch="'+switchName+'"]').show().find('.query-var, .query-set').removeClass('null');
 			} else {
 				$('.conditional[data-switch="'+switchName+'"]').hide().find('.query-var, .query-set').addClass('null');
 			}
+		});
+		
+		// Fuzzy search suggestions.
+		$('input.taxonomic').focusout(function(e){
+			var taxWrap = $(this).parent('.tax-wrapper');
+			$(taxWrap).find('ul.tax-suggestions').remove();
+		});
+		
+		$('input.taxonomic').keydown(function(e){
+			var key = e.which;
+			var taxWrap = $(this).parent('.tax-wrapper');
+			var taxSugList = $(taxWrap).find('.tax-suggestions');
+			var taxSugItems = $(taxWrap).find('.tax-suggestion');
+			var i = $(taxWrap).find('.tax-suggestion.selected').index();
+			
+			// Down arrow.
+			if(key == '40'){
+				if(i < (taxSugItems.length - 1)){
+					i++;
+					var value = $(taxSugItems).removeClass('selected').eq(i).addClass('selected').text();
+					$(this).val(value);
+				}
+			}
+			
+			// Up arrow.
+			if(key == '38'){
+				if(i > 0){
+					i--;
+					var value = $(taxSugItems).removeClass('selected').eq(i).addClass('selected').text();
+					$(this).val(value);
+				} else {
+					i = -1;
+					$(taxSugItems).removeClass('selected')
+				}
+			}
+		});
+		
+		var t;
+		
+		$('input.taxonomic').keyup(function(e){
+			var key = e.which;
+			var taxWrap = $(this).parent('.tax-wrapper');
+			var taxSugList = $(taxWrap).find('.tax-suggestions');
+			var taxSugItems = $(taxWrap).find('.tax-suggestion');
+			
+			var noTriggerKeys = [16, 17, 18, 20, 37, 38, 39, 40, 91, 93, 27, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130];
+			
+			// Non-arrow, non-modifier keys.
+			if($.inArray(key, noTriggerKeys) < 0){
+				clearTimeout(t);
+				var sugValue = $(this).val();
+				t = setTimeout(function(){
+					$.post(
+						'/wp-admin/admin-ajax.php',
+						{
+							action: 'rhm_data_query',
+							url: 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php',
+							suggestion: sugValue
+						},
+						function(data, textStatus, jqXHR){
+							log(data);
+							if($(taxWrap).find('ul.tax-suggestions').length){
+								$(taxWrap).find('ul.tax-suggestions').remove();
+							}
+							$(taxWrap).append('<ul class="tax-suggestions" />')
+							$(taxWrap).find('ul.tax-suggestions').append('<li class="tax-suggestion">test</li>');
+						}
+					);
+				}, 500);
+			}
+		});
+
+				
+		$('li.tax-suggestion').click(function(e){
+			$(this).parent().children().removeClass('selected');
+			var value = $(this).addClass('selected').text();
+			$(this).closest('.tax-wrapper').children('input.taxonomic').val(value);
 		});
 		
 		// Data query form submit action.
