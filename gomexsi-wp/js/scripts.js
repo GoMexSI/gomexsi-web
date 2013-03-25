@@ -46,6 +46,8 @@ jQuery(document).ready(function($) {
 				}
 			});
 			
+			log('Query Object:'); log(queryObj);
+			
 			// POST to the WordPress Ajax system.
 			$.post(
 				
@@ -108,8 +110,6 @@ jQuery(document).ready(function($) {
 		
 		// Process returned data.
 		function processData(data){
-			log(results);
-			
 			// Clear the results container.
 			$('#results').html('');
 			
@@ -124,6 +124,8 @@ jQuery(document).ready(function($) {
 				if(results){
 					results = JSON && JSON.parse(results) || $.parseJSON(results);
 				}
+				
+				log('JSON Parsed Results Object:'); log(results);
 				
 				// Loop through the results.
 				$.each(results, function(i, subject){
@@ -187,6 +189,8 @@ jQuery(document).ready(function($) {
 						}
 					}
 				});
+			} else {
+				log('Unparsed Results String:'); log(data);
 			}
 		}
 	}

@@ -17,6 +17,7 @@
 					</header>
 					<?php if(is_user_logged_in()) : ?>
 						<form action="" id="data-query" class="clearfix">
+							<div class="comment">The subject about which the results are centered. I.e., Scomberomorus cavalla</div>
 							<div id="form-section-name" class="form-section clearfix">
 								<label>
 									<div class="section-label">Name</div>
@@ -26,6 +27,7 @@
 								</label>
 							</div>
 							
+							<div class="comment">The types of interactions to look for. One search may return both prey and predators for the subject. When a box is checked, another field appears that allows a keyword filter for that interaction.</div>
 							<div id="form-section-find" class="form-section clearfix">
 								<div class="section-label">Find</div>
 								<div class="section-input clearfix">
@@ -120,6 +122,7 @@
 								</div>
 							</div>
 							
+							<div class="comment">Filter by various location parameters. (Additive? Subtractive?)</div>
 							<div id="form-section-location" class="form-section clearfix">
 								<div class="section-label">Location</div>
 								<div class="section-input clearfix">
@@ -190,6 +193,7 @@
 								</div>
 							</div>
 							
+							<div class="comment">Development testing options. The submitted query object (POST data) is logged to your browser's console. If you set Request URL to query-test-return.php, the POST array will show under Raw Results.</div>
 							<div class="form-section clearfix">
 								<label>Service Type:
 									<select class="query-var" name="serviceType">

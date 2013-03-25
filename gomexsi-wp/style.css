@@ -268,6 +268,14 @@ form#data-query #form-submit {
 	right: -150px;
 }
 
+form#data-query .comment {
+	margin: 10px 0 0;
+	font-size: 14px;
+	color: #008000;
+	line-height: 1.2;
+	text-shadow: none;
+}
+
 form#data-query .conditional {
 	display: none;
 }
