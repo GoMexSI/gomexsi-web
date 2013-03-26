@@ -10,9 +10,22 @@ class RequestJSONResponse
 	public function populateReturnObject($serviceObject, $searchType, $speciesSubject)
 	{
         $responseObject = new ResponseObject();
+        $fuzzyResponseObject = new FuzzyResponseObject();
         $responseObjectContainer = array();
 
 		switch ($searchType) {
+            case 'fuzzySearch':
+                $i = 0;
+                $matchList = array();
+                foreach ($serviceObject as $match) {
+                    $matchList[$i] = $match;
+                    $i++;
+                }
+                $fuzzyResponseObject->fuzzyName = $speciesSubject;
+                $fuzzyResponseObject->matches = $matchList;
+
+                $responseObjectContainer[0] = $fuzzyResponseObject;
+                break;
             case 'findPreyForPredator':
                 $i = 0;
                 $preyList = array();
@@ -57,6 +70,11 @@ class ResponseObject
 {
     public $scientificName;
     public $subjectInstances = array();
+}
+class FuzzyResponseObject
+{
+    public $fuzzyName;
+    public $matches = array();
 }
 
 ?>

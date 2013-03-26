@@ -14,7 +14,7 @@ class TrophicServiceREST implements TrophicService
     }
     public function findCloseTaxonNameMatches($name)
     {
-        return $this->query('findTaxon', $name);
+        return $this->query('findTaxon', $name, null);
     }
     private function query($method, $name, $operation) {
         $url_prefix = 'http://46.4.36.142:8080/' . $method . '/' . rawurlencode($name);

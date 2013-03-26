@@ -79,5 +79,41 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
 
+	public function testGetTrophicServiceMockFindCloseTaxonNameMatches()
+	{
+		$trophicResultString = array();
+		$expectedMatchNames =array('Ariopsis felis', 'Scomberomorus cavalla');
+
+    	$mockURL = array("serviceType" => "mock", "suggestion" => "Scomb");
+    	$this->handler->parsePOST($mockURL);
+
+		$trophicService = $this->handler->getTrophicService();
+		$trophicResultString = $trophicService->findCloseTaxonNameMatches("Scomb");
+		
+		$this->assertEquals(count($expectedMatchNames), count($trophicResultString));
+
+		$iterator = 0;
+		foreach ($trophicResultString as $value) {
+			$this->assertEquals($value, $expectedMatchNames[$iterator]);
+			$iterator++;
+		}
+	}
+
+	public function testCreatJSONResponseMockFindCloseTaxonNameMatches()
+	{
+		$mockURL = array("serviceType" => "mock", "suggestion" => "Scomb");
+    	$this->handler->parsePOST($mockURL);
+
+		$this->handler->getTrophicService();
+
+		$jsonTestString = '[{"fuzzyName":"Scomb","matches":["Ariopsis felis","Scomberomorus cavalla"]}]';
+		// http://jsonlint.com/ will format this for anyone who wants to look at it in a more readable structure 
+
+		$jsonObject = $this->handler->creatJSONResponse();
+		$this->assertEquals($jsonTestString, $jsonObject);
+	}
+
 }
+
+
 ?>

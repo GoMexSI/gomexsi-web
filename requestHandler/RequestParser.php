@@ -8,6 +8,7 @@ class RequestParser
 	private $searchType;
 	private $predatorName;
 	private $preyName;
+	private $fuzzyValue;
 
 	public function parse($toParse)
 	{
@@ -18,7 +19,10 @@ class RequestParser
 	}
 	private function determineSearchType($toParse)
 	{
-		if(!empty($toParse['predName']) && empty($toParse['preyName'])) {
+		if (!empty($toParse['suggestion'])) {
+			$this->searchType = 'fuzzySearch';
+			$this->fuzzyValue = $toParse['suggestion'];
+		} elseif(!empty($toParse['predName']) && empty($toParse['preyName'])) {
 			$this->searchType = 'findPreyForPredator'; #usecase number one
 			$this->predatorName = $toParse['predName'];
 		} elseif(!empty($toParse['preyName']) && empty($toParse['predName'])) {
@@ -62,6 +66,10 @@ class RequestParser
 	public function getPreyName()
 	{
 		return $this->preyName;
+	}
+	public function getFuzzyValue()
+	{
+		return $this->fuzzyValue;
 	}
 }
 

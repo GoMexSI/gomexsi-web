@@ -10,6 +10,7 @@ class SearchRequestHandler
     private $trophicService;
     private $predatorName;
     private $preyName;
+    private $fuzzyValue;
 
 	public function __construct()
     {
@@ -31,6 +32,7 @@ class SearchRequestHandler
         $this->searchType   = $parser->getSearchType();
         $this->predatorName = $parser->getPredatorName();
         $this->preyName     = $parser->getPreyName();
+        $this->fuzzyValue   = $parser->getFuzzyValue();
 
     	
     }
@@ -44,6 +46,11 @@ class SearchRequestHandler
     {
         $jsonConverter = new RequestJSONResponse();
         switch ($this->searchType) {
+            case 'fuzzySearch':
+                $phpServiceObject = $this->trophicService->findCloseTaxonNameMatches($this->fuzzyValue);
+                $speciesSubject = $this->fuzzyValue;
+                break;
+
             case 'findPreyForPredator':
                 $phpServiceObject = $this->trophicService->findPreyForPredator($this->predatorName);
                 $speciesSubject = $this->predatorName;
@@ -57,6 +64,7 @@ class SearchRequestHandler
             default:
                 throw new CorruptSearchTypeParameterException('Search Type [' . $this->searchType . '] not supported, JSON object abandoned');
                 break;
+            #treat speciesSubject as an array for search that requires both predator and prey returned for specific subject
         }
         $phpObject = $jsonConverter->populateReturnObject($phpServiceObject, $this->searchType, $speciesSubject);
         return $jsonConverter->convertToJSONObject($phpObject);

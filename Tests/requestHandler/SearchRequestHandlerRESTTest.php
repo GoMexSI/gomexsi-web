@@ -88,5 +88,40 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$jsonObject = $this->handler->creatJSONResponse();
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
+
+	public function testGetTrophicServiceRESTFindCloseTaxonNameMatches()
+	{
+		$trophicResultString = array();
+		$expectedPredNames = array("Admontia blanda", "Admontia seria", "Admontia maculisquama", "Admontia grandicornis");
+
+    	$RESTURL = array("serviceType" => "REST", "suggestion" => "Adm");
+    	$this->handler->parsePOST($RESTURL);
+
+		$trophicService = $this->handler->getTrophicService();
+		$trophicResultString = $trophicService->findCloseTaxonNameMatches("Adm");
+		
+		$this->assertEquals(count($expectedPredNames), count($trophicResultString));
+		
+		$iterator = 0;
+		foreach ($trophicResultString as $value) {
+			$this->assertEquals($expectedPredNames[$iterator], $value);
+			$iterator++;
+		}
+
+	}
+
+	public function testCreatJSONResponseMockFindCloseTaxonNameMatches()
+	{
+		$RESTURL = array("serviceType" => "REST", "suggestion" => "Adm");
+    	$this->handler->parsePOST($RESTURL);
+
+		$this->handler->getTrophicService();
+
+		$jsonTestString = '[{"fuzzyName":"Adm","matches":["Admontia blanda","Admontia seria","Admontia maculisquama","Admontia grandicornis"]}]';
+		// http://jsonlint.com/ will format this for anyone who wants to look at it in a more readable structure 
+
+		$jsonObject = $this->handler->creatJSONResponse();
+		$this->assertEquals($jsonTestString, $jsonObject);
+	}
 }
 ?>

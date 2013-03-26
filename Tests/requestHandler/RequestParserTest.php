@@ -37,6 +37,10 @@ class RequestParserTest extends PHPUnit_Framework_TestCase
 		$preyParseMock = array("serviceType" => "mock", "preyName" => "Scomberomorus cavalla");
 		$this->requestParse->parse($preyParseMock);
 		$this->assertEquals('findPredatorForPrey',  $this->requestParse->getSearchType());
+		#mock
+		$preyParseMock = array("serviceType" => "mock", "suggestion" => "Scomb");
+		$this->requestParse->parse($preyParseMock);
+		$this->assertEquals('fuzzySearch',  $this->requestParse->getSearchType());
 
 		#REST
 		$predParseREST = array("serviceType" => "REST", "predName" => "Scomberomorus cavalla");
@@ -46,6 +50,10 @@ class RequestParserTest extends PHPUnit_Framework_TestCase
 		$preyParseREST = array("serviceType" => "REST", "preyName" => "Scomberomorus cavalla");
 		$this->requestParse->parse($preyParseREST);
 		$this->assertEquals('findPredatorForPrey',  $this->requestParse->getSearchType());
+		#REST
+		$preyParseREST = array("serviceType" => "REST", "suggestion" => "Scomb");
+		$this->requestParse->parse($preyParseREST);
+		$this->assertEquals('fuzzySearch',  $this->requestParse->getSearchType());
 
 		#live
 		$predParseLive = array("serviceType" => "live", "predName" => "Scomberomorus cavalla");
@@ -55,6 +63,10 @@ class RequestParserTest extends PHPUnit_Framework_TestCase
 		$preyParseLive = array("serviceType" => "live", "preyName" => "Scomberomorus cavalla");
 		$this->requestParse->parse($preyParseLive);
 		$this->assertEquals('findPredatorForPrey',  $this->requestParse->getSearchType());
+		#live
+		$preyParseLive = array("serviceType" => "live", "suggestion" => "Scomb");
+		$this->requestParse->parse($preyParseLive);
+		$this->assertEquals('fuzzySearch',  $this->requestParse->getSearchType());
     }
 
     /**
