@@ -8,6 +8,5 @@ $request = $_POST;
 $handler = new SearchRequestHandler();
 $jsonString = $handler->requestHandlerDriver($request);
 echo $jsonString;
-echo $handler->searchType;
 
 ?>

@@ -5,17 +5,21 @@ require_once 'requestHandler/SearchRequestHandler.php';
 class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 {
 	private $handler;
+	private $toParse;
 
 	public function setUp()
     {
     	$this->handler = new SearchRequestHandler();
+    	$this->toParse = array("serviceType" => "REST",
+			   "findPrey"=>"true",
+			   "findPredators" => "false",
+			   "subjectName" => "Zalieutes mcgintyi");
     }
 
     public function testRequestHandlerDriver()
     {
-    	$postArray = array('serviceType' => 'rest', 'predName' => 'Zalieutes mcgintyi');
     	$jsonTestString = '[{"scientificName":"Zalieutes mcgintyi","subjectInstances":[{"prey":["Foraminifera","Goniadella","Goniada maculata","Teleostei","Crustacea","Animalia","Rhachotropis","Paraonidae","Phyllodoce arenae","Opheliidae","Ophiodromus","Spionidae","Amphipoda","Nematoda","Lumbrineridae","Onuphidae","Anchialina typica","Nemertea","Bathymedon","Sediment","Xanthoidea"]}]}]';
-    	$returnValue = $this->handler->requestHandlerDriver($postArray);
+    	$returnValue = $this->handler->requestHandlerDriver($this->toParse);
 
     	$this->assertEquals($jsonTestString, $returnValue);
     }
@@ -25,8 +29,10 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$trophicResultString = array();
 		$expectedPreyNames = array("Foraminifera", "Goniadella", "Goniada maculata", "Teleostei", "Crustacea", "Animalia", "Rhachotropis", "Paraonidae", "Phyllodoce arenae", "Opheliidae", "Ophiodromus", "Spionidae", "Amphipoda", "Nematoda", "Lumbrineridae", "Onuphidae", "Anchialina typica", "Nemertea", "Bathymedon", "Sediment", "Xanthoidea");
 
-    	$RESTURL = array("serviceType" => "REST", "predName" => "Zalieutes mcgintyi");
-    	$this->handler->parsePOST($RESTURL);
+    	$this->toParse["subjectName"] = "Zalieutes mcgintyi";
+    	$this->toParse["findPrey"] = "true";
+		$this->toParse["findPredators"] = "false";
+    	$this->handler->parsePOST($this->toParse);
 
 		$trophicService = $this->handler->getTrophicService();
 		$trophicResultString = $trophicService->findPreyForPredator("Zalieutes mcgintyi");
@@ -42,8 +48,9 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 	public function testCreatJSONResponseMockFindPreyForPredator()
 	{
-		$RESTURL = array("serviceType" => "REST", "predName" => "Zalieutes mcgintyi");
-    	$this->handler->parsePOST($RESTURL);
+    	$this->toParse["findPrey"] = "true";
+		$this->toParse["findPredators"] = "false";
+    	$this->handler->parsePOST($this->toParse);
 
 		$this->handler->getTrophicService();
 
@@ -59,8 +66,10 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$trophicResultString = array();
 		$expectedPredNames = array("Zalieutes mcgintyi", "Syacium gunteri", "Pomatoschistus microps", "Zoarces viviparus", "Symphurus plagiusa", "Prionotus roseus", "Stenotomus caprinus", "Syacium papillosum", "Monolene sessilicauda", "Fundulus similis", "Trichopsetta ventralis", "Coelorinchus caribbaeus", "Bembrops anatirostris", "Bellator militaris", "Pomatoschistus minutus", "Leiostomus xanthurus", "Crangon crangon", "Platichthys flesus", "Pleuronectes platessa", "Paralichthyes albigutta", "Retusa obtusa", "Symphurus civitatus");
 
-    	$RESTURL = array("serviceType" => "REST", "preyName" => "Foraminifera");
-    	$this->handler->parsePOST($RESTURL);
+    	$this->toParse["subjectName"] = "Foraminifera";
+    	$this->toParse["findPrey"] = "false";
+		$this->toParse["findPredators"] = "true";
+    	$this->handler->parsePOST($this->toParse);
 
 		$trophicService = $this->handler->getTrophicService();
 		$trophicResultString = $trophicService->findPredatorForPrey("Foraminifera");
@@ -77,8 +86,10 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 	public function testCreatJSONResponseMockFindPredatorForPrey()
 	{
-		$RESTURL = array("serviceType" => "REST", "preyName" => "Foraminifera");
-    	$this->handler->parsePOST($RESTURL);
+		$this->toParse["subjectName"] = "Foraminifera";
+    	$this->toParse["findPrey"] = "false";
+		$this->toParse["findPredators"] = "true";
+    	$this->handler->parsePOST($this->toParse);
 
 		$this->handler->getTrophicService();
 
@@ -94,8 +105,8 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$trophicResultString = array();
 		$expectedPredNames = array("Admontia blanda", "Admontia seria", "Admontia maculisquama", "Admontia grandicornis");
 
-    	$RESTURL = array("serviceType" => "REST", "suggestion" => "Adm");
-    	$this->handler->parsePOST($RESTURL);
+    	$this->toParse["suggestion"] = "Adm";
+    	$this->handler->parsePOST($this->toParse);
 
 		$trophicService = $this->handler->getTrophicService();
 		$trophicResultString = $trophicService->findCloseTaxonNameMatches("Adm");
@@ -112,8 +123,8 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 	public function testCreatJSONResponseMockFindCloseTaxonNameMatches()
 	{
-		$RESTURL = array("serviceType" => "REST", "suggestion" => "Adm");
-    	$this->handler->parsePOST($RESTURL);
+		$this->toParse["suggestion"] = "Adm";
+    	$this->handler->parsePOST($this->toParse);
 
 		$this->handler->getTrophicService();
 

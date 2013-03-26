@@ -22,12 +22,12 @@ class RequestParser
 		if (!empty($toParse['suggestion'])) {
 			$this->searchType = 'fuzzySearch';
 			$this->fuzzyValue = $toParse['suggestion'];
-		} elseif(!empty($toParse['predName']) && empty($toParse['preyName'])) {
+		} elseif ($toParse['findPrey'] == 'true' &&  $toParse['findPredators'] == 'false') {
 			$this->searchType = 'findPreyForPredator'; #usecase number one
-			$this->predatorName = $toParse['predName'];
-		} elseif(!empty($toParse['preyName']) && empty($toParse['predName'])) {
+			$this->predatorName = $toParse['subjectName'];
+		} elseif ($toParse['findPredators'] == 'true' &&  $toParse['findPrey'] == 'false') {
 			$this->searchType = 'findPredatorForPrey'; #usecase number two
-			$this->preyName = $toParse['preyName'];
+			$this->preyName = $toParse['subjectName'];
 		} else {
 			throw new CorruptSearchTypeParameterException('Search Type could not be determined based on parameters given');
 		}
