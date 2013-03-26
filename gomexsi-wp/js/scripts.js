@@ -156,7 +156,11 @@ jQuery(document).ready(function($) {
 				if($(this).hasClass('null')){
 					queryObj[$(this).attr('name')] = '';
 				} else {
-					queryObj[$(this).attr('name')] = $(this).val();
+					if($(this).attr('type') == 'checkbox'){
+						queryObj[$(this).attr('name')] = $(this).prop('checked');
+					} else {
+						queryObj[$(this).attr('name')] = $(this).val();
+					}
 				}
 			});
 			

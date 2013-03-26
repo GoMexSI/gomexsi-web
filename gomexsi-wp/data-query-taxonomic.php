@@ -36,7 +36,7 @@
 									<div class="section-input clearfix">
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findRel" data-switch="filterPrey" value="filterPreyCheck" /> Prey</label>
+												<label><input type="checkbox" class="query-var switch" name="findPrey" data-switch="filterPrey" /> Prey</label>
 											</div>
 											<div class="conditional" data-switch="filterPrey">
 												<label>
@@ -49,7 +49,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findRel" data-switch="filterPredators" /> Predators</label>
+												<label><input type="checkbox" class="query-var switch" name="findPredators" data-switch="filterPredators" /> Predators</label>
 											</div>
 											<div class="conditional" data-switch="filterPredators">
 												<label>
@@ -62,7 +62,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findRel" data-switch="filterParasites" /> Parasites</label>
+												<label><input type="checkbox" class="query-var switch" name="findParasites" data-switch="filterParasites" /> Parasites</label>
 											</div>
 											<div class="conditional" data-switch="filterParasites">
 												<label>
@@ -75,7 +75,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findRel" data-switch="filterMutalists" /> Mutalists</label>
+												<label><input type="checkbox" class="query-var switch" name="findMutualists" data-switch="filterMutalists" /> Mutalists</label>
 											</div>
 											<div class="conditional" data-switch="filterMutalists">
 												<label>
@@ -88,7 +88,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findRel" data-switch="filterCommonsals" /> Commonsals</label>
+												<label><input type="checkbox" class="query-var switch" name="findCommonsals" data-switch="filterCommonsals" /> Commonsals</label>
 											</div>
 											<div class="conditional" data-switch="filterCommonsals">
 												<label>
@@ -101,7 +101,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findRel" data-switch="filterAmensals" /> Amensals</label>
+												<label><input type="checkbox" class="query-var switch" name="findAmensals" data-switch="filterAmensals" /> Amensals</label>
 											</div>
 											<div class="conditional" data-switch="filterAmensals">
 												<label>
@@ -114,7 +114,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findRel" data-switch="filterPrimaryHosts" /> Primary Hosts</label>
+												<label><input type="checkbox" class="query-var switch" name="findPrimaryHosts" data-switch="filterPrimaryHosts" /> Primary Hosts</label>
 											</div>
 											<div class="conditional" data-switch="filterPrimaryHosts">
 												<label>
@@ -127,7 +127,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findRel" data-switch="filterSecondaryHosts" /> Secondary Hosts</label>
+												<label><input type="checkbox" class="query-var switch" name="findSecondaryHosts" data-switch="filterSecondaryHosts" /> Secondary Hosts</label>
 											</div>
 											<div class="conditional" data-switch="filterSecondaryHosts">
 												<label>
