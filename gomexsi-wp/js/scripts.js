@@ -5,7 +5,7 @@ jQuery(document).ready(function($) {
    ========================================================================== */
 	
 	// Start by checking to see if we're on the data query page template.
-	if($('body.page-template-data-query-taxonomic-php').length){
+	if($('body.page-template-data-query-taxonomic-php').length || $('body.page-template-data-query-spatial-php').length){
 		$('input[name="subjectName"]').focus();
 		
 		/* ==============================
@@ -578,14 +578,127 @@ jQuery(document).ready(function($) {
 		
 		// Conditional switch.
 		$('.switch').click(function(e){
-			var checked = $(this).prop('checked');
-			var switchName = $(this).attr('data-switch');
+			toggleSwitch($(this));
+		});
+		
+		function toggleSwitch(theSwitch){
+			var checked = $(theSwitch).prop('checked');
+			var switchName = $(theSwitch).attr('data-switch');
+			var conditional = $('.conditional[data-switch="'+switchName+'"]');
 			if(checked){
-				$('.conditional[data-switch="'+switchName+'"]').show().find('.query-var, .query-set').removeClass('null');
+				$(conditional).show();
 			} else {
-				$('.conditional[data-switch="'+switchName+'"]').hide().find('.query-var, .query-set').addClass('null');
+				$(conditional).hide();
+				$(conditional).find('input[type="checkbox"], input[type="radio"]').prop('checked', false);
+				$(conditional).find('input[type="text"], textarea').val('');
+				$(conditional).find('select').prop('selectedIndex', 0);
+			}
+		}
+
+		// Master checkbox.
+		$('.master-checkbox').click(function(e){
+			var section = $(this).closest('.form-section');
+			var checkboxes = checkboxCheck(section);
+			
+			if(checkboxes.unchecked > 0){
+				$(this).prop('indeterminate', false);
+				$(this).prop('checked', true);
+			} else {
+				$(this).prop('checked', false);
+			}
+			
+			var checked = $(this).prop('checked');
+			
+			var checkboxInputs = $(section).find('input[type="checkbox"]').not('.master-checkbox');
+			$(checkboxInputs).prop('checked', checked).each(function(i){
+				toggleSwitch($(checkboxInputs)[i]);
+			});
+		});
+		
+		$('input[type="checkbox"]').not('.master-checkbox').click(function(e){
+			var section = $(this).closest('.form-section');
+			var checkboxes = checkboxCheck(section);
+			
+			if(checkboxes.checked && checkboxes.unchecked){
+				$(section).find('.master-checkbox').prop('indeterminate', true);
+			} else if(checkboxes.checked && checkboxes.unchecked == 0){
+				$(section).find('.master-checkbox').prop('indeterminate', false);
+				$(section).find('.master-checkbox').prop('checked', true);
+			} else if(checkboxes.checked == 0 && checkboxes.unchecked){
+				$(section).find('.master-checkbox').prop('indeterminate', false);
+				$(section).find('.master-checkbox').prop('checked', false);
 			}
 		});
+		
+		function checkboxCheck(section){
+			var checked = 0;
+			var unchecked = 0;
+			
+			$(section).find('input[type="checkbox"]').not('.master-checkbox').each(function(i){
+				if($(this).prop('checked')){
+					checked++;
+				} else {
+					unchecked++;
+				}
+			});
+			
+			var checkboxes = { 'checked': checked, 'unchecked': unchecked };
+			
+			return checkboxes;
+		}
+		
+		
+		// Query Map
+		if($('body.page-template-data-query-spatial-php').length){
+			var qMapLatLon = new google.maps.LatLng(25, -90);
+			
+			var qMapOptions = {
+				center: qMapLatLon,
+				zoom: 5,
+				mapTypeId: google.maps.MapTypeId.TERRAIN
+			};
+			
+			var qMap = new google.maps.Map(document.getElementById('query-map'), qMapOptions);
+			
+			var qShape;
+			
+			var qShapeBounds = new google.maps.LatLngBounds(
+				new google.maps.LatLng(20, -100),
+				new google.maps.LatLng(30, -80)
+			);
+			
+			qShape = new google.maps.Rectangle({
+				bounds: qShapeBounds,
+				map: qMap,
+				editable: true,
+				strokeColor: "#ffff00",
+				strokeOpacity: 1,
+				strokeWeight: 1,
+				fillColor: "#ffff00",
+				fillOpacity: 0.1
+			});
+			
+			function updateBounds(bounds){
+				var boundNE = bounds.getNorthEast();
+				var boundSW = bounds.getSouthWest();
+				var boundN = boundNE.jb;
+				var boundE = boundNE.kb;
+				var boundS = boundSW.jb;
+				var boundW = boundSW.kb;
+				
+				$('form#data-query input[name="boundNorth"]').val(boundN);
+				$('form#data-query input[name="boundEast"]').val(boundE);
+				$('form#data-query input[name="boundSouth"]').val(boundS);
+				$('form#data-query input[name="boundWest"]').val(boundW);
+			}
+			
+			updateBounds(qShape.bounds);
+			
+			google.maps.event.addListener(qShape, 'bounds_changed', function() {
+				updateBounds(qShape.bounds);
+			});
+		}
+		
 		
 		// Data query form submit action.
 		$('form#data-query').submit(function(e){

@@ -17,7 +17,7 @@
 					</header>
 					<?php if(is_user_logged_in()) : ?>
 						<form action="" id="data-query" class="clearfix">
-							<div>
+							<div class="query-inputs">
 								<div class="comment">The subject about which the results are centered. I.e., Scomberomorus cavalla</div>
 								<div id="form-section-name" class="form-section clearfix">
 									<label>
@@ -34,6 +34,9 @@
 								<div id="form-section-find" class="form-section clearfix">
 									<div class="section-label">Find</div>
 									<div class="section-input clearfix">
+										<div class="clearfix row">
+											<label><input type="checkbox" class="master-checkbox" name="allInteractions" /> All Interaction Types</label>
+										</div>
 										<div class="clearfix row">
 											<div class="spacer">
 												<label><input type="checkbox" class="switch" name="findPrey" data-switch="filterPrey" /> Prey</label>

@@ -820,6 +820,34 @@ a.name-tip-link {
 	height: 450px;
 }
 
+#query-map-instructions {
+	font-weight: 400;
+}
+
+#query-map-top {
+	margin: 10px -12px 0;
+	width: 664px;
+	height: 15px;
+	background: url('img/bg-query-map-header.png') center 0 no-repeat;
+}
+
+#query-map {
+	margin: 0 0 10px;
+	width: 632px;
+	height: 356px;
+	border-right: 4px #808080 solid;
+	border-bottom: 4px #808080 solid;
+	border-left: 4px #808080 solid;
+	text-shadow: none;
+	box-shadow: 0 5px 20px rgba(0,0,0,.25);
+}
+
+#query-map img,
+#query-map object,
+#query-map embed {
+	max-width: inherit;
+}
+
 /* =============================================================================
    Sidebar
    ========================================================================== */
