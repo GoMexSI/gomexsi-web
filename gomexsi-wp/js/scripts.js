@@ -8,23 +8,48 @@ jQuery(document).ready(function($) {
 	if($('body.page-template-data-query-taxonomic-php').length){
 		$('input[name="subjectName"]').focus();
 		
-		// Conditional switch.
-		$('.switch').click(function(e){
-			var checked = $(this).prop('checked');
-			var switchName = $(this).attr('data-switch');
-			if(checked){
-				$('.conditional[data-switch="'+switchName+'"]').show().find('.query-var, .query-set').removeClass('null');
-			} else {
-				$('.conditional[data-switch="'+switchName+'"]').hide().find('.query-var, .query-set').addClass('null');
-			}
-		});
+		/* ==============================
+		   Miscellaneous
+		   ============================*/
+		
+		function nameTip(scientificName){
+			var nameTip = '';
+			nameTip += '<div class="name-tip-wrapper">';
+			nameTip += '<a href="#" class="name-tip-link">';
+			nameTip += scientificName;
+			nameTip += '</a>';
+			nameTip += '<div class="name-tip-box"><div class="container">';
+			nameTip += '<ul>';
+			nameTip += '<li><a href="#">View in Explorer Mode</a></li>';
+			nameTip += '<li><a href="http://fishbase.org/summary/' + scientificName.replace(' ', '-') + '.html" class="external" target="_blank">View on FishBase.org</a></li>';
+			nameTip += '</ul>';
+			nameTip += '</div>'; // .container
+			nameTip += '<div class="bridge"></div>';
+			nameTip += '</div></div>'; // .name-tip-box, .name-tip-wrapper
+			return nameTip;
+		}
+		
+		
+		function nameSafe(name){
+			var safeName = name.replace(' ', '_').toLowerCase();
+			return safeName;
+		}
+		
+		/* ==============================
+		   Fuzzy Search Suggestions
+		   ============================*/
 		
 		// Fuzzy search suggestions.
 		$('input.taxonomic').keydown(function(e){
+			// Which key was pressed? (Key code number.)
 			var key = e.which;
+			
+			// Convenience handles.
 			var taxWrap = $(this).parent('.tax-wrapper');
 			var taxSugList = $(taxWrap).find('.tax-suggestions');
 			var taxSugItems = $(taxWrap).find('.tax-suggestion');
+			
+			// Index of the currently selected suggestion in the list.
 			var i = $(taxWrap).find('.tax-suggestion.selected').index();
 			
 			// Down arrow.
@@ -49,76 +74,90 @@ jQuery(document).ready(function($) {
 			}
 		});
 		
-		var t;
+		// Handle for the suggestion setTimeout() function.
+		// Declared outside the function so it can be cancelled by a separate instance of the function.
+		var sugTimeout;
 		
 		$('input.taxonomic').keyup(function(e){
+			// Which key was pressed? (Key code number.)
 			var key = e.which;
+			
+			// Convenience handles.
 			var taxWrap = $(this).parent('.tax-wrapper');
 			var taxSugList = $(taxWrap).find('.tax-suggestions');
 			var taxSugItems = $(taxWrap).find('.tax-suggestion');
 			
+			// These keys are modifiers or arrow keys that should not trigger a suggestion request.
 			var noTriggerKeys = [16, 17, 18, 20, 37, 38, 39, 40, 91, 93, 27, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130];
 			
-			// Non-arrow, non-modifier keys.
+			// If not an arrow or modifier key.
 			if($.inArray(key, noTriggerKeys) < 0){
-				clearTimeout(t);
+				// Cancel any previous request.
+				clearTimeout(sugTimeout);
+				
+				// The value to send for suggestions.
 				var sugValue = $(this).val();
+				
+				// If we have a suggestion fragment.
 				if(sugValue.length){
-					t = setTimeout(function(){
-						$.post(
-							'/gomexsi/gomexsi-wp/data-query-suggestions.php',
-							{ url: 'http://46.4.36.142:8080/findTaxon/' + encodeURI(sugValue) },
-							function(data, textStatus, jqXHR){
-								// Convert to JSON.
-								if(data){
-									results = JSON && JSON.parse(data) || $.parseJSON(data);
-								}
-								
-								var suggestions = results.data;
-								
-								if($(taxWrap).find('ul.tax-suggestions').length){
-									$(taxWrap).find('ul.tax-suggestions').remove();
-								}
-								
-								if(suggestions[0][0] != sugValue){
-									$(taxWrap).append('<ul class="tax-suggestions" />');
-									var taxSugList = $(taxWrap).find('ul.tax-suggestions');
-									
-									$.each(suggestions, function(i){
-										$(taxSugList).append('<li class="tax-suggestion">' + suggestions[i][0] + '</li>');
-									});
-									
-									suggestionClickListener();
-								}
-							}
-						);
-/*
+					// Put this action on a 250 millisecond delay to avoid unnecessary requests.
+					sugTimeout = setTimeout(function(){
+						// Post to the request handler.
 						$.post(
 							'/wp-admin/admin-ajax.php',
 							{
 								action: 'rhm_data_query',
 								url: 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php',
+								serviceType: 'rest',
 								suggestion: sugValue
 							},
+							// Success function.
 							function(data, textStatus, jqXHR){
-								log(data);
-								if($(taxWrap).find('ul.tax-suggestions').length){
-									$(taxWrap).find('ul.tax-suggestions').remove();
+								if(data){
+									// Convert to JSON.
+									results = JSON && JSON.parse(data) || $.parseJSON(data);
+									
+									var suggestions = results[0].matches;
+									
+									// Remove the old suggestion list.
+									if($(taxWrap).find('ul.tax-suggestions').length){
+										$(taxWrap).find('ul.tax-suggestions').remove();
+									}
+									
+									// If we have at least one suggestion and it is not identical to the text in the input.
+									if($(suggestions).length > 0 && suggestions[0] != sugValue){
+										// Attach a new suggestion list.
+										$(taxWrap).append('<ul class="tax-suggestions" />');
+										var taxSugList = $(taxWrap).find('ul.tax-suggestions');
+										
+										// Add each suggestion to the list.
+										$.each(suggestions, function(i){
+											$(taxSugList).append('<li class="tax-suggestion">' + suggestions[i] + '</li>');
+										});
+										
+										// Event listener for suggestion items to make them clickable.
+										suggestionClickListener();
+									}
 								}
-								$(taxWrap).append('<ul class="tax-suggestions" />')
-								$(taxWrap).find('ul.tax-suggestions').append('<li class="tax-suggestion">test</li>');
 							}
 						);
-*/
-					}, 250);
+					}, 250); // 250 millisecond delay.
 				} else {
+					// If we don't have a suggestion fragment (e.g., the user deleted all text from the input) remove the suggestion list.
 					$(taxWrap).find('ul.tax-suggestions').remove();
 				}
 			}
 		});
-
+		
+		// If the user clicks anywhere on the page outside of the input box or the suggestion list, remove the list.
+		$('body').click(function(e){
+			$('ul.tax-suggestions').remove();
+		});
+		
+		// Attach click event listener to suggestion list items. This function must be run after the list items are created.
 		function suggestionClickListener(){
 			$('li.tax-suggestion').click(function(e){
+				// Stop propagation so that this does not count as a body click (and thereby remove the list).
 				e.stopPropagation();
 				$(this).parent().children().removeClass('selected');
 				var value = $(this).addClass('selected').text();
@@ -126,18 +165,431 @@ jQuery(document).ready(function($) {
 			});
 		}
 		
-		suggestionClickListener()
 		$('input.taxonomic').click(function(e){
+			// Stop propagation so that this does not count as a body click (and thereby remove the list).
 			e.stopPropagation();
 		});
 		
-		$('body').click(function(e){
-			$('ul.tax-suggestions').remove();
+		/* ==============================
+		   Results
+		   ============================*/
+		
+		function Results(data){
+			if(data){
+				try{
+					this.subjects = JSON && JSON.parse(data) || $.parseJSON(data);
+					log('JSON Parsed Results Object:'); log(this.subjects);
+					log('Processed Data Object:'); log(this);
+				}
+				catch(err){
+					this.subjects = '';
+					log('Error message: ' + err.message);
+					log('Unparsed Results String:'); log(this);
+				}
+			} else {
+				this.subjects = '';
+				log('No data.');
+			}
+		}
+		
+		Results.prototype.prepResultsArea = function(){
+			$('#results-area').html('');
+		}
+		
+		// Iterate over prey, predators, etc., to get make cumulative lists and get some statistics.
+		Results.prototype.makeSpecimenList = function(){
+			var totalInstanceCount = 0;
+			var subjects = this.subjects;
+			
+			$.each(subjects, function(i){
+				var subject = subjects[i];
+				
+				subject.preyInstanceCount = 0;
+				subject.preyList = [];
+				
+				subject.predInstanceCount = 0;
+				subject.predList = [];
+				
+				var preyInstances = subjects[i].preyInstances;
+				
+				$.each(preyInstances, function(j){
+					var instance = preyInstances[j];
+					
+					subject.preyInstanceCount++;
+					totalInstanceCount++;
+					
+					var prey = instance.prey;
+				
+					$.each(prey, function(k){
+						var safeName = nameSafe(prey[k]);
+						
+						if(safeName in subject.preyList){
+							subject.preyList[safeName].count++;
+						} else {
+							subject.preyList[safeName] = {};
+							subject.preyList[safeName].scientificName = prey[k];
+							subject.preyList[safeName].count = 1;
+						}
+					});
+				});
+					
+				var predInstances = subjects[i].predInstances;
+				
+				$.each(predInstances, function(j){
+					var instance = predInstances[j];
+					
+					subject.predInstanceCount++;
+					totalInstanceCount++;
+					
+					if(typeof instance.pred == 'object'){
+						var safeName = nameSafe(instance.pred[0]);
+					} else {
+						var safeName = nameSafe(instance.pred);
+					}
+					
+					if(safeName in subject.predList){
+						subject.predList[safeName].count++;
+					} else {
+						subject.predList[safeName] = {};
+						subject.predList[safeName].scientificName = instance.pred;
+						subject.predList[safeName].count = 1;
+					}
+				});
+			});
+			
+			this.totalInstanceCount = totalInstanceCount;
+		}
+		
+		// Make the subject blocks on the page.
+		Results.prototype.makeSubjects = function(){
+			this.totalSubjectCount = $(this.subjects).length;
+			var subjects = this.subjects;
+			
+			$('#results-area').empty();
+			
+			$.each(subjects, function(i){
+				var subject = subjects[i];
+				
+				subject.baseID = subject.scientificName.replace(' ', '-').toLowerCase();
+				$('#results-area').append('<div id="' + subject.baseID + '" class="query-results" />');
+				var subjectTitleID = subject.baseID + '-title';
+				$('#' + subject.baseID).append('<h2 id="' + subjectTitleID + '" class="subject-name">' + nameTip(subject.scientificName) + ' <span class="common-name"></span></h2>');
+				
+				if('commonNames' in subject){
+					var commonNames = subject.commonNames;
+					var commonNamesText = '&nbsp;&ndash;&nbsp; ';
+					
+					$.each(commonNames, function(j){
+						commonNamesText += commonNames[j];
+						if((j + 1) < $(commonNames).length){
+							commonNamesText += ', ';
+						}
+					});
+					$('#' + subjectTitleID + ' .common-name').html(commonNamesText);
+				}
+				
+				makePrey(subject);
+				makePred(subject);
+			});
+		}
+		
+		// Make the Prey section within a subject block.
+		// Called in this.makeSubjects.
+		function makePrey(subject){
+			if(subject.preyInstanceCount){
+				// Results section for prey.
+				var sectionID = subject.baseID + '-prey-section';
+				$('#' + subject.baseID).append('<div id="' + sectionID + '" class="results-section" />');
+				var resultsSection = $('#' + sectionID);
+				$(resultsSection).append('<h3 class="section-title toggle">Prey</h3>');
+				$(resultsSection).append('<div class="container" />');
+				
+				// Prey Summary.
+				$(resultsSection).children('.container').append('<div class="results-subsection prey-summary" />');
+				var preySummary = $('#' + subject.baseID + ' .prey-summary');
+				$(preySummary).append('<form><label class="view-option toggle-summary-all"><input type="checkbox" /> Show All Prey</label></form>');
+				$(preySummary).append('<h4 class="subsection-title toggle">Prey Summary</h4>');
+				$(preySummary).append('<div class="container" />');
+				$(preySummary).children('.container').append('<table class="summary"><tbody></tbody></table>');
+				
+				// Sort the prey list by number of instances for a given prey. We must dump the prey list into an array so it can be sorted.
+				var preyList = subject.preyList;
+				var preyListDesc = [];
+				
+				for(var prop in preyList){
+					preyListDesc.push({
+						safeName: prop,
+						scientificName: preyList[prop].scientificName,
+						count: preyList[prop].count,
+						percent: Math.round( ( preyList[prop].count / subject.preyInstanceCount ) * 100 )
+					});
+				}
+				
+				// Sort using a custom function.
+				preyListDesc.sort(function(a,b){
+					// If the count is the same for two items, sort alphabetically ascending.
+					if(b.count === a.count){
+						return a.scientificName < b.scientificName ? -1 : a.scientificName > b.scientificName ? 1 : 0;
+					}
+					
+					// Otherwise, sort by count descending.
+					return b.count - a.count;
+				});
+				
+				var rowCount = 0;
+				
+				$.each(preyListDesc, function(i){
+					rowCount++;
+					var prey = preyListDesc[i];
+					if(rowCount < 11){
+						var row = '<tr>';
+					} else {
+						var row = '<tr class="overflow">';
+					}
+					row += '<td class="species-name">' + nameTip(prey.scientificName) + '</td>';
+					row += '<td class="percent-number">' + prey.percent + '%</td>';
+					row += '<td class="percent-bar"><div class="percent-bar-total"><div class="percent-bar-value" style="width:' + prey.percent + '%"></div></div></td>';
+					row += '</tr>';
+					
+					$('#' + subject.baseID + ' .prey-summary table.summary').append(row);
+				});
+				
+				// Prey Instance Details
+				var instanceDetailsID = subject.baseID + '-prey-instance-details';
+				$(resultsSection).children('.container').append('<div id="' + instanceDetailsID + '" class="results-subsection instance-details" />');
+				var preyInstanceDetails = $('#' + instanceDetailsID);
+				$(preyInstanceDetails).append('<form><label class="view-option toggle-references"><input type="checkbox" /> References</label><label class="view-option toggle-stats"><input type="checkbox" /> Prey Stats</label></form>');
+				$(preyInstanceDetails).append('<h4 class="subsection-title toggle">Instance Details</h4>');
+				$(preyInstanceDetails).append('<div class="container" />');
+				
+				$.each(subject.preyInstances, function(i){
+					var instance = subject.preyInstances[i];
+					
+					var instanceID = subject.baseID + '-prey-instance-' + i;
+					
+					$(preyInstanceDetails).children('.container').append('<div id="' + instanceID + '" class="single-instance clearfix" />');
+					var singleInstance = $('#' + instanceID);
+					
+					var instanceDate = ('date' in instance ? instance.date : 'unknown');
+					$(singleInstance).append('<div class="date"><h5 class="label">Date:</h5> ' + instanceDate + '</div>');
+					
+					var instanceLocation = ('loc' in instance ? instance.loc : 'unknown');
+					var lat = ('lat' in instance ? instance.lat : '');
+					var lon = ('lon' in instance ? instance.lon : '');
+					$(singleInstance).append('<div class="location"><h5 class="label">Location:</h5> ' + instanceLocation + ' <a href="#map-canvas" class="map-link" data-lat="' + lat + '" data-lon="' + lon + '">Map</a></div>');
+					
+					var instancePreyListID = instanceID + '-prey-list';
+					$(singleInstance).append('<div class="prey species-list"><h5 class="label">Prey:</h5><ul id="' + instancePreyListID + '"></ul></div>');
+					$.each(instance.prey, function(j){
+						var prey = instance.prey[j];
+						
+						var li = '<li class="clearfix">';
+						li += '<div class="name">' + nameTip(prey) + '</div>';
+						li += '<div class="details">Details go here</div>';
+						li += '</li>';
+						
+						$('#' + instancePreyListID).append(li);
+					});
+					
+					var instanceReference = ('ref' in instance ? instance.ref : 'unknown');
+					$(singleInstance).append('<div class="reference"><h5 class="label">Reference:</h5> ' + instanceReference + '</div>');
+				});
+				
+				$(resultsSection).append('<hr class="section-break" />');
+			}
+		}
+		
+		// Make the Prey section within a subject block.
+		// Called in this.makeSubjects.
+		function makePred(subject){
+			if(subject.predInstanceCount){
+				// Results section for predators.
+				var sectionID = subject.baseID + '-pred-section';
+				$('#' + subject.baseID).append('<div id="' + sectionID + '" class="results-section" />');
+				var resultsSection = $('#' + sectionID);
+				$(resultsSection).append('<h3 class="section-title toggle">Predators</h3>');
+				$(resultsSection).append('<div class="container" />');
+				
+				// Predator Summary.
+				$(resultsSection).children('.container').append('<div class="results-subsection pred-summary" />');
+				var predSummary = $('#' + subject.baseID + ' .pred-summary');
+				$(predSummary).append('<form><label class="view-option toggle-summary-all"><input type="checkbox" /> Show All Predators</label></form>');
+				$(predSummary).append('<h4 class="subsection-title toggle">Predator Summary</h4>');
+				$(predSummary).append('<div class="container" />');
+				$(predSummary).children('.container').append('<table class="summary"><tbody></tbody></table>');
+				
+				// Sort the predator list by number of instances for a given predator. We must dump the predator list into an array so it can be sorted.
+				var predList = subject.predList;
+				var predListDesc = [];
+				
+				for(var prop in predList){
+					predListDesc.push({
+						safeName: prop,
+						scientificName: predList[prop].scientificName,
+						count: predList[prop].count,
+						percent: Math.round( ( predList[prop].count / subject.predInstanceCount ) * 100 )
+					});
+				}
+				
+				// Sort using a custom function.
+				predListDesc.sort(function(a,b){
+					// If the count is the same for two items, sort alphabetically ascending.
+					if(b.count === a.count){
+						return a.scientificName < b.scientificName ? -1 : a.scientificName > b.scientificName ? 1 : 0;
+					}
+					
+					// Otherwise, sort by count descending.
+					return b.count - a.count;
+				});
+				
+				var rowCount = 0;
+				
+				$.each(predListDesc, function(i){
+					rowCount++;
+					var pred = predListDesc[i];
+					if(rowCount < 11){
+						var row = '<tr>';
+					} else {
+						var row = '<tr class="overflow">';
+					}
+					row += '<td class="species-name">' + nameTip(pred.scientificName) + '</td>';
+					row += '<td class="percent-number">' + pred.percent + '%</td>';
+					row += '<td class="percent-bar"><div class="percent-bar-total"><div class="percent-bar-value" style="width:' + pred.percent + '%"></div></div></td>';
+					row += '</tr>';
+					
+					$('#' + subject.baseID + ' .pred-summary table.summary').append(row);
+				});
+				
+				// Predator Instance Details
+				var instanceDetailsID = subject.baseID + '-pred-instance-details';
+				$(resultsSection).children('.container').append('<div id="' + instanceDetailsID + '" class="results-subsection instance-details" />');
+				var predInstanceDetails = $('#' + instanceDetailsID);
+				$(predInstanceDetails).append('<form><label class="view-option toggle-references"><input type="checkbox" /> References</label><label class="view-option toggle-stats"><input type="checkbox" /> Predator Stats</label></form>');
+				$(predInstanceDetails).append('<h4 class="subsection-title toggle">Instance Details</h4>');
+				$(predInstanceDetails).append('<div class="container" />');
+				
+				$.each(subject.predInstances, function(i){
+					var instance = subject.predInstances[i];
+					
+					var instanceID = subject.baseID + '-pred-instance-' + i;
+					
+					$(predInstanceDetails).children('.container').append('<div id="' + instanceID + '" class="single-instance clearfix" />');
+					var singleInstance = $('#' + instanceID);
+					
+					var instanceDate = ('date' in instance ? instance.date : 'unknown');
+					$(singleInstance).append('<div class="date"><h5 class="label">Date:</h5> ' + instanceDate + '</div>');
+					
+					var instanceLocation = ('loc' in instance ? instance.loc : 'unknown');
+					var lat = ('lat' in instance ? instance.lat : '');
+					var lon = ('lon' in instance ? instance.lon : '');
+					$(singleInstance).append('<div class="location"><h5 class="label">Location:</h5> ' + instanceLocation + ' <a href="#map-canvas" class="map-link" data-lat="' + lat + '" data-lon="' + lon + '">Map</a></div>');
+					
+					var instancePredListID = instanceID + '-pred-list';
+					$(singleInstance).append('<div class="predator species-list"><h5 class="label">Predator:</h5><ul id="' + instancePredListID + '"></ul></div>');
+
+					var li = '<li class="clearfix">';
+					li += '<div class="name">' + nameTip(instance.pred) + '</div>';
+					li += '<div class="details">Details go here</div>';
+					li += '</li>';
+					$('#' + instancePredListID).append(li);
+					
+					var instanceReference = ('ref' in instance ? instance.ref : 'unknown');
+					$(singleInstance).append('<div class="reference"><h5 class="label">Reference:</h5> ' + instanceReference + '</div>');
+				});
+				
+				$(resultsSection).append('<hr class="section-break" />');
+			}
+		}
+		
+		// Populate the results header area.
+		Results.prototype.makeResultsHeader = function(){
+			$('#query-results-info').html('Returned ' + this.totalSubjectCount + ($(this.totalSubjectCount).length > 1 ? ' results' : ' result') + ' with ' + this.totalInstanceCount + ' instances recorded.');
+		}
+		
+		// Section toggles.
+		Results.prototype.toggleListener = function(){
+			$('.toggle').click(function(e){
+				$(this).parent().toggleClass('closed');
+			});
+			
+			$('.toggle-summary-all').click(function(e){
+				if($(this).children('input').prop('checked')){
+					$(this).closest('.results-subsection').find('.overflow').show();
+				} else {
+					$(this).closest('.results-subsection').find('.overflow').hide();
+				}
+			});
+			
+			$('.toggle-stats').click(function(e){
+				if($(this).children('input').prop('checked')){
+					$(this).closest('.instance-details').find('.species-list').addClass('expanded');
+				} else {
+					$(this).closest('.instance-details').find('.species-list').removeClass('expanded');
+				}
+			});
+			
+			$('.toggle-references').click(function(e){
+				if($(this).children('input').prop('checked')){
+					$(this).closest('.instance-details').find('.reference').show();
+				} else {
+					$(this).closest('.instance-details').find('.reference').hide();
+				}
+			});
+		}
+		
+		Results.prototype.mapListner = function(){
+			$('.map-link').click(function(e){
+				e.preventDefault();
+				
+				var lat = $(this).attr('data-lat');
+				var lon = $(this).attr('data-lon');
+				var latLon = new google.maps.LatLng(lat, lon);
+				
+				if(lat && lon){
+					var mapOptions = {
+						center: latLon,
+						zoom: 8,
+						mapTypeId: google.maps.MapTypeId.TERRAIN
+					};
+					
+					var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+					
+					var marker = new google.maps.Marker({
+						position: latLon,
+						map: map
+					});
+					
+					$.fancybox({
+						'type': 'inline',
+						'href': '#map-canvas',
+						'onClosed': function(){
+							$('div#hideaway .fancybox-inline-tmp').attr('id', 'map-canvas').attr('style','').removeClass('fancybox-inline-tmp');
+						}
+					});
+				}
+			});
+		}
+		
+		
+		
+		/* ==============================
+		   Query Form
+		   ============================*/
+		
+		// Conditional switch.
+		$('.switch').click(function(e){
+			var checked = $(this).prop('checked');
+			var switchName = $(this).attr('data-switch');
+			if(checked){
+				$('.conditional[data-switch="'+switchName+'"]').show().find('.query-var, .query-set').removeClass('null');
+			} else {
+				$('.conditional[data-switch="'+switchName+'"]').hide().find('.query-var, .query-set').addClass('null');
+			}
 		});
 		
 		// Data query form submit action.
 		$('form#data-query').submit(function(e){
-		
+			
 			// Prevent actual form submission.  We'll do this with AJAX.
 			e.preventDefault();
 			
@@ -145,26 +597,9 @@ jQuery(document).ready(function($) {
 			$('#status').html('');
 			
 			// The query object that we'll submit via POST.
-			var queryObj = {};
+			var queryString = $(this).serialize();
 			
-			// The "action" tells WordPress what to run.  Defined in functions.php.
-			queryObj.action = 'rhm_data_query';
-			
-			// Loop through the form elements that have the class "query-var".
-			$('form#data-query .query-var').each(function(){
-				// Use the name attribute as the key and the value as the value.
-				if($(this).hasClass('null')){
-					queryObj[$(this).attr('name')] = '';
-				} else {
-					if($(this).attr('type') == 'checkbox'){
-						queryObj[$(this).attr('name')] = $(this).prop('checked');
-					} else {
-						queryObj[$(this).attr('name')] = $(this).val();
-					}
-				}
-			});
-			
-			log('Query Object:'); log(queryObj);
+			log('Query String:'); log(queryString);
 			
 			// POST to the WordPress Ajax system.
 			$.post(
@@ -173,17 +608,24 @@ jQuery(document).ready(function($) {
 				'/wp-admin/admin-ajax.php',
 				
 				// The object containing the POST data.
-				queryObj,
+				queryString,
 				
 				// Success callback function.
 				function(data, textStatus, jqXHR){
-					// The function to process the data.
-					processData(data);
+					// The function to process the results data.
+					var r = new Results(data);
+					
+					r.prepResultsArea();
+					r.makeSpecimenList();
+					r.makeSubjects();
+					r.makeResultsHeader();
+					r.toggleListener();
+					r.mapListner();
 					
 					// Show status on page.
 					$('#status').html(textStatus);
 					
-					// Show results on page.
+					// Show raw results on page.
 					$('#raw-results').html(data);
 				}
 			
@@ -194,124 +636,14 @@ jQuery(document).ready(function($) {
 				$('#status').html(textStatus);
 				
 				// Clear results area.
-				$('#query-results').html('');
+				$('#query-results').html('').hide();
 				$('#raw-results').html('');
 			});
 		});
 		
-		// "Clear Results" link action.
-		$('a#clear').click(function(e){
-			e.preventDefault();
-			$('#status').html('');
-			$('#query-results').html('');
-			$('#raw-results').html('');
-		});
 		
-		// Convert ugly property names into pretty names.
-		function niceName(name){
-			// Table of names.
-			var niceName = {
-				pred: 'Predators',
-				prey: 'Prey',
-				scientificName: 'Scientific Name',
-				subjectInstances: 'Subject Instances'
-			}
-			
-			if(typeof niceName[name] != 'undefined'){
-				// If the name is in the table, return the nice name.
-				return niceName[name];
-			} else {
-				// Otherwise, just return the original name.
-				return name;
-			}
-		}
-		
-		// Process returned data.
-		function processData(data){
-			// Clear the results container.
-			$('#query-results').html('');
-			
-			if($('select[name="url"]').val() != 'http://gomexsi.tamucc.edu/gomexsi/query-test-return.php'){
-				// Find the end of the array so we can trim any extra characters.
-				var trimLimit = data.lastIndexOf(']') + 1;
-				
-				// Trim any extra characters.
-				var results = data.substring(0, trimLimit);
-				
-				// Convert to JSON.
-				if(results){
-					results = JSON && JSON.parse(results) || $.parseJSON(results);
-				}
-				
-				log('JSON Parsed Results Object:'); log(results);
-				
-				// Loop through the results.
-				$.each(results, function(i, subject){
-					if(!subject.scientificName){
-						// Log an error if there is no scientificName property.
-						log('Error: no scientific name.');
-					} else {
-						// Create a unique base ID for this subject.
-						var baseID = subject.scientificName.replace(' ', '-').toLowerCase();
-						
-						// Output the scientific name.
-						var sciNameID = baseID + '-sci-name';
-						$('#query-results').append('<p id="' + sciNameID + '">Scientific Name: ' + subject.scientificName + '</p>');
-						
-						if(!subject.subjectInstances){
-							// Log an error if there are no instances.
-							log('Error: no subject instances.');
-						} else {
-							// Output instance title.
-							var instancesTitleID = baseID + '-instances-title';
-							$('#query-results').append('<p id="' + instancesTitleID + '">Subject Instances:</p>');
-							
-							// Make a list for instances.
-							var instancesListID = baseID + '-instances-list';
-							$('#query-results').append('<ul id="' + instancesListID + '"/>');
-							var instancesList = $('ul#' + instancesListID);
-							
-							$.each(subject.subjectInstances, function(j, instance){
-								// Make list item for each instance.
-								var singleInstanceID = baseID + '-instance-' + (j + 1);
-								$(instancesList).append('<li id="' + singleInstanceID + '">Instance ' + (j + 1) + '</li>');
-								var singleInstance = $(instancesList).children('li#' + singleInstanceID);
-								
-								// Make sublist of instance properties.
-								var singleInstanceListID = singleInstanceID + '-list';
-								$(singleInstance).append('<ul id="' + singleInstanceListID + '" />');
-								var singleInstanceList = $('ul#' + singleInstanceListID);
-								
-								$.each(instance, function(propName, propValue){
-									// Make list item for each instance property.
-									var instancePropID = singleInstanceID + '-' + propName;
-									$(singleInstanceList).append('<li id="' + instancePropID + '">' + niceName(propName) + '</li>');
-									var instanceProp = $('li#' + instancePropID);
-									
-									if(typeof propValue == 'object'){
-										// If this property is an object (an array is an object), then make a list for its values.
-										var propListID = instancePropID + '-list';
-										$(singleInstanceList).append('<ul id="' + propListID + '" />');
-										var propList = $('ul#' + propListID);
-										
-										$.each(propValue, function(k, item){
-											// Make list items for each value.
-											$(propList).append('<li>' + item + '</li>');
-										});
-									} else {
-										// If this property is not an object (or an array), then just add the value to the property list item.
-										$(instanceProp).append(': ' + propValue)
-									}
-								});
-							});
-						}
-					}
-				});
-			} else {
-				log('Unparsed Results String:'); log(data);
-			}
-		}
 	}
+
 
 
 /* =============================================================================
@@ -436,3 +768,5 @@ jQuery(document).ready(function($) {
 	});
 	
 });
+
+$("a[href$='.jpg'],a[href$='.jpeg'],a[href$='.png'],a[href$='.gif']").fancybox();

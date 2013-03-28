@@ -24,7 +24,7 @@
 										<div class="section-label">Name</div>
 										<div class="section-input clearfix">
 											<div class="tax-wrapper">
-												<input type="text" class="query-var taxonomic" name="subjectName" placeholder="Any taxonomic level, scientific or common name" />
+												<input type="text" class="taxonomic" name="subjectName" placeholder="Any taxonomic level, scientific or common name" />
 											</div>
 										</div>
 									</label>
@@ -36,104 +36,104 @@
 									<div class="section-input clearfix">
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="query-var switch" name="findPrey" data-switch="filterPrey" /> Prey</label>
+												<label><input type="checkbox" class="switch" name="findPrey" data-switch="filterPrey" /> Prey</label>
 											</div>
 											<div class="conditional" data-switch="filterPrey">
 												<label>
 													<span class="visuallyhidden">Limit prey results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="query-var taxonomic filter" name="filterPrey" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterPrey" placeholder="Limit results by name" />
 													</div>
 												</label>
 											</div>
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="query-var switch" name="findPredators" data-switch="filterPredators" /> Predators</label>
+												<label><input type="checkbox" class="switch" name="findPredators" data-switch="filterPredators" /> Predators</label>
 											</div>
 											<div class="conditional" data-switch="filterPredators">
 												<label>
 													<span class="visuallyhidden">Limit predator results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="query-var taxonomic filter" name="filterPredators" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterPredators" placeholder="Limit results by name" />
 													</div>
 												</label>
 											</div>
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="query-var switch" name="findParasites" data-switch="filterParasites" /> Parasites</label>
+												<label><input type="checkbox" class="switch" name="findParasites" data-switch="filterParasites" /> Parasites</label>
 											</div>
 											<div class="conditional" data-switch="filterParasites">
 												<label>
 													<span class="visuallyhidden">Limit parasites results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="query-var taxonomic filter" name="filterParasites" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterParasites" placeholder="Limit results by name" />
 													</div>
 												</label>
 											</div>
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="query-var switch" name="findMutualists" data-switch="filterMutalists" /> Mutalists</label>
+												<label><input type="checkbox" class="switch" name="findMutualists" data-switch="filterMutalists" /> Mutalists</label>
 											</div>
 											<div class="conditional" data-switch="filterMutalists">
 												<label>
 													<span class="visuallyhidden">Limit mutalists results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="query-var taxonomic filter" name="filterMutalists" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterMutalists" placeholder="Limit results by name" />
 													</div>
 												</label>
 											</div>
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="query-var switch" name="findCommonsals" data-switch="filterCommonsals" /> Commonsals</label>
+												<label><input type="checkbox" class="switch" name="findCommonsals" data-switch="filterCommonsals" /> Commonsals</label>
 											</div>
 											<div class="conditional" data-switch="filterCommonsals">
 												<label>
 													<span class="visuallyhidden">Limit commonsals results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="query-var taxonomic filter" name="filterCommonsals" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterCommonsals" placeholder="Limit results by name" />
 													</div>
 												</label>
 											</div>
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="query-var switch" name="findAmensals" data-switch="filterAmensals" /> Amensals</label>
+												<label><input type="checkbox" class="switch" name="findAmensals" data-switch="filterAmensals" /> Amensals</label>
 											</div>
 											<div class="conditional" data-switch="filterAmensals">
 												<label>
 													<span class="visuallyhidden">Limit amensals results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="query-var taxonomic filter" name="filterAmensals" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterAmensals" placeholder="Limit results by name" />
 													</div>
 												</label>
 											</div>
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="query-var switch" name="findPrimaryHosts" data-switch="filterPrimaryHosts" /> Primary Hosts</label>
+												<label><input type="checkbox" class="switch" name="findPrimaryHosts" data-switch="filterPrimaryHosts" /> Primary Hosts</label>
 											</div>
 											<div class="conditional" data-switch="filterPrimaryHosts">
 												<label>
 													<span class="visuallyhidden">Limit primary hosts results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="query-var taxonomic filter" name="filterPrimaryHosts" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterPrimaryHosts" placeholder="Limit results by name" />
 													</div>
 												</label>
 											</div>
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="query-var switch" name="findSecondaryHosts" data-switch="filterSecondaryHosts" /> Secondary Hosts</label>
+												<label><input type="checkbox" class="switch" name="findSecondaryHosts" data-switch="filterSecondaryHosts" /> Secondary Hosts</label>
 											</div>
 											<div class="conditional" data-switch="filterSecondaryHosts">
 												<label>
 													<span class="visuallyhidden">Limit secondary hosts results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="query-var taxonomic filter" name="filterSecondaryHosts" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterSecondaryHosts" placeholder="Limit results by name" />
 													</div>
 												</label>
 											</div>
@@ -148,7 +148,7 @@
 										<label><input type="checkbox" class="switch" name="byRegion" data-switch="byRegion" /> Search by region</label>
 										<div class="conditional" data-switch="byRegion">
 											<label><div class="spacer">Octant</div>
-												<select class="query-var" name="octant">
+												<select name="octant">
 													<option value=""></option>
 													<option value="nne">North Northeast</option>
 													<option value="ene">East Northeast</option>
@@ -162,7 +162,7 @@
 											</label>
 											
 											<label><div class="spacer">Major locale</div>
-												<select class="query-var" name="majorLocale">
+												<select name="majorLocale">
 													<option value=""></option>
 													<option value="locale1">Locale 1</option>
 													<option value="locale2">Locale 2</option>
@@ -172,7 +172,7 @@
 											</label>
 											
 											<label><div class="spacer">Locale type</div>
-												<select class="query-var" name="localeType">
+												<select name="localeType">
 													<option value=""></option>
 													<option value="type1">Type 1</option>
 													<option value="type2">Type 2</option>
@@ -190,7 +190,7 @@
 											</label>
 											
 											<label><div class="spacer">Major bay name</div>
-												<select class="query-var" name="majorBayName">
+												<select name="majorBayName">
 													<option value=""></option>
 													<option value="bay1">Bay 1</option>
 													<option value="bay2">Bay 2</option>
@@ -200,7 +200,7 @@
 											</label>
 											
 											<label><div class="spacer">Major riverine name</div>
-												<select class="query-var" name="majorRiverineName">
+												<select name="majorRiverineName">
 													<option value=""></option>
 													<option value="river1">River 1</option>
 													<option value="river2">River 2</option>
@@ -215,7 +215,7 @@
 								<div class="comment">Development testing options. The submitted query object (POST data) is logged to your browser's console. If you set Request URL to query-test-return.php, the POST array will show under Raw Results.</div>
 								<div class="form-section clearfix">
 									<label>Service Type:
-										<select class="query-var" name="serviceType">
+										<select name="serviceType">
 											<option value="rest">REST</option>
 											<option value="mock">Mock</option>
 											<option value="">Live</option>
@@ -223,9 +223,9 @@
 									</label>
 									
 									<label>Request URL:
-										<select class="query-var" name="url">
-											<option value="http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php">RequestHandler.php</option>
+										<select name="url">
 											<option value="http://gomexsi.tamucc.edu/gomexsi/query-full-mock.php">query-full-mock.php</option>
+											<option value="http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php">RequestHandler.php</option>
 											<option value="http://gomexsi.tamucc.edu/gomexsi/query-test-return.php">query-test-return.php</option>
 										</select>
 									</label>
@@ -235,16 +235,22 @@
 									Status: <span id="status"></span>
 								</div>
 							</div>
-						
+							
+							<input type="hidden" name="action" value="rhm_data_query" />
 							<input type="submit" id="form-submit" class="gradient" value="Submit Query" />
 						</form>
 						
 						<hr />
 						
-						<div id="query-results"></div>
+						<div id="query-results-header" class="clearfix">
+							<!-- <a id="query-results-download" href="#">Download the raw data</a> -->
+							<span id="query-results-info"></span>
+						</div>
+						
+						<div id="results-area"></div>
 						
 						<pre><h4>Raw Results:</h4></pre>
-						<pre id="raw-results" style="min-height: 100px;"></pre>
+						<pre id="raw-results"></pre>
 
 					<?php else : ?>
 						<hr style="margin: 1em 0 2em;" />
@@ -258,6 +264,10 @@
 			<?php get_template_part('copyright'); ?>
 		</div>
 	</div>
+</div>
+
+<div id="hideaway" class="visuallyhidden">
+	<div id="map-canvas"></div>
 </div>
 
 <?php get_sidebar(); ?>
