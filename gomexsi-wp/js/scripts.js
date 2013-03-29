@@ -28,7 +28,8 @@ jQuery(document).ready(function($) {
 	
 	// Start by checking to see if we're on the data query page template.
 	if(modeIs('query')){
-		$('input[name="subjectName"]').focus();
+		var subjectNameInput = $('form#data-query input[name="subjectName"]');
+		$(subjectNameInput).focus();
 		
 		/* ==============================
 		   Miscellaneous
@@ -42,7 +43,7 @@ jQuery(document).ready(function($) {
 			nameTip += '</a>';
 			nameTip += '<div class="name-tip-box"><div class="container">';
 			nameTip += '<ul>';
-			nameTip += '<li><a href="#">View in Explorer Mode</a></li>';
+			nameTip += '<li><a href="/query-database/exploration/" class="ex-link">View in Explorer Mode<form class="visuallyhidden" method="post" action="/query-database/exploration/"><input type="hidden" name="subjectName" value="' + scientificName + '" /></form></a></li>';
 			nameTip += '<li><a href="http://fishbase.org/summary/' + scientificName.replace(' ', '-') + '.html" class="external" target="_blank">View on FishBase.org</a></li>';
 			nameTip += '</ul>';
 			nameTip += '</div>'; // .container
@@ -526,8 +527,8 @@ jQuery(document).ready(function($) {
 			$('#query-results-info').html('Returned ' + this.totalSubjectCount + ($(this.totalSubjectCount).length > 1 ? ' results' : ' result') + ' with ' + this.totalInstanceCount + ' instances recorded.');
 		}
 		
-		// Section toggles.
-		Results.prototype.toggleListener = function(){
+		// Section toggles and name links.
+		Results.prototype.resultsListeners = function(){
 			$('.toggle').click(function(e){
 				$(this).parent().toggleClass('closed');
 			});
@@ -554,6 +555,15 @@ jQuery(document).ready(function($) {
 				} else {
 					$(this).closest('.instance-details').find('.reference').hide();
 				}
+			});
+			
+			$('.name-tip-link').click(function(e){
+				e.preventDefault();
+			});
+			
+			$('.ex-link').click(function(e){
+				e.preventDefault();
+				$(this).children('form').submit();
 			});
 		}
 		
@@ -858,7 +868,7 @@ jQuery(document).ready(function($) {
 					if(modeIs('taxonomic') || modeIs('spatial')){
 						r.makeSubjects();
 						r.makeResultsHeader();
-						r.toggleListener();
+						r.resultsListeners();
 						r.mapListner();
 					} else {
 						r.makeExArea();
@@ -885,7 +895,11 @@ jQuery(document).ready(function($) {
 			});
 		});
 		
+		if($(subjectNameInput).val()){
+			$('form#data-query').submit();
+		}
 		
+
 	}
 
 

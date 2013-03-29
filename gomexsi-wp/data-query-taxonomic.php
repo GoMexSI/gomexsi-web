@@ -24,7 +24,8 @@
 										<div class="section-label">Name</div>
 										<div class="section-input clearfix">
 											<div class="tax-wrapper">
-												<input type="text" class="taxonomic" name="subjectName" placeholder="Any taxonomic level, scientific or common name" />
+												<?php $subjectName = (isset($_POST['subjectName']) ? $_POST['subjectName'] : ''); ?>
+												<input type="text" class="taxonomic" name="subjectName" placeholder="Any taxonomic level, scientific or common name" value="<?php echo $subjectName; ?>" />
 											</div>
 										</div>
 									</label>
