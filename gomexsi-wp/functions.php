@@ -22,6 +22,9 @@ function rhm_child_theme_setup(){
 	// Enqueue Google Maps API script.
 	add_action( 'wp_enqueue_scripts', 'rhm_enqueue_google_maps_api' );
 	
+	// Enqueue jsPlumb.
+	add_action( 'wp_enqueue_scripts', 'rhm_enqueue_jsPlumb' );
+	
 	// Enqueue child theme plugin scripts.
 	add_action( 'wp_enqueue_scripts', 'rhm_enqueue_child_scripts' );
 	
@@ -134,8 +137,16 @@ function rhm_enqueue_google_maps_api() {
 	}
 }
 
+// Enque Google Maps API on template pages that need it.
+function rhm_enqueue_jsPlumb() {
+	if(is_page_template('data-query-exploration.php')) {
+		// jsPlumb plugin stored in child theme.
+		wp_enqueue_script('rhm_jsPlumb', get_stylesheet_directory_uri() . '/js/jsPlumb.js');
+	}
+}
+
 function rhm_enqueue_child_scripts() {
-	// JS plugins stored in RHM Framework.
+	// JS plugins stored in child theme.
 	wp_enqueue_script('rhm_js_child_plugins', get_stylesheet_directory_uri() . '/js/plugins.js');
 }
 

@@ -165,7 +165,7 @@
 								</div>
 								
 								<div class="form-section clearfix">
-									<div id="query-map-instructions">Resize the box on the map to limit your results.</div>
+									<div class="query-instructions">Resize the box on the map to limit your results.</div>
 								</div>
 							</div>
 							
