@@ -11,8 +11,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
     {
     	$this->handler = new SearchRequestHandler();
     	$this->toParse = array("serviceType" => "REST",
-			   "findPrey"=>"true",
-			   "findPredators" => "false",
+			   "findPrey"=>"on",
 			   "subjectName" => "Zalieutes mcgintyi");
     }
 
@@ -30,8 +29,8 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$expectedPreyNames = array("Foraminifera", "Goniadella", "Goniada maculata", "Teleostei", "Crustacea", "Animalia", "Rhachotropis", "Paraonidae", "Phyllodoce arenae", "Opheliidae", "Ophiodromus", "Spionidae", "Amphipoda", "Nematoda", "Lumbrineridae", "Onuphidae", "Anchialina typica", "Nemertea", "Bathymedon", "Sediment", "Xanthoidea");
 
     	$this->toParse["subjectName"] = "Zalieutes mcgintyi";
-    	$this->toParse["findPrey"] = "true";
-		$this->toParse["findPredators"] = "false";
+    	$this->toParse["findPrey"] = "on";
+		unset($this->toParse["findPredators"]);
     	$this->handler->parsePOST($this->toParse);
 
 		$trophicService = $this->handler->getTrophicService();
@@ -48,8 +47,8 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 	public function testCreatJSONResponseMockFindPreyForPredator()
 	{
-    	$this->toParse["findPrey"] = "true";
-		$this->toParse["findPredators"] = "false";
+    	$this->toParse["findPrey"] = "on";
+		unset($this->toParse["findPredators"]);
     	$this->handler->parsePOST($this->toParse);
 
 		$this->handler->getTrophicService();
@@ -67,8 +66,8 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$expectedPredNames = array("Zalieutes mcgintyi", "Syacium gunteri", "Pomatoschistus microps", "Zoarces viviparus", "Symphurus plagiusa", "Prionotus roseus", "Stenotomus caprinus", "Syacium papillosum", "Monolene sessilicauda", "Fundulus similis", "Trichopsetta ventralis", "Coelorinchus caribbaeus", "Bembrops anatirostris", "Bellator militaris", "Pomatoschistus minutus", "Leiostomus xanthurus", "Crangon crangon", "Platichthys flesus", "Pleuronectes platessa", "Paralichthyes albigutta", "Retusa obtusa", "Symphurus civitatus");
 
     	$this->toParse["subjectName"] = "Foraminifera";
-    	$this->toParse["findPrey"] = "false";
-		$this->toParse["findPredators"] = "true";
+    	unset($this->toParse["findPrey"]);
+		$this->toParse["findPredators"] = "on";
     	$this->handler->parsePOST($this->toParse);
 
 		$trophicService = $this->handler->getTrophicService();
@@ -87,8 +86,8 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 	public function testCreatJSONResponseMockFindPredatorForPrey()
 	{
 		$this->toParse["subjectName"] = "Foraminifera";
-    	$this->toParse["findPrey"] = "false";
-		$this->toParse["findPredators"] = "true";
+    	unset($this->toParse["findPrey"]);
+		$this->toParse["findPredators"] = "on";
     	$this->handler->parsePOST($this->toParse);
 
 		$this->handler->getTrophicService();

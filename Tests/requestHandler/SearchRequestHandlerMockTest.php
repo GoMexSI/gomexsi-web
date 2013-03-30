@@ -11,8 +11,7 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
     {
     	$this->handler = new SearchRequestHandler();
     	$this->toParse = array("serviceType" => "mock",
-					   "findPrey"=>"true",
-					   "findPredators" => "false",
+					   "findPrey"=>"on",
 					   "subjectName" => "Scomberomorus cavalla");
     }
 
@@ -54,8 +53,8 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 		$expectedPredNames =array("Ariopsis felis", "Scomberomorus cavalla");
 
 		$this->toParse["subjectName"] = "Mugil cephalus";
-    	$this->toParse["findPrey"] = "false";
-		$this->toParse["findPredators"] = "true";
+    	unset($this->toParse["findPrey"]);
+		$this->toParse["findPredators"] = "on";
     	$this->handler->parsePOST($this->toParse);
 
 		$trophicService = $this->handler->getTrophicService();
@@ -73,8 +72,8 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 	public function testCreatJSONResponseMockFindPredatorForPrey()
 	{
 		$this->toParse["subjectName"] = "Mugil cephalus";
-		$this->toParse["findPrey"] = "false";
-		$this->toParse["findPredators"] = "true";
+		unset($this->toParse["findPrey"]);
+		$this->toParse["findPredators"] = "on";
     	$this->handler->parsePOST($this->toParse);
 
 		$this->handler->getTrophicService();

@@ -22,10 +22,10 @@ class RequestParser
 		if (!empty($toParse['suggestion'])) {
 			$this->searchType = 'fuzzySearch';
 			$this->fuzzyValue = $toParse['suggestion'];
-		} elseif ($toParse['findPrey'] == 'true' &&  $toParse['findPredators'] == 'false') {
+		} elseif (!empty($toParse['findPrey']) &&  empty($toParse['findPredators'])) {
 			$this->searchType = 'findPreyForPredator'; #usecase number one
 			$this->predatorName = $toParse['subjectName'];
-		} elseif ($toParse['findPredators'] == 'true' &&  $toParse['findPrey'] == 'false') {
+		} elseif (!empty($toParse['findPredators']) &&  empty($toParse['findPrey'])) {
 			$this->searchType = 'findPredatorForPrey'; #usecase number two
 			$this->preyName = $toParse['subjectName'];
 		} else {

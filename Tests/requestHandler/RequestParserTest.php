@@ -11,8 +11,7 @@ class RequestParserTest extends PHPUnit_Framework_TestCase
     {
     	$this->requestParse = new RequestParser();
     	$this->toParse = array("serviceType" => "mock",
-    						   "findPrey"=>"true",
-    						   "findPredators" => "false",
+    						   "findPrey"=>"on",
     						   "subjectName" => "Scomberomorus cavalla");
     }
     public function testDetermineServiceType()
@@ -36,8 +35,8 @@ class RequestParserTest extends PHPUnit_Framework_TestCase
 		$this->requestParse->parse($this->toParse);
 		$this->assertEquals('findPreyForPredator', $this->requestParse->getSearchType());
 		#mock
-		$this->toParse["findPrey"] = "false";
-		$this->toParse["findPredators"] = "true";
+		unset($this->toParse["findPrey"]);
+		$this->toParse["findPredators"] = "on";
 		$this->requestParse->parse($this->toParse);
 		$this->assertEquals('findPredatorForPrey',  $this->requestParse->getSearchType());
 		#mock
@@ -48,13 +47,13 @@ class RequestParserTest extends PHPUnit_Framework_TestCase
 
 		#REST
 		$this->toParse["serviceType"] = "REST";
-		$this->toParse["findPrey"] = "true";
-		$this->toParse["findPredators"] = "false";
+		$this->toParse["findPrey"] = "on";
+		unset($this->toParse["findPredators"]);
 		$this->requestParse->parse($this->toParse);
 		$this->assertEquals('findPreyForPredator', $this->requestParse->getSearchType());
 		#REST
-		$this->toParse["findPrey"] = "false";
-		$this->toParse["findPredators"] = "true";
+		unset($this->toParse["findPrey"]);
+		$this->toParse["findPredators"] = "on";
 		$this->requestParse->parse($this->toParse);
 		$this->assertEquals('findPredatorForPrey',  $this->requestParse->getSearchType());
 		#REST
@@ -65,13 +64,13 @@ class RequestParserTest extends PHPUnit_Framework_TestCase
 
 		#live
 		$this->toParse["serviceType"] = "live";
-		$this->toParse["findPrey"] = "true";
-		$this->toParse["findPredators"] = "false";
+		$this->toParse["findPrey"] = "on";
+		unset($this->toParse["findPredators"]);
 		$this->requestParse->parse($this->toParse);
 		$this->assertEquals('findPreyForPredator', $this->requestParse->getSearchType());
 		#live
-		$this->toParse["findPrey"] = "false";
-		$this->toParse["findPredators"] = "true";
+		unset($this->toParse["findPrey"]);
+		$this->toParse["findPredators"] = "on";
 		$this->requestParse->parse($this->toParse);
 		$this->assertEquals('findPredatorForPrey',  $this->requestParse->getSearchType());
 		#live
@@ -86,8 +85,8 @@ class RequestParserTest extends PHPUnit_Framework_TestCase
      */
 	public function testCorruptSearchTypeParameters()
 	{
-		$this->toParse["findPrey"] = "false";
-		$this->toParse["findPredators"] = "false";
+		unset($this->toParse["findPrey"]);
+		unset($this->toParse["findPredators"]);
 		$this->requestParse->parse($this->toParse);
 		$this->requestParse->getSearchType();
 	}
