@@ -46,8 +46,6 @@ class basicTraits{
 #
 class aSubject extends basicTraits{
 
-	public $subjectInstances = array(); # this is an array of each database instance of the subject
-
 	/*
 	This an array of the aPredator object, this will be populated if the 'aSubjecct' is catagorized as a prey,
 	else it will be an empty list
