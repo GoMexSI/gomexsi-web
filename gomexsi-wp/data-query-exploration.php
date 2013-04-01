@@ -42,7 +42,6 @@
 										<select name="url">
 											<option value="http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php">RequestHandler.php</option>
 											<option value="http://gomexsi.tamucc.edu/gomexsi/query-full-mock.php">Full Mock Data</option>
-											<option value="http://gomexsi.tamucc.edu/gomexsi/query-test-return.php">Show this request</option>
 										</select>
 									</label>
 									
@@ -67,11 +66,6 @@
 						
 						<div id="ex-area"></div>
 						
-<!--
-						<pre><h4>Raw Results:</h4></pre>
-						<pre id="raw-results"></pre>
--->
-
 					<?php else : ?>
 						<hr style="margin: 1em 0 2em;" />
 
