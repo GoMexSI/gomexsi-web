@@ -18,7 +18,6 @@
 					<?php if(is_user_logged_in()) : ?>
 						<form action="" id="data-query" class="clearfix">
 							<div class="query-inputs">
-								<div class="comment">The subject about which the results are centered. I.e., Scomberomorus cavalla</div>
 								<div id="form-section-name" class="form-section clearfix">
 									<label>
 										<div class="section-label">Name</div>
@@ -31,7 +30,6 @@
 									</label>
 								</div>
 								
-								<div class="comment">The types of interactions to look for. One search may return both prey and predators for the subject. When a box is checked, another field appears that allows a keyword filter for that interaction.</div>
 								<div id="form-section-find" class="form-section clearfix">
 									<div class="section-label">Find</div>
 									<div class="section-input clearfix">
@@ -145,7 +143,6 @@
 									</div>
 								</div>
 								
-								<div class="comment">Filter by various location parameters. (Additive? Subtractive?)</div>
 								<div id="form-section-location" class="form-section clearfix">
 									<div class="section-label">Location</div>
 									<div class="section-input clearfix">
@@ -216,21 +213,19 @@
 									</div>
 								</div>
 								
-								<div class="comment">Development testing options. The submitted query object (POST data) is logged to your browser's console. If you set Request URL to query-test-return.php, the POST array will show under Raw Results.</div>
 								<div class="form-section clearfix">
 									<label>Service Type:
 										<select name="serviceType">
-											<option value="rest">REST</option>
+											<option value="rest">Live</option>
 											<option value="mock">Mock</option>
-											<option value="">Live</option>
 										</select>
 									</label>
 									
 									<label>Request URL:
 										<select name="url">
-											<option value="http://gomexsi.tamucc.edu/gomexsi/query-full-mock.php">query-full-mock.php</option>
 											<option value="http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php">RequestHandler.php</option>
-											<option value="http://gomexsi.tamucc.edu/gomexsi/query-test-return.php">query-test-return.php</option>
+											<option value="http://gomexsi.tamucc.edu/gomexsi/query-full-mock.php">Full Mock Data</option>
+											<option value="http://gomexsi.tamucc.edu/gomexsi/query-test-return.php">Show this request</option>
 										</select>
 									</label>
 									
@@ -253,8 +248,10 @@
 						
 						<div id="results-area"></div>
 						
+<!--
 						<pre><h4>Raw Results:</h4></pre>
 						<pre id="raw-results"></pre>
+-->
 
 					<?php else : ?>
 						<hr style="margin: 1em 0 2em;" />

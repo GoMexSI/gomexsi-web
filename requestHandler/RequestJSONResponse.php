@@ -36,7 +36,7 @@ class RequestJSONResponse
                 $prey = array('prey' => $preyList);
 
                 $responseObject->scientificName = $speciesSubject;
-                $responseObject->subjectInstances[0] = $prey;
+                $responseObject->preyInstances[0] = $prey;
 
                 $responseObjectContainer[0] = $responseObject;
                 break;
@@ -51,7 +51,7 @@ class RequestJSONResponse
                 $pred = array('pred' => $predList);
 
                 $responseObject->scientificName = $speciesSubject;
-                $responseObject->subjectInstances[0] = $pred;
+                $responseObject->predInstances[0] = $pred;
 
                 $responseObjectContainer[0] = $responseObject;
                 break;

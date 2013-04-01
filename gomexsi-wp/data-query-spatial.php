@@ -146,17 +146,16 @@
 								<div class="form-section clearfix">
 									<label>Service Type:
 										<select name="serviceType">
-											<option value="rest">REST</option>
+											<option value="rest">Live</option>
 											<option value="mock">Mock</option>
-											<option value="">Live</option>
 										</select>
 									</label>
 									
 									<label>Request URL:
 										<select name="url">
-											<option value="http://gomexsi.tamucc.edu/gomexsi/query-full-mock.php">query-full-mock.php</option>
 											<option value="http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php">RequestHandler.php</option>
-											<option value="http://gomexsi.tamucc.edu/gomexsi/query-test-return.php">query-test-return.php</option>
+											<option value="http://gomexsi.tamucc.edu/gomexsi/query-full-mock.php">Full Mock Data</option>
+											<option value="http://gomexsi.tamucc.edu/gomexsi/query-test-return.php">Show this request</option>
 										</select>
 									</label>
 									
@@ -190,8 +189,10 @@
 						
 						<div id="results-area"></div>
 						
+<!--
 						<pre><h4>Raw Results:</h4></pre>
 						<pre id="raw-results"></pre>
+-->
 
 					<?php else : ?>
 						<hr style="margin: 1em 0 2em;" />

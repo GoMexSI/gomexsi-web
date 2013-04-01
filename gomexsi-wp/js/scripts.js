@@ -229,7 +229,7 @@ jQuery(document).ready(function($) {
 				subject.predInstanceCount = 0;
 				subject.predList = [];
 				
-				var preyInstances = subjects[i].preyInstances;
+				var preyInstances = (typeof subjects[i].preyInstances == 'object' ? subjects[i].preyInstances : []);
 				
 				$.each(preyInstances, function(j){
 					var instance = preyInstances[j];
@@ -252,28 +252,28 @@ jQuery(document).ready(function($) {
 					});
 				});
 					
-				var predInstances = subjects[i].predInstances;
+				var predInstances = (typeof subjects[i].predInstances == 'object' ? subjects[i].predInstances : []);
 				
-				$.each(predInstances, function(j){
-					var instance = predInstances[j];
-					
-					subject.predInstanceCount++;
-					totalInstanceCount++;
-					
-					if(typeof instance.pred == 'object'){
-						var safeName = nameSafe(instance.pred[0]);
-					} else {
+				if(predInstances){
+					$.each(predInstances, function(j){
+						var instance = predInstances[j];
+						
+						subject.predInstanceCount++;
+						totalInstanceCount++;
+						
+						instance.pred = (typeof instance.pred == 'string' ? instance.pred : instance.pred[0]);
+						
 						var safeName = nameSafe(instance.pred);
-					}
-					
-					if(safeName in subject.predList){
-						subject.predList[safeName].count++;
-					} else {
-						subject.predList[safeName] = {};
-						subject.predList[safeName].scientificName = instance.pred;
-						subject.predList[safeName].count = 1;
-					}
-				});
+						
+						if(safeName in subject.predList){
+							subject.predList[safeName].count++;
+						} else {
+							subject.predList[safeName] = {};
+							subject.predList[safeName].scientificName = instance.pred;
+							subject.predList[safeName].count = 1;
+						}
+					});
+				}
 			});
 			
 			this.totalInstanceCount = totalInstanceCount;
@@ -447,7 +447,7 @@ jQuery(document).ready(function($) {
 			for(var prop in predList){
 				predListDesc.push({
 					safeName: prop,
-					scientificName: predList[prop].scientificName,
+					scientificName: (typeof predList[prop].scientificName == 'string' ? predList[prop].scientificName : predList[prop].scientificName[0]),
 					count: predList[prop].count,
 					percent: Math.round( ( predList[prop].count / subject.predInstanceCount ) * 100 )
 				});
@@ -492,6 +492,7 @@ jQuery(document).ready(function($) {
 			
 			$.each(subject.predInstances, function(i){
 				var instance = subject.predInstances[i];
+				instance.pred = (typeof instance.pred == 'string' ? instance.pred : instance.pred[0]);
 				
 				var instanceID = subject.baseID + '-pred-instance-' + i;
 				
