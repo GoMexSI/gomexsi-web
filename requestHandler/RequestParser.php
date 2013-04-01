@@ -6,9 +6,7 @@ class RequestParser
 {
 	private $serviceType;
 	private $searchType;
-	private $predatorName;
-	private $preyName;
-	private $fuzzyValue;
+	private $subjectName;
 	private $shouldIncludePrey = false;
 	private $shouldIncludePredators = false;
 
@@ -23,11 +21,11 @@ class RequestParser
 	{
 		if (!empty($toParse['suggestion'])) {
 			$this->searchType = 'fuzzySearch';
-			$this->fuzzyValue = $toParse['suggestion'];
+			$this->subjectName = $toParse['suggestion'];
 		} else {
 			$this->searchType = 'exactMatch'; 
-			$this->predatorName = $toParse['subjectName'];
-			$this->preyName = $toParse['subjectName'];
+			$this->subjectName = $toParse['subjectName'];
+			$this->subjectName = $toParse['subjectName'];
 			$this->shouldIncludePrey = !empty($toParse['findPrey']);
 			$this->shouldIncludePredators = !empty($toParse['findPredators']);
 			if (!$this->shouldIncludePrey && !$this->shouldIncludePredators) {
@@ -62,20 +60,12 @@ class RequestParser
 	{
 		return $this->searchType;
 	}
-	public function getPredatorName()
+	
+	public function getSubjectName()
 	{
-		return $this->predatorName;
+		return $this->subjectName;
 	}
-	public function getPreyName()
-	{
-		return $this->preyName;
-	}
-
-	public function getFuzzyValue()
-	{
-		return $this->fuzzyValue;
-	}
-
+	
 	public function shouldIncludePrey() 
 	{
 		return $this->shouldIncludePrey;

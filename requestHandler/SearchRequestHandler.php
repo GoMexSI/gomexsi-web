@@ -37,23 +37,22 @@ class SearchRequestHandler
         $searchType = $this->parser->getSearchType();
         $responseObjectContainer = array();
 
+        $speciesSubject = $this->parser->getSubjectName();
+
         if ($searchType == 'fuzzySearch') {
             $fuzzyResponseObject = new FuzzyResponseObject();
-            $speciesSubject = $this->parser->getFuzzyValue();
             $phpServiceObject = $this->trophicService->findCloseTaxonNameMatches($speciesSubject);
             $jsonConverter->addFuzzySearchResultToResponse($fuzzyResponseObject, $phpServiceObject);
             $fuzzyResponseObject->fuzzyName = $speciesSubject;
             $responseObjectContainer[0] = $fuzzyResponseObject;
         } else {
             $responseObject = new ResponseObject();
-            $speciesSubject;
+            
             if ($this->parser->shouldIncludePrey()) {
-                $speciesSubject = $this->parser->getPredatorName();
                 $phpServiceObject = $this->trophicService->findPreyForPredator($speciesSubject);
                 $jsonConverter->addPreyListToResponse($responseObject, $phpServiceObject);
             } 
             if ($this->parser->shouldIncludePredators()) {
-                $speciesSubject = $this->parser->getPreyName();
                 $phpServiceObject = $this->trophicService->findPredatorForPrey($speciesSubject);
                 $jsonConverter->addPredatorListToResponse($responseObject, $phpServiceObject);
             } 
