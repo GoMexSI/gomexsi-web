@@ -69,7 +69,6 @@ class RequestJSONResponse
 class ResponseObject
 {
     public $scientificName;
-    public $subjectInstances = array();
 }
 class FuzzyResponseObject
 {
