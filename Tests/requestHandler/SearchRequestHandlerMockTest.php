@@ -34,18 +34,26 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
-	public function testCreatJSONResponseMockFindPreyForPredator()
+	public function testCreateJSONResponseMockFindPreyForPredator()
 	{
-    	$this->handler->parsePOST($this->postRequest);
-
-		$this->handler->getTrophicService();
-
-		$jsonTestString = '[{"scientificName":"Scomberomorus cavalla","preyInstances":[{"prey":["Synalpheus latastei","Lutjanus jocu"]}]}]';
-		// http://jsonlint.com/ will format this for anyone who wants to look at it in a more readable structure 
-
-		$jsonObject = $this->handler->creatJSONResponse();
+    	$jsonTestString = '[{"scientificName":"Scomberomorus cavalla","preyInstances":[{"prey":["Synalpheus latastei","Lutjanus jocu"]}]}]';
+		
+		$jsonObject = $this->handler->requestHandlerDriver($this->postRequest);
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
+
+	public function testSearchPredatorAndPrey()
+	{
+		$this->postRequest["subjectName"] = "Ariopsis felis";
+		$this->postRequest["findPredators"] = "on";
+		$this->postRequest["findPrey"] = "on";
+    	
+		$jsonTestString = '[{"scientificName":"Ariopsis felis","preyInstances":[{"prey":["Synalpheus latastei","Lutjanus jocu"]}],"predInstances":[{"pred":["Ariopsis felis","Scomberomorus cavalla"]}]}]';
+		
+		$jsonObject = $this->handler->requestHandlerDriver($this->postRequest);
+		$this->assertEquals($jsonTestString, $jsonObject);
+	}
+
 
 	public function testGetTrophicServiceMockFindPredatorForPrey()
 	{
@@ -69,19 +77,15 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
-	public function testCreatJSONResponseMockFindPredatorForPrey()
+	public function testCreateJSONResponseMockFindPredatorForPrey()
 	{
 		$this->postRequest["subjectName"] = "Mugil cephalus";
 		unset($this->postRequest["findPrey"]);
 		$this->postRequest["findPredators"] = "on";
-    	$this->handler->parsePOST($this->postRequest);
-
-		$this->handler->getTrophicService();
-
+    	
 		$jsonTestString = '[{"scientificName":"Mugil cephalus","predInstances":[{"pred":["Ariopsis felis","Scomberomorus cavalla"]}]}]';
-		// http://jsonlint.com/ will format this for anyone who wants to look at it in a more readable structure 
-
-		$jsonObject = $this->handler->creatJSONResponse();
+		
+		$jsonObject = $this->handler->requestHandlerDriver($this->postRequest);
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
 
@@ -105,7 +109,7 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
-	public function testCreatJSONResponseMockFindCloseTaxonNameMatches()
+	public function testCreateJSONResponseMockFindCloseTaxonNameMatches()
 	{
 		$this->postRequest["suggestion"] = "Scomb";
     	$this->handler->parsePOST($this->postRequest);
@@ -113,9 +117,8 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 		$this->handler->getTrophicService();
 
 		$jsonTestString = '[{"fuzzyName":"Scomb","matches":["Ariopsis felis","Scomberomorus cavalla"]}]';
-		// http://jsonlint.com/ will format this for anyone who wants to look at it in a more readable structure 
-
-		$jsonObject = $this->handler->creatJSONResponse();
+		
+		$jsonObject = $this->handler->createJSONResponse();
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
 

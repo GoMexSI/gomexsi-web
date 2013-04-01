@@ -28,19 +28,24 @@
  		$this->requestParse->parse($this->postRequest);
  		$this->assertEquals('live', $this->requestParse->getServiceType());
  	}
+
  	public function testDetermineSearchTypeMock()
  	{	
-    	#mock
- 		$this->postRequest["serviceType"] = "mock";
+    	$this->postRequest["serviceType"] = "mock";
  		$this->requestParse->parse($this->postRequest);
- 		$this->assertEquals('findPreyForPredator', $this->requestParse->getSearchType());
-		#mock
- 		unset($this->postRequest["findPrey"]);
+ 		$this->assertEquals('exactMatch',  $this->requestParse->getSearchType());
+		$this->assertTrue($this->requestParse->shouldIncludePrey());
+		$this->assertFalse($this->requestParse->shouldIncludePredators());
+	
+		unset($this->postRequest["findPrey"]);
  		$this->postRequest["findPredators"] = "on";
  		$this->requestParse->parse($this->postRequest);
- 		$this->assertEquals('findPredatorForPrey',  $this->requestParse->getSearchType());
-		#mock
- 		$this->postRequest["suggestion"] = "Scomb";
+ 		$this->assertEquals('exactMatch',  $this->requestParse->getSearchType());
+		$this->assertFalse($this->requestParse->shouldIncludePrey());
+		$this->assertTrue($this->requestParse->shouldIncludePredators());
+	
+
+		$this->postRequest["suggestion"] = "Scomb";
  		$this->requestParse->parse($this->postRequest);
  		$this->assertEquals('fuzzySearch',  $this->requestParse->getSearchType());
  		unset($this->postRequest["suggestion"]);
@@ -52,13 +57,15 @@
  		$this->postRequest["findPrey"] = "on";
  		unset($this->postRequest["findPredators"]);
  		$this->requestParse->parse($this->postRequest);
- 		$this->assertEquals('findPreyForPredator', $this->requestParse->getSearchType());
-
+		$this->assertTrue($this->requestParse->shouldIncludePrey());
+		$this->assertFalse($this->requestParse->shouldIncludePredators());
+	
  		unset($this->postRequest["findPrey"]);
  		$this->postRequest["findPredators"] = "on";
  		$this->requestParse->parse($this->postRequest);
- 		$this->assertEquals('findPredatorForPrey',  $this->requestParse->getSearchType());
-
+ 		$this->assertFalse($this->requestParse->shouldIncludePrey());
+		$this->assertTrue($this->requestParse->shouldIncludePredators());
+	
  		$this->postRequest["suggestion"] = "Scomb";
  		$this->requestParse->parse($this->postRequest);
  		$this->assertEquals('fuzzySearch',  $this->requestParse->getSearchType());
@@ -72,12 +79,15 @@
  		$this->postRequest["findPrey"] = "on";
  		unset($this->postRequest["findPredators"]);
  		$this->requestParse->parse($this->postRequest);
- 		$this->assertEquals('findPreyForPredator', $this->requestParse->getSearchType());
+ 		$this->assertTrue($this->requestParse->shouldIncludePrey());
+		$this->assertFalse($this->requestParse->shouldIncludePredators());
+	
 
  		unset($this->postRequest["findPrey"]);
  		$this->postRequest["findPredators"] = "on";
  		$this->requestParse->parse($this->postRequest);
- 		$this->assertEquals('findPredatorForPrey',  $this->requestParse->getSearchType());
+		$this->assertFalse($this->requestParse->shouldIncludePrey());
+		$this->assertTrue($this->requestParse->shouldIncludePredators());
 
  		$this->postRequest["suggestion"] = "Scomb";
  		$this->requestParse->parse($this->postRequest);

@@ -9,6 +9,8 @@ class RequestParser
 	private $predatorName;
 	private $preyName;
 	private $fuzzyValue;
+	private $shouldIncludePrey = false;
+	private $shouldIncludePredators = false;
 
 	public function parse($toParse)
 	{
@@ -22,15 +24,16 @@ class RequestParser
 		if (!empty($toParse['suggestion'])) {
 			$this->searchType = 'fuzzySearch';
 			$this->fuzzyValue = $toParse['suggestion'];
-		} elseif (!empty($toParse['findPrey']) &&  empty($toParse['findPredators'])) {
-			$this->searchType = 'findPreyForPredator'; #usecase number one
-			$this->predatorName = $toParse['subjectName'];
-		} elseif (!empty($toParse['findPredators']) &&  empty($toParse['findPrey'])) {
-			$this->searchType = 'findPredatorForPrey'; #usecase number two
-			$this->preyName = $toParse['subjectName'];
 		} else {
-			throw new CorruptSearchTypeParameterException('Search Type could not be determined based on parameters given');
-		}
+			$this->searchType = 'exactMatch'; 
+			$this->predatorName = $toParse['subjectName'];
+			$this->preyName = $toParse['subjectName'];
+			$this->shouldIncludePrey = !empty($toParse['findPrey']);
+			$this->shouldIncludePredators = !empty($toParse['findPredators']);
+			if (!$this->shouldIncludePrey && !$this->shouldIncludePredators) {
+				throw new CorruptSearchTypeParameterException('Search Type could not be determined based on parameters given');	
+			}
+		} 
 
 		return $this->searchType;
 	}
@@ -67,9 +70,20 @@ class RequestParser
 	{
 		return $this->preyName;
 	}
+
 	public function getFuzzyValue()
 	{
 		return $this->fuzzyValue;
+	}
+
+	public function shouldIncludePrey() 
+	{
+		return $this->shouldIncludePrey;
+	}
+
+	public function shouldIncludePredators() 
+	{
+		return $this->shouldIncludePredators;
 	}
 }
 

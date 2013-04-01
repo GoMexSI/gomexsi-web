@@ -5,69 +5,64 @@ require_once 'RequestJSONResponse.php';
 
 class SearchRequestHandler
 {
-    private $serviceType; # 'mock', 'REST'
-    private $searchType; # 'findPreyForPredator', 'findPredatorForPrey'
     private $trophicService;
-    private $predatorName;
-    private $preyName;
-    private $fuzzyValue;
+    private $parser;
 
-	public function __construct()
+    public function __construct()
     {
 
     }
     public function requestHandlerDriver($urlPost)
     {
-    	$this->parsePOST($urlPost); #Parse Post
+    	$this->parsePOST($urlPost); 
     	$this->getTrophicService();
-        return $this->creatJSONResponse();
+        return $this->createJSONResponse();
     }
     public function parsePOST($urlPost)
     {
-
-    	$parser = new RequestParser();
-
-        $parser->parse($urlPost);
-        $this->serviceType  = $parser->getServiceType();
-        $this->searchType   = $parser->getSearchType();
-        $this->predatorName = $parser->getPredatorName();
-        $this->preyName     = $parser->getPreyName();
-        $this->fuzzyValue   = $parser->getFuzzyValue();
-
-    	
+    	$this->parser = new RequestParser();
+        $this->parser->parse($urlPost);
     }
+
     public function getTrophicService()
     {
     	$serviceFactory = new TrophicServiceFactory();
-    	$this->trophicService = $serviceFactory->createServiceOfType($this->serviceType);
+    	$this->trophicService = $serviceFactory->createServiceOfType($this->parser->getServiceType());
     	return $this->trophicService;
     }
-    public function creatJSONResponse()
+
+    public function createJSONResponse()
     {
         $jsonConverter = new RequestJSONResponse();
-        switch ($this->searchType) {
-            case 'fuzzySearch':
-                $phpServiceObject = $this->trophicService->findCloseTaxonNameMatches($this->fuzzyValue);
-                $speciesSubject = $this->fuzzyValue;
-                break;
+        $searchType = $this->parser->getSearchType();
+        $responseObjectContainer = array();
 
-            case 'findPreyForPredator':
-                $phpServiceObject = $this->trophicService->findPreyForPredator($this->predatorName);
-                $speciesSubject = $this->predatorName;
-                break;
-
-            case 'findPredatorForPrey':
-                $phpServiceObject = $this->trophicService->findPredatorForPrey($this->preyName);
-                $speciesSubject = $this->preyName;
-                break;
-
-            default:
-                throw new CorruptSearchTypeParameterException('Search Type [' . $this->searchType . '] not supported, JSON object abandoned');
-                break;
-            #treat speciesSubject as an array for search that requires both predator and prey returned for specific subject
+        if ($searchType == 'fuzzySearch') {
+            $fuzzyResponseObject = new FuzzyResponseObject();
+            $speciesSubject = $this->parser->getFuzzyValue();
+            $phpServiceObject = $this->trophicService->findCloseTaxonNameMatches($speciesSubject);
+            $jsonConverter->addFuzzySearchResultToResponse($fuzzyResponseObject, $phpServiceObject);
+            $fuzzyResponseObject->fuzzyName = $speciesSubject;
+            $responseObjectContainer[0] = $fuzzyResponseObject;
+        } else {
+            $responseObject = new ResponseObject();
+            $speciesSubject;
+            if ($this->parser->shouldIncludePrey()) {
+                $speciesSubject = $this->parser->getPredatorName();
+                $phpServiceObject = $this->trophicService->findPreyForPredator($speciesSubject);
+                $jsonConverter->addPreyListToResponse($responseObject, $phpServiceObject);
+            } 
+            if ($this->parser->shouldIncludePredators()) {
+                $speciesSubject = $this->parser->getPreyName();
+                $phpServiceObject = $this->trophicService->findPredatorForPrey($speciesSubject);
+                $jsonConverter->addPredatorListToResponse($responseObject, $phpServiceObject);
+            } 
+            $responseObject->scientificName = $speciesSubject;
+            $responseObjectContainer[0] = $responseObject;
         }
-        $phpObject = $jsonConverter->populateReturnObject($phpServiceObject, $this->searchType, $speciesSubject);
-        return $jsonConverter->convertToJSONObject($phpObject);
+        
+
+        return $jsonConverter->convertToJSONObject($responseObjectContainer);
     }
 
 
