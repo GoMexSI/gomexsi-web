@@ -40,7 +40,7 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 
 		$this->handler->getTrophicService();
 
-		$jsonTestString = '[{"scientificName":"Scomberomorus cavalla","subjectInstances":[{"prey":["Synalpheus latastei","Lutjanus jocu"]}]}]';
+		$jsonTestString = '[{"scientificName":"Scomberomorus cavalla","preyInstances":[{"prey":["Synalpheus latastei","Lutjanus jocu"]}]}]';
 		// http://jsonlint.com/ will format this for anyone who wants to look at it in a more readable structure 
 
 		$jsonObject = $this->handler->creatJSONResponse();
@@ -78,7 +78,7 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 
 		$this->handler->getTrophicService();
 
-		$jsonTestString = '[{"scientificName":"Mugil cephalus","subjectInstances":[{"pred":["Ariopsis felis","Scomberomorus cavalla"]}]}]';
+		$jsonTestString = '[{"scientificName":"Mugil cephalus","predInstances":[{"pred":["Ariopsis felis","Scomberomorus cavalla"]}]}]';
 		// http://jsonlint.com/ will format this for anyone who wants to look at it in a more readable structure 
 
 		$jsonObject = $this->handler->creatJSONResponse();
