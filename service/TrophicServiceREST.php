@@ -1,6 +1,8 @@
 <?php
 require_once 'TrophicService.php';
 
+class NotImplementedException extends Exception {}
+
 class TrophicServiceREST implements TrophicService 
 {
     public function findPreyForPredator($predatorScientificName) 
@@ -15,6 +17,14 @@ class TrophicServiceREST implements TrophicService
     public function findCloseTaxonNameMatches($name)
     {
         return $this->query('findTaxon', $name, null);
+    }
+    public function findObservedPreyForPredator($predatorTaxon, $preyTaxon)
+    {
+        throw new NotImplementedException('REST findObservedPreyForPredator not implemented');
+    }
+    public function findObservedPredatorForPrey($predatorTaxon, $preyTaxon)
+    {
+        throw new NotImplementedException('REST findObservedPredatorForPrey not implemented');
     }
     private function query($method, $name, $operation) {
         $url_prefix = 'http://46.4.36.142:8080/' . $method . '/' . rawurlencode($name);

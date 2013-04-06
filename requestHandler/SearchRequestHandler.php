@@ -45,6 +45,19 @@ class SearchRequestHandler
             $jsonConverter->addFuzzySearchResultToResponse($fuzzyResponseObject, $phpServiceObject);
             $fuzzyResponseObject->fuzzyName = $speciesSubject;
             $responseObjectContainer[0] = $fuzzyResponseObject;
+        } elseif ($searchType == 'exactMatchObservation') {
+            $responseObject = new ResponseObject();
+            
+            if ($this->parser->shouldIncludePrey()) {
+                $phpServiceObject = $this->trophicService->findObservedPreyForPredator($speciesSubject);
+                $jsonConverter->addPreyObservationToResponse($responseObject, $phpServiceObject);
+            } 
+            if ($this->parser->shouldIncludePredators()) {
+                $phpServiceObject = $this->trophicService->findObservedPredatorForPrey($speciesSubject);
+                $jsonConverter->addPredatorObservationToResponse($responseObject, $phpServiceObject);
+            } 
+            $responseObject->scientificName = $speciesSubject;
+            $responseObjectContainer[0] = $responseObject;
         } else {
             $responseObject = new ResponseObject();
             
