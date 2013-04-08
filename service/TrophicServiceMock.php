@@ -22,13 +22,14 @@ class TrophicServiceMock implements TrophicService
         $container = array(); // [row][colum]
 
         $k=0;
-        for($i=0; $i<6; $i++) { // 6 rows of data
+        for($i=0; $i<6; $i++) { // 6 rows of data(mock)
             $container[$i] = array(); 
-            for($j=0; $j<5; $j++) { // 5 colums
+            for($j=0; $j<5; $j++) { // 5 columns
                 $container[$i][$j] = $stringArray[$k];
                 $k+=1;
             }
         }
+
 
         return $container;
 

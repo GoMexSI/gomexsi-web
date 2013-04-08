@@ -109,7 +109,6 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals($expectedPredNames[$iterator], $value);
 			$iterator++;
 		}
-
 	}
 
 	public function testcreateJSONResponseMockFindCloseTaxonNameMatches()
@@ -121,5 +120,6 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$jsonObject = $this->handler->requestHandlerDriver($this->postRequest);
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
+
 }
 ?>

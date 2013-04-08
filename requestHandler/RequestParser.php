@@ -22,7 +22,7 @@ class RequestParser
 		if (!empty($toParse['suggestion'])) {
 			$this->searchType = 'fuzzySearch';
 			$this->subjectName = $toParse['suggestion'];
-		} elseif (!empty($toParse['default'])) {
+		} elseif (!empty($toParse['default'])) { # TODO fix to make this default
 			$this->searchType = 'exactMatchObservation'; 
 			$this->subjectName = $toParse['subjectName'];
 			$this->shouldIncludePrey = !empty($toParse['findPrey']);

@@ -20,7 +20,8 @@ class TrophicServiceREST implements TrophicService
     }
     public function findObservedPreyForPredator($predatorTaxon, $preyTaxon)
     {
-        throw new NotImplementedException('REST findObservedPreyForPredator not implemented');
+        return $this->query('predator', $predatorTaxon, 'listPreyObservations');
+        //throw new NotImplementedException('REST findObservedPreyForPredator not implemented');
     }
     public function findObservedPredatorForPrey($predatorTaxon, $preyTaxon)
     {
@@ -30,24 +31,43 @@ class TrophicServiceREST implements TrophicService
         $url_prefix = 'http://46.4.36.142:8080/' . $method . '/' . rawurlencode($name);
 
         if (isset($operation)){
-            $url = $url_prefix . '/' . $operation;
+            $url = $url_prefix . '/' . $operation . '/';
         } else {
             $url = $url_prefix;
         }
-        
+
         $response = file_get_contents($url);
         $response = json_decode($response);
-        $columns = $response->{'columns'};
-        $preyDataList = $response->{'data'};
-        $preyNames = array();
-        foreach ($preyDataList as $preyData) {
-            foreach ($preyData as $preyName) {
-                $preyNames[] = $preyName;
-            }
-        }
-        return $preyNames;
-    }
 
-    
+        if(strpos($operation, 'Observations') !== FALSE) { #if it is an observational query
+
+            $columns = $response->{'columns'};
+            $dataList = $response->{'data'};
+            $container = array();
+            $i = 0;
+            foreach ($dataList as $taxonData) {
+                $container[$i] = array();
+                $container[$i][0] = $taxonData[0]; #preyName
+                $container[$i][1] = $taxonData[1]; #latitude
+                $container[$i][2] = $taxonData[2]; #longitude
+                $container[$i][3] = $taxonData[3]; #altitude
+                $container[$i][4] = $taxonData[4]; #contributor
+                #could do a nested for, but the straight assignment will probably be faster for huge datasets
+                $i+=1;
+            }
+            return $container;
+        }else {
+            $columns = $response->{'columns'};
+            $preyDataList = $response->{'data'};
+            $preyNames = array();
+            foreach ($preyDataList as $preyData) {
+                foreach ($preyData as $preyName) {
+                $preyNames[] = $preyName;
+                }
+            }
+            return $preyNames;
+        }
+    }
 }
+
 ?>
