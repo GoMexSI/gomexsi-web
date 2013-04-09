@@ -52,7 +52,7 @@ class SearchRequestHandler
                 $phpServiceObject = $this->trophicService->findObservedPreyForPredator($speciesSubject, null); # null will include option for other taxon later
                 $jsonConverter->addPreyObservationToResponse($responseObject, $phpServiceObject);
             } 
-            if ($this->parser->shouldIncludePredators()) {
+            if ($this->parser->shouldIncludePredators()) { # not fully implemented yet
                 $phpServiceObject = $this->trophicService->findObservedPredatorForPrey($speciesSubject, null);
                 $jsonConverter->addPredatorObservationToResponse($responseObject, $phpServiceObject);
             }
