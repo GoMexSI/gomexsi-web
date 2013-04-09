@@ -34,32 +34,31 @@ class RequestJSONResponse
     public function addPreyObservationToResponse($responseObject, $serviceObject)
     {
         $observation = 0;
+        $locationCheckSum = 0;
         $i = 0; #each element in the preyList list
 
         $latitude = -999; #for first run in loop
         $longitude = -999;
         $altitude = -999;
+        $contributor = "ERROR"; # this should never be used as the contributor, but have to define varible
+        $unixEpoch = null;
 
         $preyList = array();
         foreach ($serviceObject as $thePrey) { # thePrey is a single observation
+            #after one round, locationCheckSum will contain an actul value. (($observation + $i) != 0) prevents entering this condition on the first run
+            if((($locationCheckSum - ($thePrey[1] + $thePrey[2] + $thePrey[3])) != 0) && (($observation + $i) != 0)) { #new observation, but should not occur the first time in the foreach
+                $prey = array('prey' => $preyList); # should work, and not just make referance to old prey referance.. 
+                $responseObject->preyInstances[$observation] = array($prey, array('date' => $unixEpoch), array('lat' => $latitude), array('long' => $longitude), array('alt' => $altitude), array('ref' => $contributor));
+                $observation+=1;
+                $i = 0;
+            }
 
-            if((($locationCheckSum - ($latitude + $longitude + $altitude)) != 0) && $observation != 0) { #new observation, but not the first observation
-                $prey = array('prey' => $preyList); # should work, and not just make referance to old prey referance.. 
-                $responseObject->preyInstances[$observation] = array($prey, array('date' => 'fakeDate'), array('lat' => $latitude), array('long' => $longitude), array('alt' => $altitude), array('ref' => $contributor));
-                $observation+=1;
-                $i = 0;
-            }
-            if($observation == 0 && (($locationCheckSum - ($latitude + $longitude + $altitude)) != 0)) { #if it is the first observation and you are moving onto the second observation
-                $prey = array('prey' => $preyList); # should work, and not just make referance to old prey referance.. 
-                $responseObject->preyInstances[$observation] = array($prey, array('date' => 'fakeDate'), array('lat' => $latitude), array('long' => $longitude), array('alt' => $altitude), array('ref' => $contributor));
-                $observation+=1;
-                $i = 0;
-            }
             $preyName = $thePrey[0];
             $latitude = $thePrey[1];
             $longitude = $thePrey[2];
             $altitude = $thePrey[3];
             $contributor = $thePrey[4];
+            $unixEpoch = $thePrey[5];
 
             $preyList[$i] = $preyName;
             $locationCheckSum = $latitude + $longitude + $altitude;
@@ -70,7 +69,7 @@ class RequestJSONResponse
 
     public function addPredatorObservationToResponse($responseObject, $serviceObject)
     {
-        #TODO also fill in this crapola
+        #TODO implement this
     }
 
     public function addFuzzySearchResultToResponse($responseObject, $serviceObject) {

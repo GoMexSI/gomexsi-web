@@ -6,13 +6,17 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 {
 	private $handler;
 	private $postRequest;
+	private $observationPostRequest;
 
 	public function setUp()
     {
     	$this->handler = new SearchRequestHandler();
     	$this->postRequest = array("serviceType" => "mock",
 					   "findPrey"=>"on",
-					   "subjectName" => "Scomberomorus cavalla");
+					   "subjectName" => "Scomberomorus cavalla", "listStyle" => true);
+    	$this->observationPostRequest = $arrayName = array("serviceType" => "mock",
+			   "findPrey"=>"on",
+			   "subjectName" => "Ariopsis felis");
     }
 
 	public function testGetTrophicServiceMockFindPreyForPredator()
@@ -33,12 +37,41 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 			$iterator++;
 		}
 	}
+	public function testGetTrophicServiceMockFindObservedPreyForPredator()
+	{
+		$trophicResultString = array();
+		$expectedPreyResult = array("Micropogonias undulatus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Brevoortia patronus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Farfantepenaeus aztecus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Mollusca",8.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Bivalvia", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Actinopterygii", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Callinectes sapidus", 28.639232, -96.105117, 0.0, "Senol Akin", 923695200000, "Farfantepenaeus aztecus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Mollusca", 28.642313, -96.103142, 0.0, "Senol Akin", 923695200000);
+
+    	$this->handler->parsePOST($this->observationPostRequest);
+
+		$trophicService = $this->handler->getTrophicService();
+		$trophicResultString = $trophicService->findObservedPreyForPredator("Ariopsi felis", null);
+		
+		$this->assertEquals((count($expectedPreyResult)/6), count($trophicResultString)); #6 catogries 
+
+		$iterator = 0;
+		foreach ($trophicResultString as $value) {
+			for ($i=0; $i < 5; $i++) { #value holds 6 catagories
+				$this->assertEquals($value[$i], $expectedPreyResult[$iterator]);
+				$iterator++;
+			}
+			$iterator++;
+		}
+	}
+	
 
 	public function testCreateJSONResponseMockFindPreyForPredator()
 	{
     	$jsonTestString = '[{"scientificName":"Scomberomorus cavalla","preyInstances":[{"prey":["Synalpheus latastei","Lutjanus jocu"]}]}]';
 		
 		$jsonObject = $this->handler->requestHandlerDriver($this->postRequest);
+		$this->assertEquals($jsonTestString, $jsonObject);
+	}
+	public function testCreateJSONResponseMockFindObservedPreyForPredator()
+	{
+    	$jsonTestString = '[{"scientificName":"Ariopsis felis","preyInstances":[[{"prey":["Micropogonias undulatus","Brevoortia patronus","Farfantepenaeus aztecus"]},{"date":923695200000},{"lat":28.645202},{"long":-96.099923},{"alt":0},{"ref":"Senol Akin"}],[{"prey":["Mollusca","Brevoortia patronus","Farfantepenaeus aztecus"]},{"date":923695200000},{"lat":8.645202},{"long":-96.099923},{"alt":0},{"ref":"Senol Akin"}],[{"prey":["Bivalvia","Actinopterygii","Farfantepenaeus aztecus"]},{"date":923695200000},{"lat":28.645202},{"long":-96.099923},{"alt":0},{"ref":"Senol Akin"}],[{"prey":["Callinectes sapidus","Actinopterygii","Farfantepenaeus aztecus"]},{"date":923695200000},{"lat":28.639232},{"long":-96.105117},{"alt":0},{"ref":"Senol Akin"}],[{"prey":["Farfantepenaeus aztecus","Actinopterygii","Farfantepenaeus aztecus"]},{"date":923695200000},{"lat":28.645202},{"long":-96.099923},{"alt":0},{"ref":"Senol Akin"}]]}]';
+		
+		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequest);
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
 

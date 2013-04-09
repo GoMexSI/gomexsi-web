@@ -6,13 +6,17 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 {
 	private $handler;
 	private $postRequest;
+	private $observationPostRequest;
 
 	public function setUp()
     {
     	$this->handler = new SearchRequestHandler();
     	$this->postRequest = array("serviceType" => "REST",
 			   "findPrey"=>"on",
-			   "subjectName" => "Zalieutes mcgintyi");
+			   "subjectName" => "Zalieutes mcgintyi", "listStyle" => true);
+    	$this->observationPostRequest = $arrayName = array("serviceType" => "REST",
+			   "findPrey"=>"on",
+			   "subjectName" => "Ariopsis felis");
     }
 
     public function testRequestHandlerDriver()
@@ -44,18 +48,6 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$iterator++;
 		}
 	}
-
-	public function testCreateJSONResponseMockFindPreyForPredator()
-	{
-    	$this->postRequest["findPrey"] = "on";
-		unset($this->postRequest["findPredators"]);
-    	
-		$jsonTestString = '[{"scientificName":"Zalieutes mcgintyi","preyInstances":[{"prey":["Foraminifera","Goniadella","Goniada maculata","Teleostei","Crustacea","Animalia","Rhachotropis","Paraonidae","Phyllodoce arenae","Opheliidae","Ophiodromus","Spionidae","Amphipoda","Nematoda","Lumbrineridae","Onuphidae","Anchialina typica","Nemertea","Bathymedon","Sediment","Xanthoidea"]}]}]';
-		
-		$jsonObject = $this->handler->requestHandlerDriver($this->postRequest);
-		$this->assertEquals($jsonTestString, $jsonObject);
-	}
-
 	public function testGetTrophicServiceRESTFindPredatorForPrey()
 	{
 		$trophicResultString = array();
@@ -76,10 +68,20 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals($expectedPredNames[$iterator], $value);
 			$iterator++;
 		}
-
+	}
+	/*JSON Response Tests*/
+	public function testCreateJSONResponseRESRFindPreyForPredator()
+	{
+    	$this->postRequest["findPrey"] = "on";
+		unset($this->postRequest["findPredators"]);
+    	
+		$jsonTestString = '[{"scientificName":"Zalieutes mcgintyi","preyInstances":[{"prey":["Foraminifera","Goniadella","Goniada maculata","Teleostei","Crustacea","Animalia","Rhachotropis","Paraonidae","Phyllodoce arenae","Opheliidae","Ophiodromus","Spionidae","Amphipoda","Nematoda","Lumbrineridae","Onuphidae","Anchialina typica","Nemertea","Bathymedon","Sediment","Xanthoidea"]}]}]';
+		
+		$jsonObject = $this->handler->requestHandlerDriver($this->postRequest);
+		$this->assertEquals($jsonTestString, $jsonObject);
 	}
 
-	public function testCreateJSONResponseMockFindPredatorForPrey()
+	public function testCreateJSONResponseRESTFindPredatorForPrey()
 	{
 		$this->postRequest["subjectName"] = "Foraminifera";
     	unset($this->postRequest["findPrey"]);
@@ -90,7 +92,17 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$jsonObject = $this->handler->requestHandlerDriver($this->postRequest);
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
-
+	public function testCreatJSONResponseRESTAddPreyObservationToResponse()
+	{
+		$file = "Tests/requestHandler/largeStringFiles/preyForPredObservation.txt";
+		$f = fopen($file, "r");
+		$jsonTestString = fgets($f);
+   		//$jsonTestString = '[{"scientificName":"Foraminifera","predInstances":[{"pred":["Zalieutes mcgintyi","Syacium gunteri","Pomatoschistus microps","Zoarces viviparus","Symphurus plagiusa","Prionotus roseus","Stenotomus caprinus","Syacium papillosum","Monolene sessilicauda","Fundulus similis","Trichopsetta ventralis","Coelorinchus caribbaeus","Bembrops anatirostris","Bellator militaris","Pomatoschistus minutus","Leiostomus xanthurus","Crangon crangon","Platichthys flesus","Pleuronectes platessa","Paralichthyes albigutta","Retusa obtusa","Symphurus civitatus"]}]}]';
+		
+		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequest);
+		$this->assertEquals($jsonTestString, $jsonObject);
+	}
+	/*END JSON Response Tests*/
 	public function testGetTrophicServiceRESTFindCloseTaxonNameMatches()
 	{
 		$trophicResultString = array();
@@ -111,7 +123,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
-	public function testcreateJSONResponseMockFindCloseTaxonNameMatches()
+	public function testcreateJSONResponseRESTFindCloseTaxonNameMatches()
 	{
 		$this->postRequest["suggestion"] = "Adm";
     	
