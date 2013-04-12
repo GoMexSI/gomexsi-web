@@ -45,10 +45,9 @@ class RequestJSONResponse
 
         $preyList = array();
         foreach ($serviceObject as $thePrey) { # thePrey is a single observation
-            #after one round, locationCheckSum will contain an actul value. (($observation + $i) != 0) prevents entering this condition on the first run
             if((($locationCheckSum - ($thePrey[1] + $thePrey[2] + $thePrey[3])) != 0) && (($observation + $i) != 0)) { #new observation, but should not occur the first time in the foreach
                 $prey = array('prey' => $preyList); # should work, and not just make referance to old prey referance.. 
-                $responseObject->preyInstances[$observation] = array($prey, array('date' => $unixEpoch), array('lat' => $latitude), array('long' => $longitude), array('alt' => $altitude), array('ref' => $contributor));
+                $responseObject->preyInstances[$observation] = array('prey' => $preyList, 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
                 $observation+=1;
                 $i = 0;
             }

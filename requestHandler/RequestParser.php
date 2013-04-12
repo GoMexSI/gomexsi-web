@@ -30,6 +30,9 @@ class RequestParser
 			if (!$this->shouldIncludePrey && !$this->shouldIncludePredators) {
 				throw new CorruptSearchTypeParameterException('Search Type could not be determined based on parameters given');	
 			}
+		} elseif (!empty($toParse['deepLinks'])) { # URL lookup 
+			$this->searchType = 'taxonURLLookup';
+			$this->subjectName = $toParse['deepLinks'];
 		} else { # default behavior
 			$this->searchType = 'exactMatchObservation'; 
 			$this->subjectName = $toParse['subjectName'];

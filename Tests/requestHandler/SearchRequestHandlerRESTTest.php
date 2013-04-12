@@ -97,7 +97,6 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$file = "Tests/requestHandler/largeStringFiles/preyForPredObservation.txt";
 		$f = fopen($file, "r");
 		$jsonTestString = fgets($f);
-   		//$jsonTestString = '[{"scientificName":"Foraminifera","predInstances":[{"pred":["Zalieutes mcgintyi","Syacium gunteri","Pomatoschistus microps","Zoarces viviparus","Symphurus plagiusa","Prionotus roseus","Stenotomus caprinus","Syacium papillosum","Monolene sessilicauda","Fundulus similis","Trichopsetta ventralis","Coelorinchus caribbaeus","Bembrops anatirostris","Bellator militaris","Pomatoschistus minutus","Leiostomus xanthurus","Crangon crangon","Platichthys flesus","Pleuronectes platessa","Paralichthyes albigutta","Retusa obtusa","Symphurus civitatus"]}]}]';
 		
 		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequest);
 		$this->assertEquals($jsonTestString, $jsonObject);
