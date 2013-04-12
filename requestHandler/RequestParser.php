@@ -1,6 +1,8 @@
 <?php
 
 class CorruptSearchTypeParameterException extends Exception {}
+class CorruptServiceTypeParameterException extends Exception {}
+
 
 class RequestParser
 {
@@ -53,10 +55,13 @@ class RequestParser
 			} else {
 				$this->serviceType = $toParse['serviceType'];
 			}
-		}else{
-			$this->serviceType = 'live';
-		}
 
+			if(!($this->serviceType == 'REST' || $this->serviceType == 'mock')) {
+				throw new CorruptServiceTypeParameterException('Service type given: ' . $toParse['serviceType'] . ' is not known');
+			}
+		} else {
+			throw new CorruptServiceTypeParameterException('No service type was provided! Post must provide service type');
+		}
 		return $this->serviceType;
 	}
 

@@ -58,7 +58,14 @@ class SearchRequestHandler
             }
             $responseObject->scientificName = $speciesSubject;
             $responseObjectContainer[0] = $responseObject;
-        } else {
+        } elseif ($searchType == 'taxonURLLookup') {
+            $responseObject = new ResponseObject();
+            
+            $phpServiceObject = $this->trophicService->findExternalTaxonURL($speciesSubject);
+            $jsonConverter->addTaxonURLLookupToResponse($responseObject, $phpServiceObject);
+            $responseObject->scientificName = $speciesSubject;
+            $responseObjectContainer[0] = $responseObject;
+        }else {
             $responseObject = new ResponseObject();
             
             if ($this->parser->shouldIncludePrey()) {
@@ -73,8 +80,13 @@ class SearchRequestHandler
             $responseObjectContainer[0] = $responseObject;
         }
         
+        $JSON = $jsonConverter->convertToJSONObject($responseObjectContainer);
 
-        return $jsonConverter->convertToJSONObject($responseObjectContainer);
+        if($searchType == 'taxonURLLookup') {
+            $JSON = str_replace("\\/","/", $JSON); 
+        }
+
+        return $JSON;
     }
 
 

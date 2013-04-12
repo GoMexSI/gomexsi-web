@@ -11,6 +11,8 @@ interface TrophicService
     public function findObservedPreyForPredator($predatorTaxon, $preyTaxon);
 
     public function findObservedPredatorForPrey($predatorTaxon, $preyTaxon);
+
+    public function findExternalTaxonURL($taxonName);
 }
 
 ?>

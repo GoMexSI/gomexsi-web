@@ -21,6 +21,13 @@ class TrophicServiceRESTTest extends PHPUnit_Framework_TestCase
         $predatorNames = $trophicService->findObservedPreyForPredator('Ariopsis felis', null);
         $this->assertTrue(count($predatorNames) > 500, 'expected at least 500 predators, but found ' . count($predatorNames));
     }
+    public function testFindExternalTaxonURL()
+    {
+        $trophicService = new TrophicServiceREST();
+        $taxonURL = $trophicService->findExternalTaxonURL('Homo sapiens');
+        $expected = "http://eol.org/pages/327955";
+        $this->assertEquals($expected, $taxonURL);
+    }
 }
 
 ?>

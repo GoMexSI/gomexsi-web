@@ -81,9 +81,9 @@ class RequestJSONResponse
         $responseObject->matches = $matchList;
 
     }
-
-
-    
+    public function addTaxonURLLookupToResponse($responseObject, $serviceObject) {
+        $responseObject->URL = $serviceObject;
+    }
 }
 /**
 * 

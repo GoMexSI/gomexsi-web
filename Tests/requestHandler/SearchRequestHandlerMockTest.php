@@ -154,6 +154,18 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 		$jsonObject = $this->handler->createJSONResponse();
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
+	public function testFindExternalTaxonURLMock()
+	{
+		$post = array("serviceType" => "mock", "deepLinks" => "homo sapiens");
+		$this->handler->parsePOST($post);
+
+		$this->handler->getTrophicService();
+
+		$jsonTestString = '[{"scientificName":"homo sapiens","URL":"http://eol.org/pages/327955"}]';
+
+		$jsonObject = $this->handler->createJSONResponse();
+		$this->assertEquals($jsonTestString, $jsonObject);
+	}
 
 }
 

@@ -29,18 +29,17 @@ class TrophicServiceMock implements TrophicService
                 $k+=1;
             }
         }
-
-
         return $container;
-
     }
     public function findObservedPredatorForPrey($predatorTaxon, $preyTaxon)
     {
 
     }
+    public function findExternalTaxonURL($taxonName)
+    {
+        return "http://eol.org/pages/327955";
+    }
 
-    #TODO add findObservedPreyForPredator(predatorTaxon, preyTaxon) and findObservedPredatorForPrey
-    #TODO make observed the default action. and the mock data to look just like Reeds mock data
 }
 
 ?>

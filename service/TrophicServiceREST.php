@@ -21,11 +21,14 @@ class TrophicServiceREST implements TrophicService
     public function findObservedPreyForPredator($predatorTaxon, $preyTaxon)
     {
         return $this->query('predator', $predatorTaxon, 'listPreyObservations');
-        //throw new NotImplementedException('REST findObservedPreyForPredator not implemented');
     }
     public function findObservedPredatorForPrey($predatorTaxon, $preyTaxon)
     {
         throw new NotImplementedException('REST findObservedPredatorForPrey not implemented');
+    }
+    public function findExternalTaxonURL($taxonName)
+    {
+        return $this->query('findExternalUrlForTaxon', $taxonName, null);
     }
     private function query($method, $name, $operation) {
         $url_prefix = 'http://46.4.36.142:8080/' . $method . '/' . rawurlencode($name);
@@ -57,7 +60,9 @@ class TrophicServiceREST implements TrophicService
                 $i+=1;
             }
             return $container;
-        }else {
+        }elseif ($method == 'findExternalUrlForTaxon') { #{"url":"http://eol.org/pages/327955"}
+           return $response->{'url'};
+        }else { // used for list style returns as well as findCloseTaxonNameMatches
             $columns = $response->{'columns'};
             $preyDataList = $response->{'data'};
             $preyNames = array();
