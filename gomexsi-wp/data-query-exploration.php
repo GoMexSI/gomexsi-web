@@ -16,6 +16,7 @@
 						<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . 'Pages:', 'after' => '</p></nav>' )); ?>
 					</header>
 					<?php if(is_user_logged_in()) : ?>
+						<p><strong>Note: Some features are not yet finalized. If you run into any issues, <a href="/feedback/">please give us feedback</a>.</strong></p>
 						<form action="" id="data-query" class="clearfix">
 							<div class="query-inputs">
 								<div id="form-section-name" class="form-section clearfix">
@@ -31,6 +32,7 @@
 								</div>
 								
 								<div class="form-section clearfix">
+									<p>Typical users can ignore the options below. They are used by the developers as we finalize the query features.</p>
 									<label>Service Type:
 										<select name="serviceType">
 											<option value="rest">Live</option>

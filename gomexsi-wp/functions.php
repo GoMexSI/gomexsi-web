@@ -148,5 +148,10 @@ function rhm_enqueue_jsPlumb() {
 function rhm_enqueue_child_scripts() {
 	// JS plugins stored in child theme.
 	wp_enqueue_script('rhm_js_child_plugins', get_stylesheet_directory_uri() . '/js/plugins.js');
+	
+	// Data Query Scripts
+	if(is_page_template('data-query-taxonomic.php') || is_page_template('data-query-spatial.php') || is_page_template('data-query-exploration.php')) {
+		wp_enqueue_script('rhm_data_query', get_stylesheet_directory_uri() . '/js/data-query.js');
+	}
 }
 

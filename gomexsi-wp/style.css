@@ -225,7 +225,8 @@ body.search #content article.page {
 }
 
 .entry-content .alignleft,
-.entry-content embed {
+.entry-content embed,
+.entry-content .video-js {
 	margin-left: -100px;
 }
 

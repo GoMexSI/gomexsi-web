@@ -16,6 +16,7 @@
 						<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . 'Pages:', 'after' => '</p></nav>' )); ?>
 					</header>
 					<?php if(is_user_logged_in()) : ?>
+						<p><strong>Note: Some features are not yet finalized. If you run into any issues, <a href="/feedback/">please give us feedback</a>.</strong></p>
 						<form action="" id="data-query" class="clearfix">
 							<div class="query-inputs">
 								<div id="form-section-name" class="form-section clearfix">
@@ -64,7 +65,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findParasites" data-switch="filterParasites" /> Parasites</label>
+												<label><input type="checkbox" class="switch" name="findParasites" data-switch="filterParasites" disabled /> Parasites</label>
 											</div>
 											<div class="conditional" data-switch="filterParasites">
 												<label>
@@ -77,7 +78,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findMutualists" data-switch="filterMutalists" /> Mutalists</label>
+												<label><input type="checkbox" class="switch" name="findMutualists" data-switch="filterMutalists" disabled /> Mutalists</label>
 											</div>
 											<div class="conditional" data-switch="filterMutalists">
 												<label>
@@ -90,7 +91,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findCommonsals" data-switch="filterCommonsals" /> Commonsals</label>
+												<label><input type="checkbox" class="switch" name="findCommonsals" data-switch="filterCommonsals" disabled /> Commonsals</label>
 											</div>
 											<div class="conditional" data-switch="filterCommonsals">
 												<label>
@@ -103,7 +104,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findAmensals" data-switch="filterAmensals" /> Amensals</label>
+												<label><input type="checkbox" class="switch" name="findAmensals" data-switch="filterAmensals" disabled /> Amensals</label>
 											</div>
 											<div class="conditional" data-switch="filterAmensals">
 												<label>
@@ -116,7 +117,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findPrimaryHosts" data-switch="filterPrimaryHosts" /> Primary Hosts</label>
+												<label><input type="checkbox" class="switch" name="findPrimaryHosts" data-switch="filterPrimaryHosts" disabled /> Primary Hosts</label>
 											</div>
 											<div class="conditional" data-switch="filterPrimaryHosts">
 												<label>
@@ -129,7 +130,7 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findSecondaryHosts" data-switch="filterSecondaryHosts" /> Secondary Hosts</label>
+												<label><input type="checkbox" class="switch" name="findSecondaryHosts" data-switch="filterSecondaryHosts" disabled /> Secondary Hosts</label>
 											</div>
 											<div class="conditional" data-switch="filterSecondaryHosts">
 												<label>
@@ -144,6 +145,7 @@
 								</div>
 								
 								<div class="form-section clearfix">
+									<p>Typical users can ignore the options below. They are used by the developers as we finalize the query features.</p>
 									<label>Service Type:
 										<select name="serviceType">
 											<option value="rest">Live</option>
