@@ -22,9 +22,9 @@ class TrophicServiceREST implements TrophicService
     {
         return $this->query('predator', $predatorTaxon, 'listPreyObservations');
     }
-    public function findObservedPredatorForPrey($predatorTaxon, $preyTaxon)
+    public function findObservedPredatorsForPrey($predatorTaxon, $preyTaxon)
     {
-        throw new NotImplementedException('REST findObservedPredatorForPrey not implemented');
+        return $this->query('prey', $predatorTaxon, 'listPredatorObservations');
     }
     public function findExternalTaxonURL($taxonName)
     {

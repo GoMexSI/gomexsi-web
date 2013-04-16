@@ -19,8 +19,17 @@ class TrophicServiceRESTTest extends PHPUnit_Framework_TestCase
     {
         $trophicService = new TrophicServiceREST();
         $predatorNames = $trophicService->findObservedPreyForPredator('Ariopsis felis', null);
-        $this->assertTrue(count($predatorNames) > 500, 'expected at least 500 predators, but found ' . count($predatorNames));
+        $this->assertTrue(count($predatorNames) > 500, 'expected at least 500 prey items, but found ' . count($predatorNames));
     }
+
+    public function testFindObservedPredatorsForPrey()
+    {
+        $trophicService = new TrophicServiceREST();
+        $predatorNames = $trophicService->findObservedPredatorsForPrey('Crustacea', null);
+        $this->assertTrue(count($predatorNames) > 100, 'expected at least 500 predators, but found ' . count($predatorNames));
+    }
+    
+
     public function testFindExternalTaxonURL()
     {
         $trophicService = new TrophicServiceREST();

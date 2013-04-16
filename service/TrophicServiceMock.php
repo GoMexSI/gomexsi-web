@@ -31,7 +31,7 @@ class TrophicServiceMock implements TrophicService
         }
         return $container;
     }
-    public function findObservedPredatorForPrey($predatorTaxon, $preyTaxon)
+    public function findObservedPredatorsForPrey($predatorTaxon, $preyTaxon)
     {
 
     }
