@@ -760,7 +760,6 @@ a.name-tip-link {
 }
 
 .name-tip-box {
-	visibility: hidden;
 	position: absolute;
 	bottom: 100%;
 	left: 50%;
@@ -768,10 +767,6 @@ a.name-tip-link {
 	padding-bottom: 10px;
 	width: 180px;
 	z-index: 1;
-}
-
-.name-tip-wrapper:hover .name-tip-box {
-	visibility: visible;
 }
 
 .name-tip-box .container {

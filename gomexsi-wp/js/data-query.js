@@ -44,20 +44,7 @@ jQuery(document).ready(function($) {
 		   ============================*/
 		
 		function nameTip(scientificName){
-			var nameTip = '';
-			nameTip += '<div class="name-tip-wrapper">';
-			nameTip += '<a href="#" class="name-tip-link">';
-			nameTip += scientificName;
-			nameTip += '</a>';
-			nameTip += '<div class="name-tip-box"><div class="container">';
-			nameTip += '<ul>';
-			nameTip += '<li><a href="/query-database/exploration/" class="ex-link">View in Explorer Mode<form class="visuallyhidden" method="post" action="/query-database/exploration/"><input type="hidden" name="subjectName" value="' + scientificName + '" /></form></a></li>';
-			nameTip += '<li><a href="http://fishbase.org/summary/' + scientificName.replace(' ', '-') + '.html" class="external" target="_blank">View on FishBase.org</a></li>';
-			nameTip += '</ul>';
-			nameTip += '</div>'; // .container
-			nameTip += '<div class="bridge"></div>';
-			nameTip += '</div></div>'; // .name-tip-box, .name-tip-wrapper
-			return nameTip;
+			return '<div class="name-tip-wrapper"><a href="#" class="name-tip-link">' + scientificName + '</a></div>';
 		}
 		
 		function nameSafe(name){
@@ -475,6 +462,44 @@ jQuery(document).ready(function($) {
 			
 			$('.name-tip-link').click(function(e){
 				e.preventDefault();
+				e.stopPropagation();
+				
+				// Remove any existing name tip boxes.
+				$('.name-tip-box').remove();
+
+				var scientificName = $(this).html();
+				var wrapper = $(this).parent('.name-tip-wrapper');
+				$(wrapper).append('<div class="name-tip-box"><div class="container"><ul></ul></div><div class="bridge"></div></div>');
+				var linkList = $(wrapper).find('ul');
+				$(linkList).append('<li><a href="/query-database/exploration/" class="ex-link">View in Explorer Mode<form class="visuallyhidden" method="post" action="/query-database/exploration/"><input type="hidden" name="subjectName" value="' + scientificName + '" /></form></a></li>')
+				
+				// POST to the WordPress Ajax system.
+				$.post(
+					// URL to the WordPress Ajax system.
+					'/wp-admin/admin-ajax.php',
+					
+					// The object containing the POST data.
+					{
+						url : 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php',
+						action : 'rhm_data_query',
+						deepLinks : scientificName
+					},
+					
+					// Success callback function.
+					function(data, textStatus, jqXHR){
+						log(data);
+						//nameTip += '<li><a href="http://fishbase.org/summary/' + scientificName.replace(' ', '-') + '.html" class="external" target="_blank">View on FishBase.org</a></li>';
+					}
+				
+				// Failure callback function.
+				).fail(function(jqXHR, textStatus, errorThrown){
+					
+				});
+			});
+			
+			$('body').click(function(e){
+				// If a name tip box is open, then clicking anywhere else will remove it.
+				$('.name-tip-box').remove();
 			});
 			
 			$('.ex-link').click(function(e){
