@@ -69,7 +69,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$iterator++;
 		}
 	}
-	/*JSON Response Tests*/
+
 	public function testCreateJSONResponseRESRFindPreyForPredator()
 	{
     	$this->postRequest["findPrey"] = "on";
@@ -92,16 +92,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$jsonObject = $this->handler->requestHandlerDriver($this->postRequest);
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
-	public function testCreatJSONResponseRESTAddPreyObservationToResponse()
-	{
-		$file = "Tests/requestHandler/largeStringFiles/preyForPredObservation.txt";
-		$f = fopen($file, "r");
-		$jsonTestString = fgets($f);
-		
-		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequest);
-		$this->assertEquals($jsonTestString, $jsonObject);
-	}
-	/*END JSON Response Tests*/
+	
 	public function testGetTrophicServiceRESTFindCloseTaxonNameMatches()
 	{
 		$trophicResultString = array();
@@ -115,21 +106,21 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(count($expectedPredNames), count($trophicResultString));
 		
-		$iterator = 0;
-		foreach ($trophicResultString as $value) {
-			$this->assertEquals($expectedPredNames[$iterator], $value);
-			$iterator++;
-		}
+		$this->assertEquals(0, count(array_diff($expectedPredNames, $trophicResultString)));
 	}
 
-	public function testcreateJSONResponseRESTFindCloseTaxonNameMatches()
+	public function testCreateJSONResponseRESTFindCloseTaxonNameMatches()
 	{
 		$this->postRequest["suggestion"] = "Adm";
     	
-		$jsonTestString = '[{"fuzzyName":"Adm","matches":["Admontia blanda","Admontia seria","Admontia maculisquama","Admontia grandicornis"]}]';
+		$expected = json_decode('[{"fuzzyName":"Adm","matches":["Admontia blanda","Admontia seria","Admontia maculisquama","Admontia grandicornis"]}]');
 		
-		$jsonObject = $this->handler->requestHandlerDriver($this->postRequest);
-		$this->assertEquals($jsonTestString, $jsonObject);
+		$expectedMatches = $expected[0]->matches;
+		
+		$jsonObject = json_decode($this->handler->requestHandlerDriver($this->postRequest));
+		$actualMatches = $jsonObject[0]->matches;
+
+		$this->assertEquals(count(expectedMatches), count(actualMatches));
 	}
 
 	public function testFindExternalTaxonURLREST()

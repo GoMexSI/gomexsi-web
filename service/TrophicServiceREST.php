@@ -16,7 +16,7 @@ class TrophicServiceREST implements TrophicService
     }
     public function findCloseTaxonNameMatches($name)
     {
-        return $this->query('findTaxon', $name, null);
+        return $this->query('findCloseMatchesForTaxon', $name, null);
     }
     public function findObservedPreyForPredator($predatorTaxon, $preyTaxon)
     {
