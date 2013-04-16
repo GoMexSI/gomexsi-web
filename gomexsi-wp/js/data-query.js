@@ -269,6 +269,7 @@ jQuery(document).ready(function($) {
 					
 					$.each(instances, function(j){
 						var instance = instances[j];
+						var skip = [];
 						
 						subject[type + 'InstanceCount']++;
 						totalInstanceCount++;
@@ -276,10 +277,13 @@ jQuery(document).ready(function($) {
 						$.each(instance[type], function(k){
 							var aTypeName = instance[type][k];
 							var safeName = nameSafe(aTypeName);
+							var inSkip = ($.inArray(safeName, skip) == -1 ? false : true);
 							
-							if(safeName in subject[type + 'List']){
+							if(safeName in subject[type + 'List'] && !inSkip){
+								skip.push(safeName);
 								subject[type + 'List'][safeName].count++;
-							} else {
+							} else if(!inSkip){
+								skip.push(safeName);
 								subject[type + 'List'][safeName] = {};
 								subject[type + 'List'][safeName].scientificName = aTypeName;
 								subject[type + 'List'][safeName].count = 1;
@@ -348,7 +352,7 @@ jQuery(document).ready(function($) {
 								safeName: aType,
 								scientificName: typeList[aType].scientificName,
 								count: typeList[aType].count,
-								percent: Math.round( ( typeList[aType].count / subject[type + 'InstanceCount'] ) * 100 )
+								percent: ( ( typeList[aType].count / subject[type + 'InstanceCount'] ) * 100 ).toFixed(2)
 							});
 						}
 						
