@@ -120,7 +120,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$jsonObject = json_decode($this->handler->requestHandlerDriver($this->postRequest));
 		$actualMatches = $jsonObject[0]->matches;
 
-		$this->assertEquals(count(expectedMatches), count(actualMatches));
+		$this->assertEquals(count($expectedMatches), count($actualMatches));
 	}
 
 	public function testFindExternalTaxonURLREST()
