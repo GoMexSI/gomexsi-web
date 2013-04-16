@@ -104,8 +104,6 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$trophicService = $this->handler->getTrophicService();
 		$trophicResultString = $trophicService->findCloseTaxonNameMatches("Adm");
 		
-		$this->assertEquals(count($expectedPredNames), count($trophicResultString));
-		
 		$this->assertEquals(0, count(array_diff($expectedPredNames, $trophicResultString)));
 	}
 
@@ -120,7 +118,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$jsonObject = json_decode($this->handler->requestHandlerDriver($this->postRequest));
 		$actualMatches = $jsonObject[0]->matches;
 
-		$this->assertEquals(count($expectedMatches), count($actualMatches));
+		$this->assertEquals(0, count(array_diff($expectedMatches, $actualMatches)));
 	}
 
 	public function testFindExternalTaxonURLREST()
