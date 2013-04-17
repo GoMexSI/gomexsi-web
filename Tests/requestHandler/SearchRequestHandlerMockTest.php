@@ -161,7 +161,7 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 
 		$this->handler->getTrophicService();
 
-		$jsonTestString = '[{"scientificName":"homo sapiens","URL":"http://eol.org/pages/327955"}]';
+		$jsonTestString = '{"scientificName":"homo sapiens","URL":"http://eol.org/pages/327955"}';
 
 		$jsonObject = $this->handler->createJSONResponse();
 		$this->assertEquals($jsonTestString, $jsonObject);

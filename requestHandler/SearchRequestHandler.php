@@ -64,7 +64,7 @@ class SearchRequestHandler
             $phpServiceObject = $this->trophicService->findExternalTaxonURL($speciesSubject);
             $jsonConverter->addTaxonURLLookupToResponse($responseObject, $phpServiceObject);
             $responseObject->scientificName = $speciesSubject;
-            $responseObjectContainer[0] = $responseObject;
+            $responseObjectContainer = $responseObject;
         }else {
             $responseObject = new ResponseObject();
             
