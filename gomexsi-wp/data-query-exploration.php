@@ -62,6 +62,7 @@
 							
 							<input type="hidden" name="action" value="rhm_data_query" />
 							<input type="submit" id="form-submit" class="gradient" value="Submit Query" />
+							<div id="status"></div>
 						</form>
 						
 						<hr />

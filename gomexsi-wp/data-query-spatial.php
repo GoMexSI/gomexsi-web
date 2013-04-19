@@ -91,13 +91,13 @@
 										</div>
 										<div class="clearfix row">
 											<div class="spacer">
-												<label><input type="checkbox" class="switch" name="findCommonsals" data-switch="filterCommonsals" disabled /> Commonsals</label>
+												<label><input type="checkbox" class="switch" name="findCommensals" data-switch="filterCommensals" disabled /> Commensals</label>
 											</div>
-											<div class="conditional" data-switch="filterCommonsals">
+											<div class="conditional" data-switch="filterCommensals">
 												<label>
-													<span class="visuallyhidden">Limit commonsals results by name</span>
+													<span class="visuallyhidden">Limit commensals results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="taxonomic filter" name="filterCommonsals" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterCommensals" placeholder="Limit results by name" />
 													</div>
 												</label>
 											</div>
@@ -178,6 +178,7 @@
 							<input type="hidden" name="action" value="rhm_data_query" />
 							
 							<input type="submit" id="form-submit" class="gradient" value="Submit Query" />
+							<div id="status"></div>
 						</form>
 						
 						<div id="query-map-top"></div>

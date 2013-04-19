@@ -273,8 +273,34 @@ form#data-query {
 
 form#data-query #form-submit {
 	position: absolute;
-	bottom: 50px;
+	top: 10px;
 	right: -150px;
+	width: 130px;
+}
+
+form#data-query #status {
+	position: absolute;
+	top: 60px;
+	right: -150px;
+	width: 130px;
+	height: 22px;
+	padding: 3px 0;
+	font-weight: 400;
+	text-align: center;
+}
+
+form#data-query #status.loading {
+	color: #007abf;
+	right: -166px;
+	background: url('img/ajax-loader.gif') no-repeat left top;
+}
+
+form#data-query #status.success {
+	color: #00a000;
+}
+
+form#data-query #status.failure {
+	color: #a00000;
 }
 
 form#data-query .comment {

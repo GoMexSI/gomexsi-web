@@ -473,17 +473,22 @@ jQuery(document).ready(function($) {
 				var linkList = $(wrapper).find('ul');
 				$(linkList).append('<li><a href="/query-database/exploration/" class="ex-link">View in Explorer Mode<form class="visuallyhidden" method="post" action="/query-database/exploration/"><input type="hidden" name="subjectName" value="' + scientificName + '" /></form></a></li>')
 				
+				var postData = {
+					url : 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php',
+					action : 'rhm_data_query',
+					deepLinks : scientificName,
+					serviceType: 'rest'
+				};
+				
+				log(postData);
+				
 				// POST to the WordPress Ajax system.
 				$.post(
 					// URL to the WordPress Ajax system.
 					'/wp-admin/admin-ajax.php',
 					
 					// The object containing the POST data.
-					{
-						url : 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php',
-						action : 'rhm_data_query',
-						deepLinks : scientificName
-					},
+					postData,
 					
 					// Success callback function.
 					function(data, textStatus, jqXHR){
@@ -820,7 +825,9 @@ jQuery(document).ready(function($) {
 			}
 			
 			// Clear the status container.
-			$('#status').html('');
+			$('#status').removeClass('success failure');
+			$('#status').addClass('loading');
+			$('#status').html('Loading...');
 			
 			log('Query String:'); log(queryString);
 			
@@ -852,17 +859,28 @@ jQuery(document).ready(function($) {
 					}
 					
 					// Show status on page.
-					$('#status').html(textStatus);
+					$('#status').removeClass('loading failure');
+					$('#status').addClass('success');
+					$('#status').html('Query complete.');
 					
 					// Show raw results on page.
 					$('#raw-results').html(data);
+					
+					// Animate scrolling to the results area.
+					if(modeIs('spatial') || modeIs('taxonomic')){
+						$(document.body).animate({ 'scrollTop': $('#query-results-header').offset().top }, 2000);
+					} else if(modeIs('exploration')){
+						$(document.body).animate({ 'scrollTop': $('#ex-area').offset().top }, 2000);
+					}
 				}
 			
 			// Failure callback function.
 			).fail(function(jqXHR, textStatus, errorThrown){
 				
 				// Show status on page.
-				$('#status').html(textStatus);
+				$('#status').removeClass('loading success');
+				$('#status').addClass('failure');
+				$('#status').html('Error: ' + textStatus);
 				
 				// Clear results area.
 				$('#query-results').html('').hide();
