@@ -95,21 +95,15 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 	
 	public function testCreateJSONResponseRESTFindObservedPrey()
 	{
-		$expectedResponse = '[{"scientificName":"Foraminifera","predInstances":[{"pred":["Zalieutes mcgintyi","Syacium gunteri","Pomatoschistus microps","Zoarces viviparus","Symphurus plagiusa","Prionotus roseus","Stenotomus caprinus","Syacium papillosum","Monolene sessilicauda","Fundulus similis","Trichopsetta ventralis","Coelorinchus caribbaeus","Bembrops anatirostris","Bellator militaris","Pomatoschistus minutus","Leiostomus xanthurus","Crangon crangon","Platichthys flesus","Pleuronectes platessa","Paralichthyes albigutta","Retusa obtusa","Symphurus civitatus"]}]}]';
-		
 		$actualResponse = $this->handler->requestHandlerDriver($this->observationPostRequest);
-
 		$position = 0;
-		$shouldContinue = true;
-
+		
 		while (($position = strpos($actualResponse, 'Ariopsis felis', $position)) > 0) {
 			$count++;
 			$position++;
 		}
 		
-		
-		$this->assertEquals('expected two matches in response to observated prey of Ariopsis felis (subject and single prey), but found ' . $count, 2, $count);		
-
+		$this->assertEquals('expected two matches in response to observated prey of Ariopsis felis (subject and single prey), but found ' . $count, 2, $count);
 	}
 	
 
