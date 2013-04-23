@@ -93,6 +93,29 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
 	
+	public function testCreateJSONResponseRESTFindObservedPrey()
+	{
+		$expectedResponse = '[{"scientificName":"Foraminifera","predInstances":[{"pred":["Zalieutes mcgintyi","Syacium gunteri","Pomatoschistus microps","Zoarces viviparus","Symphurus plagiusa","Prionotus roseus","Stenotomus caprinus","Syacium papillosum","Monolene sessilicauda","Fundulus similis","Trichopsetta ventralis","Coelorinchus caribbaeus","Bembrops anatirostris","Bellator militaris","Pomatoschistus minutus","Leiostomus xanthurus","Crangon crangon","Platichthys flesus","Pleuronectes platessa","Paralichthyes albigutta","Retusa obtusa","Symphurus civitatus"]}]}]';
+		
+		$actualResponse = $this->handler->requestHandlerDriver($this->observationPostRequest);
+
+		$count = 0;
+		$position = 0;
+
+		$position = strpos($actualResponse, 'Ariopsis felis', $position);
+		if ($position > 0) {
+			$count++;
+		}
+		$position = strpos($actualResponse, 'Ariopsis felis', $position);
+		if ($position > 0) {
+			$count++;
+		}
+
+		$this->assertEquals('expected single match of Ariopsis felis, but found at least ' . $count, 1, $count);
+		$this->assertEquals($expectedResponse, $actualResponse);
+	}
+	
+
 	public function testGetTrophicServiceRESTFindCloseTaxonNameMatches()
 	{
 		$trophicResultString = array();
