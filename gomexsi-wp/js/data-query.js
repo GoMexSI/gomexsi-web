@@ -120,6 +120,14 @@ jQuery(document).ready(function($) {
 					$(taxSugItems).removeClass('selected')
 				}
 			}
+			
+			// Tab or enter or escape.
+			if(key == '9' || key == '13' || key == '27'){
+				if($(taxWrap).find('ul.tax-suggestions').length){
+					e.preventDefault();
+					$('ul.tax-suggestions').remove();
+				}
+			}
 		});
 		
 		// Handle for the suggestion setTimeout() function.
@@ -868,9 +876,9 @@ jQuery(document).ready(function($) {
 					
 					// Animate scrolling to the results area.
 					if(modeIs('spatial') || modeIs('taxonomic')){
-						$(document.body).animate({ 'scrollTop': $('#query-results-header').offset().top }, 2000);
+						$(document.body).animate({ 'scrollTop': $('#query-results-header').offset().top - 25 }, 1000);
 					} else if(modeIs('exploration')){
-						$(document.body).animate({ 'scrollTop': $('#ex-area').offset().top }, 2000);
+						$(document.body).animate({ 'scrollTop': $('#ex-area').offset().top - 25 }, 1000);
 					}
 				}
 			

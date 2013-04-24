@@ -237,7 +237,7 @@
 							<div id="status"></div>
 						</form>
 						
-						<hr />
+						<hr class="section-break" />
 						
 						<div id="query-results-header" class="clearfix">
 							<!-- <a id="query-results-download" href="#">Download the raw data</a> -->
