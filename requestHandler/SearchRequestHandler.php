@@ -58,6 +58,7 @@ class SearchRequestHandler
             }
             $responseObject->scientificName = $speciesSubject;
             $responseObjectContainer[0] = $responseObject;
+
         } elseif ($searchType == 'taxonURLLookup') {
             $responseObject = new ResponseObject();
             

@@ -97,13 +97,14 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 	{
 		$actualResponse = $this->handler->requestHandlerDriver($this->observationPostRequest);
 		$position = 0;
+		$count = 0;
 		
 		while (($position = strpos($actualResponse, 'Ariopsis felis', $position)) > 0) {
 			$count++;
 			$position++;
 		}
-		
-		$this->assertEquals('expected two matches in response to observated prey of Ariopsis felis (subject and single prey), but found ' . $count, 2, $count);
+
+		$this->assertEquals(2, $count, 'expected two matches in response to observated prey of Ariopsis felis (subject and single prey), but found ' . $count);
 	}
 	
 

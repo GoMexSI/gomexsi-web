@@ -45,11 +45,12 @@ class RequestJSONResponse
 
         $preyList = array();
         foreach ($serviceObject as $thePrey) { # thePrey is a single observation
-            if((($locationCheckSum - ($thePrey[1] + $thePrey[2] + $thePrey[3])) != 0) && (($observation + $i) != 0)) { #new observation, but should not occur the first time in the foreach
+            if((($locationCheckSum - ($thePrey[1] + $thePrey[2] + $thePrey[3] + $thePrey[5])) != 0) && (($observation + $i) != 0)) { #new observation, but should not occur the first time in the foreach
                 $prey = array('prey' => $preyList); # should work, and not just make referance to old prey referance.. 
                 $responseObject->preyInstances[$observation] = array('prey' => $preyList, 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
                 $observation+=1;
                 $i = 0;
+                unset($preyList);
             }
 
             $preyName = $thePrey[0];
@@ -60,7 +61,7 @@ class RequestJSONResponse
             $unixEpoch = $thePrey[5];
 
             $preyList[$i] = $preyName;
-            $locationCheckSum = $latitude + $longitude + $altitude;
+            $locationCheckSum = $latitude + $longitude + $altitude + $unixEpoch;
 
             $i+=1; # each iteration in the for each represents a new prey
         }
