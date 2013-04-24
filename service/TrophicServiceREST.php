@@ -7,12 +7,12 @@ class TrophicServiceREST implements TrophicService
 {
     public function findPreyForPredator($predatorScientificName) 
     {
-        return $this->query('predator', $predatorScientificName, 'listPrey');
+        return $this->query('taxon', $predatorScientificName, 'preysOn');
     }
 
     public function findPredatorForPrey($preyScientificName)
     {
-        return $this->query('prey', $preyScientificName, 'listPredators');
+        return $this->query('taxon', $preyScientificName, 'preyedUponBy');
     }
     public function findCloseTaxonNameMatches($name)
     {
@@ -20,11 +20,11 @@ class TrophicServiceREST implements TrophicService
     }
     public function findObservedPreyForPredator($predatorTaxon, $preyTaxon)
     {
-        return $this->query('predator', $predatorTaxon, 'listPreyObservations');
+        return $this->query('taxon', $predatorTaxon, 'preysOn?includeObservations=true');
     }
     public function findObservedPredatorsForPrey($predatorTaxon, $preyTaxon)
     {
-        return $this->query('prey', $predatorTaxon, 'listPredatorObservations');
+        return $this->query('taxon', $predatorTaxon, 'preyedUponBy?includeObservations=true');
     }
     public function findExternalTaxonURL($taxonName)
     {
@@ -34,7 +34,7 @@ class TrophicServiceREST implements TrophicService
         $url_prefix = 'http://46.4.36.142:8080/' . $method . '/' . rawurlencode($name);
 
         if (isset($operation)){
-            $url = $url_prefix . '/' . $operation . '/';
+            $url = $url_prefix . '/' . $operation;
         } else {
             $url = $url_prefix;
         }
