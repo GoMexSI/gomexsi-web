@@ -5,32 +5,48 @@ class NotImplementedException extends Exception {}
 
 class TrophicServiceREST implements TrophicService 
 {
-    public function findPreyForPredator($predatorScientificName) 
+    public function findPreyForPredator($srcTaxon) 
     {
-        return $this->query('taxon', $predatorScientificName, 'preysOn');
+        return $this->taxonQuery($srcTaxon, 'preysOn');
     }
 
-    public function findPredatorForPrey($preyScientificName)
+    public function findPredatorForPrey($srcTaxon)
     {
-        return $this->query('taxon', $preyScientificName, 'preyedUponBy');
+        return $this->taxonQuery($srcTaxon, 'preyedUponBy');
     }
+
+    public function findObservedPreyForPredator($srcTaxon, $targetTaxon)
+    {
+        return $this->taxonQuery($srcTaxon, 'preysOn', true);
+    }
+
+    public function findObservedPredatorsForPrey($srcTaxon, $targetTaxon)
+    {
+        return $this->taxonQuery($srcTaxon, 'preyedUponBy', true);
+    }
+
     public function findCloseTaxonNameMatches($name)
     {
         return $this->query('findCloseMatchesForTaxon', $name, null);
     }
-    public function findObservedPreyForPredator($predatorTaxon, $preyTaxon)
-    {
-        return $this->query('taxon', $predatorTaxon, 'preysOn?includeObservations=true');
-    }
-    public function findObservedPredatorsForPrey($predatorTaxon, $preyTaxon)
-    {
-        return $this->query('taxon', $predatorTaxon, 'preyedUponBy?includeObservations=true');
-    }
+
     public function findExternalTaxonURL($taxonName)
     {
         return $this->query('findExternalUrlForTaxon', $taxonName, null);
     }
-    private function query($method, $name, $operation) {
+
+    private function taxonQuery($scientificName, $interactionType, $includeObservations = false) 
+    {
+        $operation = $interactionType;
+        if ($includeObservations) 
+        {
+            $operation = $operation . '?includeObservations=true';
+        }   
+        return $this->query('taxon', $scientificName, $operation);
+    }
+
+    private function query($method, $name, $operation) 
+    {
         $url_prefix = 'http://46.4.36.142:8080/' . $method . '/' . rawurlencode($name);
 
         if (isset($operation)){
@@ -48,7 +64,8 @@ class TrophicServiceREST implements TrophicService
             $dataList = $response->{'data'};
             $container = array();
             $i = 0;
-            foreach ($dataList as $taxonData) {
+            foreach ($dataList as $taxonData) 
+            {
                 $container[$i] = array();
                 $container[$i][0] = $taxonData[0]; #preyName
                 $container[$i][1] = $taxonData[1]; #latitude
@@ -60,15 +77,15 @@ class TrophicServiceREST implements TrophicService
                 $i+=1;
             }
             return $container;
-        }elseif ($method == 'findExternalUrlForTaxon') { #{"url":"http://eol.org/pages/327955"}
-           return $response->{'url'};
-        }else { // used for list style returns as well as findCloseTaxonNameMatches
+        } elseif ($method == 'findExternalUrlForTaxon') { #{"url":"http://eol.org/pages/327955"}
+            return $response->{'url'};
+        } else { // used for list style returns as well as findCloseTaxonNameMatches
             $columns = $response->{'columns'};
             $preyDataList = $response->{'data'};
             $preyNames = array();
             foreach ($preyDataList as $preyData) {
                 foreach ($preyData as $preyName) {
-                $preyNames[] = $preyName;
+                    $preyNames[] = $preyName;
                 }
             }
             return $preyNames;
