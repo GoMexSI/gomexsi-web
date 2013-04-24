@@ -667,6 +667,7 @@ hr.section-break {
 /* Instance Details */
 
 .query-results .instance-details .single-instance {
+	position: relative;
 	padding-left: 40px;
 	min-height: 40px;
 	background: url('img/bg-instance-details.png') 6px 5px no-repeat;
@@ -681,6 +682,16 @@ hr.section-break {
 	display: inline;
 	margin: 0;
 	font-size: 13px;
+}
+
+.query-results .instance-details .instance-number {
+	position: absolute;
+	top: 42px;
+	left: 0;
+	width: 34px;
+	text-align: center;
+	font-size: 14px;
+	font-weight: 700;
 }
 
 .query-results .instance-details .date {
@@ -860,7 +871,7 @@ a.name-tip-link {
 }
 
 #query-map {
-	margin: 0 0 10px;
+	margin: 0 0 30px;
 	width: 632px;
 	height: 356px;
 	border-right: 4px #808080 solid;

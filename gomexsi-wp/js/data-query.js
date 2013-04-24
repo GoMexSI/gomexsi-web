@@ -380,7 +380,7 @@ jQuery(document).ready(function($) {
 							$('#' + subject.baseID + ' .' + type + '-summary table.summary').append(row);
 						});
 						
-						// Prey Instance Details
+						// Type Instance Details
 						var instanceDetailsID = subject.baseID + '-' + type + '-instance-details';
 						$(resultsSection).children('.container').append('<div id="' + instanceDetailsID + '" class="results-subsection instance-details" />');
 						var typeInstanceDetails = $('#' + instanceDetailsID);
@@ -395,6 +395,9 @@ jQuery(document).ready(function($) {
 							
 							$(typeInstanceDetails).children('.container').append('<div id="' + instanceID + '" class="single-instance clearfix" />');
 							var singleInstance = $('#' + instanceID);
+							
+							var instanceNumber = i + 1;
+							$(singleInstance).append('<div class="instance-number">' + instanceNumber + '</div>');
 							
 							var instanceDate = ('date' in instance ? instance.date : 'unknown');
 							if(instanceDate){
