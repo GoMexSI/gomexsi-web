@@ -40,18 +40,18 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 	public function testGetTrophicServiceMockFindObservedPreyForPredator()
 	{
 		$trophicResultString = array();
-		$expectedPreyResult = array("Micropogonias undulatus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Brevoortia patronus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Farfantepenaeus aztecus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Mollusca",8.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Bivalvia", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Actinopterygii", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Callinectes sapidus", 28.639232, -96.105117, 0.0, "Senol Akin", 923695200000, "Farfantepenaeus aztecus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Mollusca", 28.642313, -96.103142, 0.0, "Senol Akin", 923695200000);
+		$expectedPreyResult = array("Micropogonias undulatus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 613013, "Brevoortia patronus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 613013, "Farfantepenaeus aztecus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 613014, "Mollusca",8.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 613013, "T-Rex", 8.645202, -96.099923, 0.0, "MichaelCas", 923695200000, 613014, "Pterodactyl", 8.645202, -96.099923, 0.0, "MichaelCas", 923695200000, 613015);
 
     	$this->handler->parsePOST($this->observationPostRequest);
 
 		$trophicService = $this->handler->getTrophicService();
 		$trophicResultString = $trophicService->findObservedPreyForPredator("Ariopsi felis", null);
 		
-		$this->assertEquals((count($expectedPreyResult)/6), count($trophicResultString)); #6 catogries 
+		$this->assertEquals((count($expectedPreyResult)/7), count($trophicResultString)); #7 catogries 
 
 		$iterator = 0;
 		foreach ($trophicResultString as $value) {
-			for ($i=0; $i < 5; $i++) { #value holds 6 catagories
+			for ($i=0; $i < 6; $i++) { #value holds 7 catagories
 				$this->assertEquals($value[$i], $expectedPreyResult[$iterator]);
 				$iterator++;
 			}
@@ -69,7 +69,7 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 	}
 	public function testCreateJSONResponseMockFindObservedPreyForPredator()
 	{
-    	$jsonTestString = '[{"scientificName":"Ariopsis felis","preyInstances":[{"prey":["Micropogonias undulatus","Brevoortia patronus","Farfantepenaeus aztecus"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"prey":["Mollusca"],"date":923695200000,"lat":8.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"prey":["Bivalvia","Actinopterygii"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"prey":["Callinectes sapidus"],"date":923695200000,"lat":28.639232,"long":-96.105117,"alt":0,"ref":"Senol Akin"},{"prey":["Farfantepenaeus aztecus"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"}]}]';
+    	$jsonTestString = '[{"scientificName":"Ariopsis felis","preyInstances":[{"prey":["Micropogonias undulatus","Brevoortia patronus"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"prey":["Farfantepenaeus aztecus"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"prey":["Mollusca","T-Rex","Pterodactyl"],"date":923695200000,"lat":8.645202,"long":-96.099923,"alt":0,"ref":"MichaelCas"}]}]';
 		
 		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequest);
 		$this->assertEquals($jsonTestString, $jsonObject);

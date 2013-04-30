@@ -92,10 +92,11 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$jsonObject = $this->handler->requestHandlerDriver($this->postRequest);
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
-	
+
 	public function testCreateJSONResponseRESTFindObservedPrey()
 	{
 		$actualResponse = $this->handler->requestHandlerDriver($this->observationPostRequest);
+		$somePreyValues = array('Actinopterygii', 'Callinectes sapidus', 'Mollusca', 'Portunus', 'Trinectes maculatus', 'microzooplankton', 'phytoplankton', 'zooplankton');
 		$position = 0;
 		$count = 0;
 		
@@ -104,10 +105,14 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$position++;
 		}
 
-		$this->assertEquals(2, $count, 'expected two matches in response to observated prey of Ariopsis felis (subject and single prey), but found ' . $count);
+		$this->assertEquals(2, $count, 'expected two matches in response to observed prey of Ariopsis felis (subject and single prey), but found ' . $count);
+
+		foreach ($somePreyValues as $prey) {
+			$containsValue = (strpos($actualResponse, $prey) !== FALSE) ? true : false;
+			$this->assertTrue($containsValue, $prey . ' is missing from the observed prey list (from the REST service), for the predator Ariopsis felis');
+		}
 	}
 	
-
 	public function testGetTrophicServiceRESTFindCloseTaxonNameMatches()
 	{
 		$trophicResultString = array();

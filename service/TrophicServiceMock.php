@@ -18,13 +18,19 @@ class TrophicServiceMock implements TrophicService
     }
     public function findObservedPreyForPredator($predatorTaxon, $preyTaxon)
     {
-        $stringArray = array("Micropogonias undulatus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Brevoortia patronus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Farfantepenaeus aztecus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Mollusca",8.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Bivalvia", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Actinopterygii", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Callinectes sapidus", 28.639232, -96.105117, 0.0, "Senol Akin", 923695200000, "Farfantepenaeus aztecus", 28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, "Mollusca", 28.642313, -96.103142, 0.0, "Senol Akin", 923695200000);
+        $stringArray = array("Micropogonias undulatus",  28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 1,
+                             "Brevoortia patronus",      28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 1,
+                             "Farfantepenaeus aztecus",  28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 2,
+                             "Mollusca",                 8.645202,  -96.099923, 0.0, "Senol Akin", 923695200000, 3,
+                             "T-Rex",                    8.645202,  -96.099923, 0.0, "MichaelCas", 923695200000, 3,
+                             "Pterodactyl",              8.645202,  -96.099923, 0.0, "MichaelCas", 923695200000, 3);
         $container = array(); // [row][colum]
 
         $k=0;
-        for($i=0; $i<9; $i++) { // 6 rows of data(mock)
+        #if you change the above array contents, be sure to adjust values below..
+        for($i=0; $i<6; $i++) { // 6 rows of data(mock)
             $container[$i] = array(); 
-            for($j=0; $j<6; $j++) { // 5 columns
+            for($j=0; $j<7; $j++) { // 7 columns
                 $container[$i][$j] = $stringArray[$k];
                 $k+=1;
             }
