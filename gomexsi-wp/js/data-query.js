@@ -403,11 +403,11 @@ jQuery(document).ready(function($) {
 							if(instanceDate){
 								instanceDate = getDate(instanceDate);
 							} else {
-								instanceDate = 'unknown';
+								instanceDate = 'Date Unknown';
 							}
-							$(singleInstance).append('<div class="date"><h5 class="label">Date:</h5> ' + instanceDate + '</div>');
+							$(singleInstance).append('<div class="date"><h5 class="label">Collected:</h5> ' + instanceDate + '</div>');
 							
-							var instanceLocation = ('loc' in instance ? instance.loc : 'Unnamed location.');
+							var instanceLocation = ('loc' in instance ? instance.loc : 'Unnamed Location');
 							var lat = ('lat' in instance ? instance.lat : '');
 							var long = ('long' in instance ? instance.long : '');
 							$(singleInstance).append('<div class="location"><h5 class="label">Location:</h5> ' + instanceLocation + ' <a href="#map-canvas" class="map-link" data-lat="' + lat + '" data-lon="' + long + '">Map</a></div>');
