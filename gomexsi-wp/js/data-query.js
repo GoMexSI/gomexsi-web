@@ -492,8 +492,6 @@ jQuery(document).ready(function($) {
 					serviceType: 'rest'
 				};
 				
-				log(postData);
-				
 				// POST to the WordPress Ajax system.
 				$.post(
 					// URL to the WordPress Ajax system.
@@ -504,10 +502,28 @@ jQuery(document).ready(function($) {
 					
 					// Success callback function.
 					function(data, textStatus, jqXHR){
-						log(data);
-						//nameTip += '<li><a href="http://fishbase.org/summary/' + scientificName.replace(' ', '-') + '.html" class="external" target="_blank">View on FishBase.org</a></li>';
-					}
-				
+						var externalUrl = data['URL']; log(externalUrl);
+						
+						if(typeof externalUrl !== 'undefined'){
+							var externalSource = '';
+							
+							if(externalUrl.indexOf('eol.org') !== -1){
+								externalSource = 'Encyclopedia of Life';
+							} else if(externalUrl.indexOf('fishbase.org') !== -1){
+								externalSource = 'FishBase';
+							} else if(externalUrl.indexOf('gulfbase.org') !== -1){
+								externalSource = 'GulfBase';
+							} log(externalSource);
+							
+							if(externalSource !== ''){
+								$(linkList).append('<li><a href="' + externalUrl + '" class="external" target="_blank">' + externalSource + '</a></li>');
+							}
+						}
+					},
+					
+					// Expect JSON data.
+					'json'
+					
 				// Failure callback function.
 				).fail(function(jqXHR, textStatus, errorThrown){
 					
