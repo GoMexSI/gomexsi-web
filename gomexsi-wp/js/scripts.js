@@ -121,6 +121,6 @@ jQuery(document).ready(function($) {
 		);
 	});
 	
+	$("a[href$='.jpg'],a[href$='.jpeg'],a[href$='.png'],a[href$='.gif']").fancybox();
 });
 
-$("a[href$='.jpg'],a[href$='.jpeg'],a[href$='.png'],a[href$='.gif']").fancybox();

@@ -686,10 +686,10 @@ hr.section-break {
 
 .query-results .instance-details .instance-number {
 	position: absolute;
-	top: 42px;
-	left: 0;
-	width: 34px;
-	text-align: center;
+	top: 15px;
+	left: -30px;
+	width: 30px;
+	text-align: right;
 	font-size: 14px;
 	font-weight: 700;
 }
@@ -697,7 +697,7 @@ hr.section-break {
 .query-results .instance-details .date {
 	float: left;
 	padding: 8px 0;
-	width: 149px;
+	width: 169px;
 	border-right: 1px #bfbfbf solid;
 	border-bottom: 1px #bfbfbf solid;
 }
@@ -705,7 +705,7 @@ hr.section-break {
 .query-results .instance-details .location {
 	float: left;
 	padding: 8px 0 8px 10px;
-	width: 438px;
+	width: 418px;
 	border-bottom: 1px #bfbfbf solid;
 }
 

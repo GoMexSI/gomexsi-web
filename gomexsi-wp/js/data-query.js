@@ -403,9 +403,9 @@ jQuery(document).ready(function($) {
 							if(instanceDate){
 								instanceDate = getDate(instanceDate);
 							} else {
-								instanceDate = 'Date Unknown';
+								instanceDate = 'Unknown';
 							}
-							$(singleInstance).append('<div class="date"><h5 class="label">Collected:</h5> ' + instanceDate + '</div>');
+							$(singleInstance).append('<div class="date"><h5 class="label">Date Collected:</h5> ' + instanceDate + '</div>');
 							
 							var instanceLocation = ('loc' in instance ? instance.loc : 'Unnamed Location');
 							var lat = ('lat' in instance ? instance.lat : '');
@@ -439,6 +439,7 @@ jQuery(document).ready(function($) {
 		// Populate the results header area.
 		Results.prototype.makeResultsHeader = function(){
 			$('#query-results-info').html('Returned ' + this.totalSubjectCount + ($(this.totalSubjectCount).length > 1 ? ' results' : ' result') + ' with ' + this.totalInstanceCount + ' instances recorded.');
+			$('#query-results-download').removeClass('visuallyhidden');
 		}
 		
 		// Section toggles and name links.
@@ -510,6 +511,36 @@ jQuery(document).ready(function($) {
 				// Failure callback function.
 				).fail(function(jqXHR, textStatus, errorThrown){
 					
+				});
+			});
+			
+			$('.reference-link').click(function(e){
+				e.preventDefault();
+				
+				var refId = $(this).attr('href');
+				refId = refId.replace('#','');
+				var citation = $('#'+refId).html();
+				
+				$.fancybox({
+					type: 'inline',
+					href: '#'+refId,
+					onClosed: function(){
+						$('.fancybox-inline-tmp').html(citation).attr('id',refId).attr('style','').removeClass('fancybox-inline-tmp');
+					}
+				});
+			});
+			
+			$('#query-results-download').click(function(e){
+				e.preventDefault();
+				
+				var options = $('#query-results-download-options').html();
+				
+				$.fancybox({
+					'type': 'inline',
+					'href': '#query-results-download-options',
+					'onClosed': function(){
+						$('div#hideaway .fancybox-inline-tmp').html(options).attr('id', 'query-results-download-options').attr('style','').removeClass('fancybox-inline-tmp');
+					}
 				});
 			});
 			
@@ -879,9 +910,9 @@ jQuery(document).ready(function($) {
 					
 					// Animate scrolling to the results area.
 					if(modeIs('spatial') || modeIs('taxonomic')){
-						$(document.body).animate({ 'scrollTop': $('#query-results-header').offset().top - 25 }, 1000);
+						$(document.body).animate({ 'scrollTop': $('#query-results-header').offset().top - 50 }, 1000);
 					} else if(modeIs('exploration')){
-						$(document.body).animate({ 'scrollTop': $('#ex-area').offset().top - 25 }, 1000);
+						$(document.body).animate({ 'scrollTop': $('#ex-area').offset().top - 50 }, 1000);
 					}
 				}
 			
