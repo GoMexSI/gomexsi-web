@@ -7,16 +7,21 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 	private $handler;
 	private $postRequest;
 	private $observationPostRequest;
+	private $observationPostRequestPred;
 
 	public function setUp()
     {
     	$this->handler = new SearchRequestHandler();
     	$this->postRequest = array("serviceType" => "mock",
-					   "findPrey"=>"on",
-					   "subjectName" => "Scomberomorus cavalla", "listStyle" => true);
+			   "findPrey"=>"on",
+			   "subjectName" => "Scomberomorus cavalla", "listStyle" => true);
     	$this->observationPostRequest = $arrayName = array("serviceType" => "mock",
 			   "findPrey"=>"on",
 			   "subjectName" => "Ariopsis felis");
+    	$this->observationPostRequestPred = $arrayName = array("serviceType" => "mock",
+			   "findPredators"=>"on",
+			   "subjectName" => "Callinectes sapidus");
+
     }
 
 	public function testGetTrophicServiceMockFindPreyForPredator()
@@ -73,6 +78,24 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 		
 		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequest);
 		$this->assertEquals($jsonTestString, $jsonObject);
+	}
+	public function testCreateJSONResponseMockFindObservedPredatorForPrey()
+	{
+		unset($this->observationPostRequestPred["findPrey"]);
+    	$jsonTestString = '[{"scientificName":"Callinectes sapidus","predatorInstances":[{"predator":["Micropogonias undulatus","Actinopterygii"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"predator":["Great White"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"John Mayer"},{"predator":["Mollusca"],"date":923695200000,"lat":8.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"predator":["Velociraptor"],"date":923695200000,"lat":8.645202,"long":-96.099923,"alt":0,"ref":"MichaelCas"},{"predator":["Tiger Shark"],"date":923695200000,"lat":8.645202,"long":-96.099923,"alt":0,"ref":"MichaelCas"}]}]';
+		
+		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequestPred);
+		$this->assertEquals($jsonTestString, $jsonObject);
+	}
+	public function testSearchObservedPredatorAndPrey()
+	{
+		$this->observationPostRequestPred["findPredators"] = "on";
+		$this->observationPostRequestPred["findPrey"] = "on";
+
+    	$jsonTestString = '[{"scientificName":"Callinectes sapidus","preyInstances":[{"prey":["Micropogonias undulatus","Brevoortia patronus"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"prey":["Farfantepenaeus aztecus"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"prey":["Mollusca","T-Rex","Pterodactyl"],"date":923695200000,"lat":8.645202,"long":-96.099923,"alt":0,"ref":"MichaelCas"}],"predatorInstances":[{"predator":["Micropogonias undulatus","Actinopterygii"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"predator":["Great White"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"John Mayer"},{"predator":["Mollusca"],"date":923695200000,"lat":8.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"predator":["Velociraptor"],"date":923695200000,"lat":8.645202,"long":-96.099923,"alt":0,"ref":"MichaelCas"},{"predator":["Tiger Shark"],"date":923695200000,"lat":8.645202,"long":-96.099923,"alt":0,"ref":"MichaelCas"}]}]';
+		
+		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequestPred);
+		$this->assertEquals($jsonTestString, $jsonObject);	
 	}
 
 	public function testSearchPredatorAndPrey()

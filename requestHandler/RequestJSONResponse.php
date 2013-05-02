@@ -1,5 +1,7 @@
 <?php
 
+class UnknownSpeciesClassificationTypeException extends Exception {}
+
 class RequestJSONResponse
 {
 	public function convertToJSONObject($phpObject)
@@ -31,13 +33,14 @@ class RequestJSONResponse
         $responseObject->predInstances[0] = $pred;
     }
 
-    public function addPreyObservationToResponse($responseObject, $serviceObject)
+    public function addObservationToResponse($responseObject, $serviceObject, $predOrPrey)
     {
+        # the word instance inside this function is used to denote a 'prey' or 'predator' instanace depending on what is passed into $predOrPrey. 
+        # $predOrPrey will contain the string 'prey' or 'predator'
         $observation = 0;
-        $locationCheckSum = 0;
         $oldID = 0;
-        $i = 0; #each element in the preyList list
-        $lastPrey = array(); # used in order to save the last instnace
+        $i = 0; #each element in the instanceList list
+        $lastInstance = array(); # used in order to save the last instance
 
         $latitude = -999; #for first run in loop
         $longitude = -999;
@@ -45,34 +48,50 @@ class RequestJSONResponse
         $contributor = "ERROR"; # this should never be used as the contributor, but have to define varible
         $unixEpoch = null;
 
-        $preyList = array();
-        foreach ($serviceObject as $thePrey) { # thePrey is a single observation
-            $lastPrey = $thePrey;
-            if((($oldID - $thePrey[6]) != 0) && (($observation + $i) != 0)) { #new observation, but should not occur the first time in the foreach
-                $prey = array('prey' => $preyList);
-                $responseObject->preyInstances[$observation] = array('prey' => $preyList, 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
+        $instanceList = array();
+        foreach ($serviceObject as $theInstance) { # theInstance is a single observation
+            $lastInstance = $theInstance; # used to add the last observation after the foreach loop
+            if((($oldID - $theInstance[6]) != 0) && (($observation + $i) != 0)) { #new observation, but should not occur the first time in the foreach
+                switch ($predOrPrey) { #create correct type of object based on classification of species passed into function
+                    case 'prey':
+                        $responseObject->preyInstances[$observation] = array("$predOrPrey" => $instanceList, 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
+                        break;
+                    case 'predator':
+                        $responseObject->predatorInstances[$observation] = array("$predOrPrey" => $instanceList, 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
+                        break;
+                    default:
+                        throw new UnknownSpeciesClassificationTypeException('type [' . $predOrPrey . '] not recognized as valid parameter type');
+                        break;
+                }
                 $observation+=1;
                 $i = 0;
-                unset($preyList);
+                unset($instanceList);
             }
 
-            $preyName = $thePrey[0];
-            $latitude = $thePrey[1];
-            $longitude = $thePrey[2];
-            $altitude = $thePrey[3];
-            $contributor = $thePrey[4];
-            $unixEpoch = $thePrey[5];
-            $oldID = $thePrey[6];
+            $instanceName = $theInstance[0];
+            $latitude = $theInstance[1];
+            $longitude = $theInstance[2];
+            $altitude = $theInstance[3];
+            $contributor = $theInstance[4];
+            $unixEpoch = $theInstance[5];
+            $oldID = $theInstance[6];
 
-            $preyList[$i] = $preyName;
+            $instanceList[$i] = $instanceName;
 
-            $locationCheckSum = $latitude + $longitude + $altitude + $unixEpoch;
-
-            $i+=1; # each iteration in the for each represents a new prey
+            $i+=1; # each iteration in the for each represents a new prey or predator observation
         }
         #add the last instance to the response object
-        $prey = array('prey' => $preyList);
-        $responseObject->preyInstances[$observation] = array('prey' => $preyList, 'date' => $lastPrey[5], 'lat' => $lastPrey[1], 'long' => $lastPrey[2], 'alt' => $lastPrey[3], 'ref' => $lastPrey[4]);
+        switch ($predOrPrey) {
+            case 'prey':
+                $responseObject->preyInstances[$observation] = array("$predOrPrey" => $instanceList, 'date' => $lastInstance[5], 'lat' => $lastInstance[1], 'long' => $lastInstance[2], 'alt' => $lastInstance[3], 'ref' => $lastInstance[4]);
+                break;
+            case 'predator':
+                $responseObject->predatorInstances[$observation] = array("$predOrPrey" => $instanceList, 'date' => $lastInstance[5], 'lat' => $lastInstance[1], 'long' => $lastInstance[2], 'alt' => $lastInstance[3], 'ref' => $lastInstance[4]);
+                break;
+            default:
+                throw new UnknownSpeciesClassificationTypeException('type [' . $predOrPrey . '] not recognized as valid parameter type');
+                break;
+        }
     }
 
     public function addPredatorObservationToResponse($responseObject, $serviceObject)

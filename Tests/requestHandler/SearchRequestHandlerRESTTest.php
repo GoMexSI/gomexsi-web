@@ -17,6 +17,9 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$this->observationPostRequest = $arrayName = array("serviceType" => "REST",
 			"findPrey"=>"on",
 			"subjectName" => "Ariopsis felis");
+    	$this->observationPostRequestPred = $arrayName = array("serviceType" => "REST",
+		   "findPredators"=>"on",
+		   "subjectName" => "Callinectes sapidus");
 	}
 
 	public function testRequestHandlerDriver()
@@ -110,6 +113,32 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		foreach ($somePreyValues as $prey) {
 			$containsValue = (strpos($actualResponse, $prey) !== FALSE) ? true : false;
 			$this->assertTrue($containsValue, $prey . ' is missing from the observed prey list (from the REST service), for the predator Ariopsis felis');
+		}
+	}
+
+	public function testCreateJSONResponseRESTFindObservedPredator()
+	{
+		unset($this->observationPostRequestPred["findPrey"]);
+		$actualResponse = $this->handler->requestHandlerDriver($this->observationPostRequestPred);
+		$somePredValues = array('Micropogonias undulatus', 'Sciaenops ocellatus', 'Sciaenops ocellatus', 'Ariopsis felis', 'Menticirrhus littoralis');
+		
+		foreach ($somePredValues as $pred) {
+			$containsValue = (strpos($actualResponse, $pred) !== FALSE) ? true : false;
+			$this->assertTrue($containsValue, $pred . ' is missing from the observed pred list (from the REST service), for the predator Callinectes sapidus');
+		}
+	}
+
+	public function testSearchObservedPredatorAndPreyREST()
+	{
+		$this->observationPostRequestPred["findPredators"] = "on";
+		$this->observationPostRequestPred["findPrey"] = "on";
+
+		$actualResponse = $this->handler->requestHandlerDriver($this->observationPostRequestPred);
+		$requiredValues = array('preyInstances', 'predatorInstances');
+		
+		foreach ($requiredValues as $value) {
+			$containsValue = (strpos($actualResponse, $value) !== FALSE) ? true : false;
+			$this->assertTrue($containsValue, $value . ' is missing from the observed list (from the REST service), for the species Callinectes sapidus');
 		}
 	}
 	
