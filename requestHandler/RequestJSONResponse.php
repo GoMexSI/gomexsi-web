@@ -56,8 +56,8 @@ class RequestJSONResponse
                     case 'prey':
                         $responseObject->preyInstances[$observation] = array("$predOrPrey" => $instanceList, 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
                         break;
-                    case 'predator':
-                        $responseObject->predatorInstances[$observation] = array("$predOrPrey" => $instanceList, 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
+                    case 'pred':
+                        $responseObject->predInstances[$observation] = array("$predOrPrey" => $instanceList, 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
                         break;
                     default:
                         throw new UnknownSpeciesClassificationTypeException('type [' . $predOrPrey . '] not recognized as valid parameter type');
@@ -85,7 +85,7 @@ class RequestJSONResponse
             case 'prey':
                 $responseObject->preyInstances[$observation] = array("$predOrPrey" => $instanceList, 'date' => $lastInstance[5], 'lat' => $lastInstance[1], 'long' => $lastInstance[2], 'alt' => $lastInstance[3], 'ref' => $lastInstance[4]);
                 break;
-            case 'predator':
+            case 'pred':
                 $responseObject->predatorInstances[$observation] = array("$predOrPrey" => $instanceList, 'date' => $lastInstance[5], 'lat' => $lastInstance[1], 'long' => $lastInstance[2], 'alt' => $lastInstance[3], 'ref' => $lastInstance[4]);
                 break;
             default:

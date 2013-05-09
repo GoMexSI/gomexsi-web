@@ -54,7 +54,7 @@ class SearchRequestHandler
             } 
             if ($this->parser->shouldIncludePredators()) { # not fully implemented yet
                 $phpServiceObject = $this->trophicService->findObservedPredatorsForPrey($speciesSubject, null);
-                $jsonConverter->addObservationToResponse($responseObject, $phpServiceObject, 'predator');
+                $jsonConverter->addObservationToResponse($responseObject, $phpServiceObject, 'pred');
             }
             $responseObject->scientificName = $speciesSubject;
             $responseObjectContainer[0] = $responseObject;
