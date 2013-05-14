@@ -419,7 +419,7 @@ jQuery(document).ready(function($) {
 								
 								var li = '<li class="clearfix">';
 								li += '<div class="name">' + nameTip(aTypeName) + '</div>';
-								li += '<div class="details">Details go here</div>';
+								li += '<div class="details">No details provided.</div>';
 								li += '</li>';
 								
 								$('#' + instanceTypeListID).append(li);
@@ -821,9 +821,9 @@ jQuery(document).ready(function($) {
 			function updateBounds(bounds){
 				var boundNE = bounds.getNorthEast();
 				var boundSW = bounds.getSouthWest();
-				var boundN = boundNE.jb;
+				var boundN = boundNE.lb;
 				var boundE = boundNE.kb;
-				var boundS = boundSW.jb;
+				var boundS = boundSW.lb;
 				var boundW = boundSW.kb;
 				
 				$('form#data-query input[name="boundNorth"]').val(boundN);

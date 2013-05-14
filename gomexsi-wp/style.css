@@ -82,6 +82,10 @@ body {
 	background: url('img/bg-top-gradient.png') repeat-x;
 }
 
+p, ul {
+	margin-top: 0;
+}
+
 
 
 /* =============================================================================
