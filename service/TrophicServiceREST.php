@@ -74,6 +74,8 @@ class TrophicServiceREST implements TrophicService
                 $container[$i][4] = $taxonData[4]; #contributor
                 $container[$i][5] = $taxonData[5]; #unix epoch
                 $container[$i][6] = $taxonData[6]; #tmp_and_unique_specimen_id
+                $container[$i][7] = $taxonData[7]; #predator life stage
+                $container[$i][8] = $taxonData[8]; #prey life stage
 
                 #could do a nested for, but the straight assignment will probably be faster for huge datasets
                 $i+=1;
