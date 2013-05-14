@@ -35,6 +35,7 @@ class TrophicServiceREST implements TrophicService
         return $this->query('findExternalUrlForTaxon', $taxonName, null);
     }
 
+    # taxon Query is probably a stupid name and is not very clear.. TODO rename to something better
     private function taxonQuery($scientificName, $interactionType, $includeObservations = false) 
     {
         $operation = $interactionType;
@@ -58,7 +59,30 @@ class TrophicServiceREST implements TrophicService
         $response = file_get_contents($url);
         $response = json_decode($response);
 
-        if(strpos($operation, 'Observations') !== FALSE) { #if it is an observational query
+        if(strpos($operation, 'Observations') !== FALSE) { # Observational query
+            return $this->observationalSearchContainerPopulator($response);
+        } elseif ($method == 'findExternalUrlForTaxon') {  # External URL lookup query
+            return $response->{'url'};
+        } else {                                           # Fuzzy lookup returns and exhaustive list return, TODO contemplate moving this into a function
+            $columns = $response->{'columns'};
+            $preyDataList = $response->{'data'};
+            $preyNames = array();
+            foreach ($preyDataList as $preyData) {
+                foreach ($preyData as $preyName) {
+                    $preyNames[] = $preyName;
+                }
+            }
+            return $preyNames;
+        }
+    }
+    /*
+      FUNCTION: observationalSearchContainerPopulator
+
+      PURPOSE: Helper function that populates the return container for observational queries
+
+      This function takes the response from the rest service and converts it into a more usable format
+    */
+    private function observationalSearchContainerPopulator($response){
 
             $columns = $response->{'columns'};
             $dataList = $response->{'data'};
@@ -85,19 +109,6 @@ class TrophicServiceREST implements TrophicService
                 $i+=1;
             }
             return $container;
-        } elseif ($method == 'findExternalUrlForTaxon') { #{"url":"http://eol.org/pages/327955"}
-            return $response->{'url'};
-        } else { // used for list style returns as well as findCloseTaxonNameMatches
-            $columns = $response->{'columns'};
-            $preyDataList = $response->{'data'};
-            $preyNames = array();
-            foreach ($preyDataList as $preyData) {
-                foreach ($preyData as $preyName) {
-                    $preyNames[] = $preyName;
-                }
-            }
-            return $preyNames;
-        }
     }
 }
 
