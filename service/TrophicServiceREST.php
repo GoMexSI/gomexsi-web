@@ -79,7 +79,7 @@ class TrophicServiceREST implements TrophicService
                 $container[$i][9] = $taxonData[9]; #predator body part
                 $container[$i][10] = $taxonData[10]; #prey body part
                 $container[$i][11] = $taxonData[11]; #predator physiological state
-                $container[$i][12] = $taxonData[12]; #prey  physiological state
+                $container[$i][12] = $taxonData[12]; #prey physiological state
 
                 #could do a nested for, but the straight assignment will probably be faster for huge datasets
                 $i+=1;
