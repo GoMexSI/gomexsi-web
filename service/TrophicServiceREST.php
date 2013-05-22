@@ -2,27 +2,34 @@
 require_once 'TrophicService.php';
 
 class NotImplementedException extends Exception {}
+class NonValidLocationParameterException extends Exception {}
 
 class TrophicServiceREST implements TrophicService 
 {
     public function findPreyForPredator($srcTaxon) 
     {
-        return $this->taxonQuery($srcTaxon, 'preysOn');
+        $constraints['includeObservations'] = false;
+        return $this->queryBuilder($srcTaxon, 'preysOn', $constraints);
     }
 
     public function findPredatorForPrey($srcTaxon)
     {
-        return $this->taxonQuery($srcTaxon, 'preyedUponBy');
+        $constraints['includeObservations'] = false;
+        return $this->queryBuilder($srcTaxon, 'preyedUponBy', $constraints);
     }
 
-    public function findObservedPreyForPredator($srcTaxon, $targetTaxon)
+    public function findObservedPreyForPredator($srcTaxon, $targetTaxon, $locationConstraints)
     {
-        return $this->taxonQuery($srcTaxon, 'preysOn', true);
+        $constraints['includeObservations'] = true;
+        $this->setLocationConstraints($locationConstraints, $constraints);
+        return $this->queryBuilder($srcTaxon, 'preysOn', $constraints);
     }
 
-    public function findObservedPredatorsForPrey($srcTaxon, $targetTaxon)
+    public function findObservedPredatorsForPrey($srcTaxon, $targetTaxon, $locationConstraints)
     {
-        return $this->taxonQuery($srcTaxon, 'preyedUponBy', true);
+        $constraints['includeObservations'] = true;
+        $this->setLocationConstraints($locationConstraints, $constraints);
+        return $this->queryBuilder($srcTaxon, 'preyedUponBy', $constraints);
     }
 
     public function findCloseTaxonNameMatches($name)
@@ -34,18 +41,40 @@ class TrophicServiceREST implements TrophicService
     {
         return $this->query('findExternalUrlForTaxon', $taxonName, null);
     }
+    private function setLocationConstraints($locationConstraints, &$constraints)
+    {
+        if(isset($locationConstraints)) {
 
-    # taxon Query is probably a stupid name and is not very clear.. TODO rename to something better
-    private function taxonQuery($scientificName, $interactionType, $includeObservations = false) 
+            if(!isset($locationConstraints['nw_lat']) || !isset($locationConstraints['nw_lng']) || !isset($locationConstraints['se_lat']) || !isset($locationConstraints['se_lng'])) {
+                throw new NonValidLocationParameterException('Missing parameter(s) for location constraints');
+            }
+            $constraints['nw_lat'] =  $locationConstraints['nw_lat'];
+            $constraints['nw_lng'] =  $locationConstraints['nw_lng'];
+            $constraints['se_lat'] =  $locationConstraints['se_lat'];
+            $constraints['se_lng'] =  $locationConstraints['se_lng'];
+        }
+    }
+    #Helper fuction for query. Builds the correct strings and parameters for the query function
+    private function queryBuilder($scientificName, $interactionType, $constraints) 
     {
         $operation = $interactionType;
-        if ($includeObservations) 
-        {
+        if ($constraints['includeObservations']) {
             $operation = $operation . '?includeObservations=true';
+            if(isset($constraints['nw_lat'])) {
+                $operation = $operation . '&nw_lat=' . $constraints['nw_lat'] . '&nw_lng=' . $constraints['nw_lng'] . '&se_lat=' . $constraints['se_lat'] . '&se_lng=' . $constraints['se_lng'];
+            }
         }   
         return $this->query('taxon', $scientificName, $operation);
     }
-
+    /* 
+    
+        Function: query
+        Purpose : call the rest service using the proper URL and receive the respose containing the data
+        Parameters:
+                    method: the rest service method
+                    name: the name of the thing being operated on, the subject of the query
+                    operation: what is the operation that is being done to the subject
+    */
     private function query($method, $name, $operation) 
     {
         $url_prefix = 'http://46.4.36.142:8080/' . $method . '/' . rawurlencode($name);

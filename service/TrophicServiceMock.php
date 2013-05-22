@@ -16,7 +16,7 @@ class TrophicServiceMock implements TrophicService
     {
     	return array('Ariopsis felis', 'Scomberomorus cavalla');
     }
-    public function findObservedPreyForPredator($predatorTaxon, $preyTaxon)
+    public function findObservedPreyForPredator($predatorTaxon, $preyTaxon, $locationConstraints)
     {
         $stringArray = array("Micropogonias undulatus",  28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 1,
                              "Brevoortia patronus",      28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 1,
@@ -37,7 +37,7 @@ class TrophicServiceMock implements TrophicService
         }
         return $container;
     }
-    public function findObservedPredatorsForPrey($predatorTaxon, $preyTaxon)
+    public function findObservedPredatorsForPrey($predatorTaxon, $preyTaxon, $locationConstraints)
     {
         $stringArray = array("Micropogonias undulatus", 28.645202, -96.099923, 0.0, "Rogers 1977", 923695200000, 1,
                              "Actinopterygii",          28.645202, -96.099923, 0.0, "Senol Akin",  923695200000, 1,

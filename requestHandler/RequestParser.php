@@ -11,13 +11,13 @@ class RequestParser
 	private $subjectName;
 	private $shouldIncludePrey = false;
 	private $shouldIncludePredators = false;
+	private $locationConstraints = null;
 
 	public function parse($toParse)
 	{
-		$typeValues = array();
-		$typeValues['serviceType'] = $this->determineServiceType($toParse);
-		$typeValues['searchType'] = $this->determineSearchType($toParse);
-		return $typeValues;
+		$this->determineServiceType($toParse);
+		$this->determineSearchType($toParse);
+		$this->addLocationConstraints($toParse);
 	}
 	private function determineSearchType($toParse)
 	{
@@ -64,6 +64,17 @@ class RequestParser
 		}
 		return $this->serviceType;
 	}
+	private function addLocationConstraints($toParse)
+	{
+		$this->locationConstraints['nw_lat'] = (!empty($toParse['boundNorth'])) ? $toParse['boundNorth'] : false;
+		$this->locationConstraints['nw_lng'] = (!empty($toParse['boundWest']))? $toParse['boundWest'] : false;
+		$this->locationConstraints['se_lat'] = (!empty($toParse['boundSouth']))? $toParse['boundSouth'] : false;
+		$this->locationConstraints['se_lng'] = (!empty($toParse['boundEast']))? $toParse['boundEast'] : false;
+
+		if ($this->locationConstraints['nw_lat'] == false) {
+			$this->locationConstraints = null; # locationConstraints is now set to null. used as a condition later in the code
+		}
+	}
 
 	/*Place mutators below*/
 
@@ -89,6 +100,10 @@ class RequestParser
 	public function shouldIncludePredators() 
 	{
 		return $this->shouldIncludePredators;
+	}
+	public function getLocationConstraints()
+	{
+		return $this->locationConstraints;
 	}
 }
 

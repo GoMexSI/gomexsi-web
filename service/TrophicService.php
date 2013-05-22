@@ -8,9 +8,9 @@ interface TrophicService
 
     public function findCloseTaxonNameMatches($name);
 
-    public function findObservedPreyForPredator($predatorTaxon, $preyTaxon);
+    public function findObservedPreyForPredator($predatorTaxon, $preyTaxon, $locationConstraints);
 
-    public function findObservedPredatorsForPrey($predatorTaxon, $preyTaxon);
+    public function findObservedPredatorsForPrey($predatorTaxon, $preyTaxon, $locationConstraints);
 
     public function findExternalTaxonURL($taxonName);
 }
