@@ -14,10 +14,10 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$this->postRequest = array("serviceType" => "REST",
 			"findPrey"=>"on",
 			"subjectName" => "Zalieutes mcgintyi", "listStyle" => true);
-		$this->observationPostRequest = $arrayName = array("serviceType" => "REST",
+		$this->observationPostRequest = array("serviceType" => "REST",
 			"findPrey"=>"on",
 			"subjectName" => "Ariopsis felis");
-    	$this->observationPostRequestPred = $arrayName = array("serviceType" => "REST",
+    	$this->observationPostRequestPred = array("serviceType" => "REST",
 		   "findPredators"=>"on",
 		   "subjectName" => "Callinectes sapidus");
 	}
@@ -127,6 +127,26 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$this->assertTrue($containsValue, $pred . ' is missing from the observed pred list (from the REST service), for the predator Callinectes sapidus');
 		}
 	}
+	
+	public function testCreateJSONResponseRESTFindObservedPredatorWithLocation()
+	{
+		$locationPost = array("serviceType" => "REST",
+		   "findPrey"=>"on",
+		   "subjectName" => "Ariopsis felis",
+		   "boundNorth" => 29.3,
+		   "boundEast" => 96.1,
+		   "boundSouth" => 26.3,
+		   "boundWest" => -97.0);
+
+
+		$actualResponse = $this->handler->requestHandlerDriver($locationPost);
+		$somePredValues = array('Micropogonias undulatus', 'Parasite', 'Actinopterygii', 'Pectinariidae', 'Palaemonetes vulgaris');
+		
+		foreach ($somePredValues as $pred) {
+			$containsValue = (strpos($actualResponse, $pred) !== FALSE) ? true : false;
+			$this->assertTrue($containsValue, $pred . ' is missing from the observed pred list (from the REST service), for the predator Callinectes sapidus');
+		}
+	}
 
 	public function testSearchObservedPredatorAndPreyREST()
 	{
@@ -141,6 +161,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$this->assertTrue($containsValue, $value . ' is missing from the observed list (from the REST service), for the species Callinectes sapidus');
 		}
 	}
+
 	
 	public function testGetTrophicServiceRESTFindCloseTaxonNameMatches()
 	{
