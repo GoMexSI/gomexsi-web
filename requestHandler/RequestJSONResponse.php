@@ -73,7 +73,7 @@ class RequestJSONResponse
             $longitude = $theInstance[2];
             $altitude = $theInstance[3];
             $contributor = $theInstance[4];
-            $unixEpoch = $theInstance[5];
+            $unixEpoch = (!empty($theInstance[5])) ? $theInstance[5] : 'Null Value' ;
             $oldID = $theInstance[6];
 
             $instanceList[$i] = $instanceName;
@@ -93,12 +93,7 @@ class RequestJSONResponse
                 break;
         }
     }
-
-    public function addPredatorObservationToResponse($responseObject, $serviceObject)
-    {
-        #TODO implement this
-    }
-
+    
     public function addFuzzySearchResultToResponse($responseObject, $serviceObject) {
         $i = 0;
         $matchList = array();

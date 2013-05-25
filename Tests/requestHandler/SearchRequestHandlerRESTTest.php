@@ -127,26 +127,25 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$this->assertTrue($containsValue, $pred . ' is missing from the observed pred list (from the REST service), for the predator Callinectes sapidus');
 		}
 	}
-	#now working, not sure why
+	
 	public function testCreateJSONResponseRESTFindObservedPredatorWithLocation()
 	{
-		//http://trophicgraph.com:8080/taxon/Ariopsis%20felis/preysOn?includeObservations=true&nw_lat=29.3&nw_lng=-97.0&se_lat=26.3&se_lng=96.1
 		$locationPost = array("serviceType" => "REST",
 		   "findPrey"=>"on",
-		   "subjectName" => "Ariopsis felis");
-	/*	   "boundNorth" => 29.3,
+		   "subjectName" => "Ariopsis felis",
+		   "boundNorth" => 29.3,
 		   "boundEast" => 96.1,
 		   "boundSouth" => 26.3,
-		   "boundWest" => 97.0);*/
+		   "boundWest" => -97.0);
 
 
-/*		$actualResponse = $this->handler->requestHandlerDriver($locationPost);
-		$somePredValues = array('Micropogonias undulatus', 'Sciaenops ocellatus', 'Sciaenops ocellatus', 'Ariopsis felis', 'Menticirrhus littoralis');
+		$actualResponse = $this->handler->requestHandlerDriver($locationPost);
+		$somePredValues = array('Micropogonias undulatus', 'Parasite', 'Actinopterygii', 'Pectinariidae', 'Palaemonetes vulgaris');
 		
 		foreach ($somePredValues as $pred) {
 			$containsValue = (strpos($actualResponse, $pred) !== FALSE) ? true : false;
 			$this->assertTrue($containsValue, $pred . ' is missing from the observed pred list (from the REST service), for the predator Callinectes sapidus');
-		}*/
+		}
 	}
 
 	public function testSearchObservedPredatorAndPreyREST()
