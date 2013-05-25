@@ -819,12 +819,10 @@ jQuery(document).ready(function($) {
 			});
 			
 			function updateBounds(bounds){
-				var boundNE = bounds.getNorthEast();
-				var boundSW = bounds.getSouthWest();
-				var boundN = boundNE.lb;
-				var boundE = boundNE.kb;
-				var boundS = boundSW.lb;
-				var boundW = boundSW.kb;
+				var boundN = bounds.getNorthEast().lat();
+				var boundE = bounds.getNorthEast().lng();
+				var boundS = bounds.getSouthWest().lat();
+				var boundW = bounds.getSouthWest().lng();
 				
 				$('form#data-query input[name="boundNorth"]').val(boundN);
 				$('form#data-query input[name="boundEast"]').val(boundE);
