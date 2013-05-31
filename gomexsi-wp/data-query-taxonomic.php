@@ -25,7 +25,7 @@
 										<div class="section-input clearfix">
 											<div class="tax-wrapper">
 												<?php $subjectName = (isset($_POST['subjectName']) ? $_POST['subjectName'] : ''); ?>
-												<input type="text" class="taxonomic" name="subjectName" placeholder="Any taxonomic level, scientific or common name" value="<?php echo $subjectName; ?>" />
+												<input type="text" class="taxonomic" name="subjectName" placeholder="Any taxonomic level, scientific or common name" value="<?php echo $subjectName; ?>" autocomplete="off" />
 											</div>
 										</div>
 									</label>
@@ -45,7 +45,7 @@
 												<label>
 													<span class="visuallyhidden">Limit prey results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="taxonomic filter" name="filterPrey" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterPrey" placeholder="Limit results by name" autocomplete="off" />
 													</div>
 												</label>
 											</div>
@@ -58,7 +58,7 @@
 												<label>
 													<span class="visuallyhidden">Limit predator results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="taxonomic filter" name="filterPredators" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterPredators" placeholder="Limit results by name" autocomplete="off" />
 													</div>
 												</label>
 											</div>
@@ -71,7 +71,7 @@
 												<label>
 													<span class="visuallyhidden">Limit parasites results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="taxonomic filter" name="filterParasites" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterParasites" placeholder="Limit results by name" autocomplete="off" />
 													</div>
 												</label>
 											</div>
@@ -84,7 +84,7 @@
 												<label>
 													<span class="visuallyhidden">Limit mutalists results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="taxonomic filter" name="filterMutalists" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterMutalists" placeholder="Limit results by name" autocomplete="off" />
 													</div>
 												</label>
 											</div>
@@ -97,7 +97,7 @@
 												<label>
 													<span class="visuallyhidden">Limit commensals results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="taxonomic filter" name="filterCommensals" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterCommensals" placeholder="Limit results by name" autocomplete="off" />
 													</div>
 												</label>
 											</div>
@@ -110,7 +110,7 @@
 												<label>
 													<span class="visuallyhidden">Limit amensals results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="taxonomic filter" name="filterAmensals" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterAmensals" placeholder="Limit results by name" autocomplete="off" />
 													</div>
 												</label>
 											</div>
@@ -123,7 +123,7 @@
 												<label>
 													<span class="visuallyhidden">Limit primary hosts results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="taxonomic filter" name="filterPrimaryHosts" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterPrimaryHosts" placeholder="Limit results by name" autocomplete="off" />
 													</div>
 												</label>
 											</div>
@@ -136,7 +136,7 @@
 												<label>
 													<span class="visuallyhidden">Limit secondary hosts results by name</span>
 													<div class="tax-wrapper">
-														<input type="text" class="taxonomic filter" name="filterSecondaryHosts" placeholder="Limit results by name" />
+														<input type="text" class="taxonomic filter" name="filterSecondaryHosts" placeholder="Limit results by name" autocomplete="off" />
 													</div>
 												</label>
 											</div>

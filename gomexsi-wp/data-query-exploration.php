@@ -25,7 +25,7 @@
 										<div class="section-input clearfix">
 											<div class="tax-wrapper">
 												<?php $subjectName = (isset($_POST['subjectName']) ? $_POST['subjectName'] : ''); ?>
-												<input type="text" class="taxonomic" name="subjectName" placeholder="Any taxonomic level, scientific or common name" value="<?php echo $subjectName; ?>" />
+												<input type="text" class="taxonomic" name="subjectName" placeholder="Any taxonomic level, scientific or common name" value="<?php echo $subjectName; ?>" autocomplete="off" />
 											</div>
 										</div>
 									</label>
