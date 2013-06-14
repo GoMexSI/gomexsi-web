@@ -99,7 +99,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 	public function testCreateJSONResponseRESTFindObservedPrey()
 	{
 		$actualResponse = $this->handler->requestHandlerDriver($this->observationPostRequest);
-		$somePreyValues = array('Actinopterygii', 'Callinectes sapidus', 'Mollusca', 'Portunus', 'Trinectes maculatus', 'microzooplankton', 'phytoplankton', 'zooplankton');
+		$somePreyValues = array('Actinopterygii', 'Callinectes sapidus', 'Mollusca', 'Portunus', 'Brevoortia patronus', 'Neopanope sayi', 'Ruppia maritima');
 		$position = 0;
 		$count = 0;
 		
@@ -108,7 +108,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$position++;
 		}
 
-		$this->assertEquals(2, $count, 'expected two matches in response to observed prey of Ariopsis felis (subject and single prey), but found ' . $count);
+		$this->assertEquals(1, $count, 'expected one match in response to observed prey of Ariopsis felis (subject name only), but found ' . $count);
 
 		foreach ($somePreyValues as $prey) {
 			$containsValue = (strpos($actualResponse, $prey) !== FALSE) ? true : false;

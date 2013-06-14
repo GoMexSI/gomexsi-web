@@ -52,6 +52,11 @@ class TrophicServiceREST implements TrophicService
             $constraints['nw_lng'] =  $locationConstraints['nw_lng'];
             $constraints['se_lat'] =  $locationConstraints['se_lat'];
             $constraints['se_lng'] =  $locationConstraints['se_lng'];
+        }else { //else set default polygon parameters
+            $constraints['nw_lat'] =  30.28;    # currently these four represent a rectangular approximation of the gulf
+            $constraints['nw_lng'] =  -97.89;   # These can be changed for a better fit, will be updated to a polygon later down the line  
+            $constraints['se_lat'] =  18.04;
+            $constraints['se_lng'] =  -80.61;
         }
     }
     #Helper fuction for query. Builds the correct strings and parameters for the query function

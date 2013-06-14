@@ -86,17 +86,14 @@ class RequestParser
 	{
 		return $this->searchType;
 	}
-	
 	public function getSubjectName()
 	{
 		return $this->subjectName;
 	}
-	
 	public function shouldIncludePrey() 
 	{
 		return $this->shouldIncludePrey;
 	}
-
 	public function shouldIncludePredators() 
 	{
 		return $this->shouldIncludePredators;
