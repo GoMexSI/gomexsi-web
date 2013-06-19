@@ -262,6 +262,28 @@ body.search #content article.page {
 	background: transparent;
 }
 
+table {
+	font-size: 80%;
+}
+
+table thead {
+	font-size: 116.67%;
+}
+
+.dataTables_wrapper {
+	width: 640px;
+	margin-left: -100px !important;
+	background: #e6e6e6;
+}
+
+.dataTables_wrapper table.data-reference .column-1 {
+	min-width: 40px;
+}
+
+.dataTables_wrapper table.data-reference .column-4 {
+	min-width: 80px;
+}
+
 
 /* =============================================================================
    Query Forms

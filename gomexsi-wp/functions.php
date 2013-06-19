@@ -137,7 +137,7 @@ function rhm_enqueue_google_maps_api() {
 	}
 }
 
-// Enque Google Maps API on template pages that need it.
+// Enque jsPlumb on template pages that need it.
 function rhm_enqueue_jsPlumb() {
 	if(is_page_template('data-query-exploration.php')) {
 		// jsPlumb plugin stored in child theme.
