@@ -19,9 +19,9 @@ class TrophicServiceMock implements TrophicService
     public function findObservedPreyForPredator($predatorTaxon, $preyTaxon, $locationConstraints)
     {
         $stringArray = array("Micropogonias undulatus",  28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 1,
-                             "Brevoortia patronus",      28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 1,
+                             "Brevoortia patronus",      28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 3,
                              "Farfantepenaeus aztecus",  28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 2,
-                             "Mollusca",                 8.645202,  -96.099923, 0.0, "Senol Akin", 923695200000, 3,
+                             "Mollusca",                 8.645202,  -96.099923, 0.0, "Senol Akin", 923695200000, 1,
                              "T-Rex",                    8.645202,  -96.099923, 0.0, "MichaelCas", 923695200000, 3,
                              "Pterodactyl",              8.645202,  -96.099923, 0.0, "MichaelCas", 923695200000, 3);
         $container = array(); // [row][colum]
@@ -41,10 +41,10 @@ class TrophicServiceMock implements TrophicService
     {
         $stringArray = array("Micropogonias undulatus", 28.645202, -96.099923, 0.0, "Rogers 1977", 923695200000, 1,
                              "Actinopterygii",          28.645202, -96.099923, 0.0, "Senol Akin",  923695200000, 1,
-                             "Great White",             28.645202, -96.099923, 0.0, "John Mayer",  923695200000, 2,
-                             "Mollusca",                8.645202,  -96.099923, 0.0, "Senol Akin",  923695200000, 3,
-                             "Velociraptor",            8.645202,  -96.099923, 0.0, "MichaelCas",  923695200000, 4,
-                             "Tiger Shark",             8.645202,  -96.099923, 0.0, "MichaelCas",  923695200000, 5);
+                             "Great White",             28.645202, -96.099923, 0.0, "John Mayer",  923695200000, 4,
+                             "Mollusca",                8.645202,  -96.099923, 0.0, "Senol Akin",  923695200000, 4,
+                             "Velociraptor",            8.645202,  -96.099923, 0.0, "MichaelCas",  923695200000, 2,
+                             "Tiger Shark",             8.645202,  -96.099923, 0.0, "MichaelCas",  923695200000, 4);
         $container = array(); // [row][colum]
 
         $k=0;

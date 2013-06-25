@@ -154,7 +154,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$this->observationPostRequestPred["findPrey"] = "on";
 
 		$actualResponse = $this->handler->requestHandlerDriver($this->observationPostRequestPred);
-		$requiredValues = array('preyInstances', 'predatorInstances');
+		$requiredValues = array('preyInstances', 'predInstances');
 		
 		foreach ($requiredValues as $value) {
 			$containsValue = (strpos($actualResponse, $value) !== FALSE) ? true : false;
