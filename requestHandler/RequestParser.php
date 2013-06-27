@@ -12,11 +12,13 @@ class RequestParser
 	private $shouldIncludePrey = false;
 	private $shouldIncludePredators = false;
 	private $locationConstraints = null;
+	private $interactionFilters = null;
 
 	public function parse($toParse)
 	{
 		$this->determineServiceType($toParse);
 		$this->determineSearchType($toParse);
+		$this->addInteractionFilters($toParse);
 		$this->addLocationConstraints($toParse);
 	}
 	private function determineSearchType($toParse)
@@ -66,7 +68,7 @@ class RequestParser
 	}
 	private function addLocationConstraints($toParse)
 	{
-		$this->locationConstraints['nw_lat'] = (!empty($toParse['boundNorth'])) ? $toParse['boundNorth'] : false;
+		$this->locationConstraints['nw_lat'] = (!empty($toParse['boundNorth']))? $toParse['boundNorth'] : false;
 		$this->locationConstraints['nw_lng'] = (!empty($toParse['boundWest']))? $toParse['boundWest'] : false;
 		$this->locationConstraints['se_lat'] = (!empty($toParse['boundSouth']))? $toParse['boundSouth'] : false;
 		$this->locationConstraints['se_lng'] = (!empty($toParse['boundEast']))? $toParse['boundEast'] : false;
@@ -74,6 +76,11 @@ class RequestParser
 		if ($this->locationConstraints['nw_lat'] == false) {
 			$this->locationConstraints = null; # locationConstraints is now set to null. used as a condition later in the code
 		}
+	}
+	private function addInteractionFilters($toParse)
+	{
+		$this->interactionFilters['pred'] = (!empty($toParse['filterPredators']))? $toParse['filterPredators'] : false;
+		$this->interactionFilters['prey'] = (!empty($toParse['filterPrey']))? $toParse['filterPrey'] : false;
 	}
 
 	/*Place mutators below*/
@@ -101,6 +108,10 @@ class RequestParser
 	public function getLocationConstraints()
 	{
 		return $this->locationConstraints;
+	}
+	public function getInteractionFilters()
+	{
+		return $this->interactionFilters;
 	}
 }
 

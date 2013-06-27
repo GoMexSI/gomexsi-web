@@ -49,11 +49,11 @@ class SearchRequestHandler
             $responseObject = new ResponseObject();
             
             if ($this->parser->shouldIncludePrey()) {
-                $phpServiceObject = $this->trophicService->findObservedPreyForPredator($speciesSubject, null, $this->parser->getLocationConstraints()); # null will include option for other taxon later
+                $phpServiceObject = $this->trophicService->findObservedPreyForPredator($speciesSubject, $this->parser->getInteractionFilters(), $this->parser->getLocationConstraints());
                 $jsonConverter->addObservationToResponse($responseObject, $phpServiceObject, 'prey');
             } 
             if ($this->parser->shouldIncludePredators()) {
-                $phpServiceObject = $this->trophicService->findObservedPredatorsForPrey($speciesSubject, null, $this->parser->getLocationConstraints());
+                $phpServiceObject = $this->trophicService->findObservedPredatorsForPrey($speciesSubject, $this->parser->getInteractionFilters(), $this->parser->getLocationConstraints());
                 $jsonConverter->addObservationToResponse($responseObject, $phpServiceObject, 'pred');
             }
             $responseObject->scientificName = $speciesSubject;
