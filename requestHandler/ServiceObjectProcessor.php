@@ -12,45 +12,57 @@ class ServiceObjectProcessor
 	{
 		$instanceDictionary = array(); #dictionary that holds the tmp_and_unique_specimen_id
 		$instanceElement = 0; # element where the tmp_and_unique_specimen_id will be stored
-		$instanceList = array();
 		$instanceName = "nullName";
 		foreach ($serviceObject as $instance) { 
 			$foundElement = array_search($instance[6], $instanceDictionary); # $instance[6] is the unique_specimen_id
 
 			if($foundElement === false) { #if tmp_and_unique_specimen_id does not already exist in the list, add to the list
-				$instanceName = $instance[0];
-	            $latitude     = $instance[1];
-	            $longitude    = $instance[2];
-	            $altitude     = $instance[3];
-	            $contributor  = $instance[4];
-	            $unixEpoch    = (!empty($instance[5])) ? $instance[5] : 'Null Value' ;
-	            $uniqueID     = $instance[6];
-
-				$instanceList[0] = $instanceName;
+				$instanceName           = $instance[0];
+	            $latitude               = $instance[1];
+	            $longitude              = $instance[2];
+	            $altitude               = $instance[3];
+	            $contributor            = $instance[4];
+	            $unixEpoch              = (!empty($instance[5])) ? $instance[5] : 'Null Value' ;
+	            $uniqueID               = $instance[6];
+	            $predLifeStage          = (!empty($instance[7]))  ? $instance[7]  : 'Null Value' ;
+	            $preyLifeStage          = (!empty($instance[8]))  ? $instance[8]  : 'Null Value' ;
+	            $predBodyPart           = (!empty($instance[9]))  ? $instance[9]  : 'Null Value' ;
+	            $preyBodyPart           = (!empty($instance[10])) ? $instance[10] : 'Null Value' ;
+	            $predPhysiologicalState = (!empty($instance[11])) ? $instance[11] : 'Null Value' ;
+	            $preyPhysiologicalState = (!empty($instance[12])) ? $instance[12] : 'Null Value' ;
 
 				$instanceDictionary[$instanceElement] = $uniqueID;
-
 				switch ($predOrPrey) {
                     case 'prey':
-                        $responseObject->preyInstances[$instanceElement] = array("$predOrPrey" => $instanceList, 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
+                    	$instanceList = array("$predOrPrey" => $instanceName, 'preyLifeStage' => $preyLifeStage, 'preyBodyPart' => $preyBodyPart, 'preyPhysiologicalState' => $preyPhysiologicalState);
+                        $responseObject->preyInstances[$instanceElement] = array('preyData' => array($instanceList), 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
                         break;
                     case 'pred':
-                        $responseObject->predInstances[$instanceElement] = array("$predOrPrey" => $instanceList, 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
+                    	$instanceList = array("$predOrPrey" => $instanceName, 'predLifeStage' => $predLifeStage, 'predBodyPart' => $predBodyPart, 'predPhysiologicalState' => $predPhysiologicalState);
+                        $responseObject->predInstances[$instanceElement] = array('predData' => array($instanceList), 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
                         break;
                     default:
                         throw new UnknownSpeciesClassificationTypeException('type [' . $predOrPrey . '] not recognized as valid parameter type');
                     	break;
 				}
 				$instanceElement++;
-				unset($instanceList);
-			}else { # if the ID already exists in the instanceDictionary, then just add the instance to the "$predOrPrey" => $instanceList
-				$instanceName = $instance[0];
+			}else { # if the ID already exists in the instanceDictionary, then just add the instance properties to the [$foundElement][0]
+				$instanceName           = $instance[0];
+	            $predLifeStage          = (!empty($instance[7]))  ? $instance[7]  : 'Null Value' ;
+	            $preyLifeStage          = (!empty($instance[8]))  ? $instance[8]  : 'Null Value' ;
+	            $predBodyPart           = (!empty($instance[9]))  ? $instance[9]  : 'Null Value' ;
+	            $preyBodyPart           = (!empty($instance[10])) ? $instance[10] : 'Null Value' ;
+	            $predPhysiologicalState = (!empty($instance[11])) ? $instance[11] : 'Null Value' ;
+	            $preyPhysiologicalState = (!empty($instance[12])) ? $instance[12] : 'Null Value' ;
+
 				switch ($predOrPrey) {
 					case 'prey':
-						array_push($responseObject->preyInstances[$foundElement]["$predOrPrey"], $instanceName);
+                    	$instanceList = array("$predOrPrey" => $instanceName, 'preyLifeStage' => $preyLifeStage, 'preyBodyPart' => $preyBodyPart, 'preyPhysiologicalState' => $preyPhysiologicalState);
+						array_push($responseObject->preyInstances[$foundElement]['preyData'], $instanceList);
 						break;
 					case 'pred':
-						array_push($responseObject->predInstances[$foundElement]["$predOrPrey"], $instanceName);
+                    	$instanceList = array("$predOrPrey" => $instanceName, 'predLifeStage' => $predLifeStage, 'predBodyPart' => $predBodyPart, 'predPhysiologicalState' => $predPhysiologicalState);
+						array_push($responseObject->predInstances[$foundElement]['predData'], $instanceList);
 						break;
 					default:
                         throw new UnknownSpeciesClassificationTypeException('type [' . $predOrPrey . '] not recognized as valid parameter type');

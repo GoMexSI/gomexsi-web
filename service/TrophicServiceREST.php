@@ -18,14 +18,14 @@ class TrophicServiceREST implements TrophicService
         return $this->queryBuilder($srcTaxon, 'preyedUponBy', $constraints);
     }
 
-    public function findObservedPreyForPredator($srcTaxon, $targetTaxon, $locationConstraints)
+    public function findObservedPreyForPredator($srcTaxon, $interactionFilters, $locationConstraints)
     {
         $constraints['includeObservations'] = true;
         $this->setLocationConstraints($locationConstraints, $constraints);
         return $this->queryBuilder($srcTaxon, 'preysOn', $constraints);
     }
 
-    public function findObservedPredatorsForPrey($srcTaxon, $targetTaxon, $locationConstraints)
+    public function findObservedPredatorsForPrey($srcTaxon, $interactionFilters, $locationConstraints)
     {
         $constraints['includeObservations'] = true;
         $this->setLocationConstraints($locationConstraints, $constraints);

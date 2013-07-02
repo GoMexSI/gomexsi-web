@@ -73,29 +73,39 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
 	public function testCreateJSONResponseMockFindObservedPreyForPredator()
-	{
-    	$jsonTestString = '[{"scientificName":"Ariopsis felis","preyInstances":[{"prey":["Micropogonias undulatus","Mollusca"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"prey":["Brevoortia patronus","T-Rex","Pterodactyl"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"prey":["Farfantepenaeus aztecus"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"}]}]';
-		
+	{		
 		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequest);
-		$this->assertEquals($jsonTestString, $jsonObject);
+		$necessaryValues = array('scientificName','preyLifeStage','preyPhysiologicalState','}]}]');
+		
+		foreach ($necessaryValues as $value) {
+			$containsValue = (strpos($jsonObject, $value) !== FALSE) ? true : false;
+			$this->assertTrue($containsValue, $value . ' is missing from the observed prey list (from the REST service), for the predator Callinectes sapidus');
+		}
 	}
 	public function testCreateJSONResponseMockFindObservedPredatorForPrey()
 	{
 		unset($this->observationPostRequestPred["findPrey"]);
-    	$jsonTestString = '[{"scientificName":"Callinectes sapidus","predInstances":[{"pred":["Micropogonias undulatus","Actinopterygii"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Rogers 1977"},{"pred":["Great White","Mollusca","Tiger Shark"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"John Mayer"},{"pred":["Velociraptor"],"date":923695200000,"lat":8.645202,"long":-96.099923,"alt":0,"ref":"MichaelCas"}]}]';
 		
 		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequestPred);
-		$this->assertEquals($jsonTestString, $jsonObject);
+		$necessaryValues = array('scientificName','predLifeStage','predPhysiologicalState','}]}]');
+		
+		foreach ($necessaryValues as $value) {
+			$containsValue = (strpos($jsonObject, $value) !== FALSE) ? true : false;
+			$this->assertTrue($containsValue, $value . ' is missing from the observed pred list (from the REST service), for the predator Callinectes sapidus');
+		}
 	}
 	public function testSearchObservedPredatorAndPrey()
 	{
 		$this->observationPostRequestPred["findPredators"] = "on";
 		$this->observationPostRequestPred["findPrey"] = "on";
-
-    	$jsonTestString = '[{"scientificName":"Callinectes sapidus","preyInstances":[{"prey":["Micropogonias undulatus","Mollusca"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"prey":["Brevoortia patronus","T-Rex","Pterodactyl"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"},{"prey":["Farfantepenaeus aztecus"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Senol Akin"}],"predInstances":[{"pred":["Micropogonias undulatus","Actinopterygii"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"Rogers 1977"},{"pred":["Great White","Mollusca","Tiger Shark"],"date":923695200000,"lat":28.645202,"long":-96.099923,"alt":0,"ref":"John Mayer"},{"pred":["Velociraptor"],"date":923695200000,"lat":8.645202,"long":-96.099923,"alt":0,"ref":"MichaelCas"}]}]';
 		
 		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequestPred);
-		$this->assertEquals($jsonTestString, $jsonObject);	
+		$necessaryValues = array('scientificName','preyLifeStage','preyPhysiologicalState','preyLifeStage','predPhysiologicalState','}]}]');
+		
+		foreach ($necessaryValues as $value) {
+			$containsValue = (strpos($jsonObject, $value) !== FALSE) ? true : false;
+			$this->assertTrue($containsValue, $value . ' is missing from the observed PredatorAndPrey list (from the REST service), for the predator Callinectes sapidus');
+		}
 	}
 
 	public function testSearchPredatorAndPrey()
