@@ -269,9 +269,9 @@ jQuery(document).ready(function($) {
 						subject[type + 'InstanceCount']++;
 						totalInstanceCount++;
 						
-						$.each(instance[type], function(k){
-							var aTypeName = instance[type][k];
-							var safeName = nameSafe(aTypeName);
+						$.each(instance[type + 'Data'], function(k){
+							var singleTypeName = instance[type + 'Data'][k][type];
+							var safeName = nameSafe(singleTypeName);
 							var inSkip = ($.inArray(safeName, skip) == -1 ? false : true);
 							
 							if(safeName in subject[type + 'List'] && !inSkip){
@@ -280,7 +280,7 @@ jQuery(document).ready(function($) {
 							} else if(!inSkip){
 								skip.push(safeName);
 								subject[type + 'List'][safeName] = {};
-								subject[type + 'List'][safeName].scientificName = aTypeName;
+								subject[type + 'List'][safeName].scientificName = singleTypeName;
 								subject[type + 'List'][safeName].count = 1;
 							}
 						});
@@ -399,7 +399,7 @@ jQuery(document).ready(function($) {
 							var instanceNumber = i + 1;
 							$(singleInstance).append('<div class="instance-number">' + instanceNumber + '</div>');
 							
-							var instanceDate = ('date' in instance ? instance.date : 'unknown');
+							var instanceDate = ('date' in instance ? parseInt(instance.date) : 'unknown');
 							if(instanceDate){
 								instanceDate = getDate(instanceDate);
 							} else {
@@ -414,12 +414,42 @@ jQuery(document).ready(function($) {
 							
 							var instanceTypeListID = instanceID + '-' + type + '-list';
 							$(singleInstance).append('<div class="prey species-list"><h5 class="label">' + formatType(type, true, true) + ':</h5><ul id="' + instanceTypeListID + '"></ul></div>');
-							$.each(instance[type], function(j){
-								var aTypeName = instance[type][j];
+							$.each(instance[type + 'Data'], function(j){
+								var singleTypeName = instance[type + 'Data'][j][type];
+								
+								var singleDetails = [];
+								
+								var singleLifeStage = instance[type + 'Data'][j][type + 'LifeStage'];
+								var singleBodyPart = instance[type + 'Data'][j][type + 'BodyPart'];
+								var singlePhysiologicalState = instance[type + 'Data'][j][type + 'PhysiologicalState'];
+								
+								if(typeof singleLifeStage !== 'undefined' && singleLifeStage.toLowerCase() !== 'unknown' && singleLifeStage){
+									singleLifeStage = 'Life Stage: ' + singleLifeStage;
+									singleDetails.push(singleLifeStage);
+								}
+								if(typeof singleBodyPart !== 'undefined' && singleBodyPart.toLowerCase() !== 'unknown' && singleBodyPart){
+									singleBodyPart = 'Body Part: ' + singleBodyPart;
+									singleDetails.push(singleBodyPart);
+								}
+								if(typeof singlePhysiologicalState !== 'undefined' && singlePhysiologicalState.toLowerCase() !== 'unknown' && singlePhysiologicalState){
+									singlePhysiologicalState = 'Physiological State: ' + singlePhysiologicalState;
+									singleDetails.push(singlePhysiologicalState);
+								}
+								if(singleDetails.length == 0){
+									singleDetails.push('No details.');
+								}
 								
 								var li = '<li class="clearfix">';
-								li += '<div class="name">' + nameTip(aTypeName) + '</div>';
-								li += '<div class="details">No details provided.</div>';
+								li += '<div class="name">' + nameTip(singleTypeName) + '</div>';
+								li += '<div class="details">';
+								$.each(singleDetails, function(k){
+									if(k > 0){
+										li += ', ';
+									}
+									
+									li += singleDetails[k];
+								});
+								li += '</div>';
 								li += '</li>';
 								
 								$('#' + instanceTypeListID).append(li);
