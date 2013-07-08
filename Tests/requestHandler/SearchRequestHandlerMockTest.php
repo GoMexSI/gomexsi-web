@@ -63,8 +63,6 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 			$iterator++;
 		}
 	}
-	
-
 	public function testCreateJSONResponseMockFindPreyForPredator()
 	{
     	$jsonTestString = '[{"scientificName":"Scomberomorus cavalla","preyInstances":[{"prey":["Synalpheus latastei","Lutjanus jocu"]}]}]';

@@ -50,6 +50,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals($expectedPreyNames[$iterator], $value);
 			$iterator++;
 		}
+
 	}
 	public function testGetTrophicServiceRESTFindPredatorForPrey()
 	{
@@ -94,6 +95,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		
 		$jsonObject = $this->handler->requestHandlerDriver($this->postRequest);
 		$this->assertEquals($jsonTestString, $jsonObject);
+
 	}
 
 	public function testCreateJSONResponseRESTFindObservedPrey()

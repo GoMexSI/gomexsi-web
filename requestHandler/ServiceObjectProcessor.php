@@ -22,14 +22,14 @@ class ServiceObjectProcessor
 	            $longitude              = $instance[2];
 	            $altitude               = $instance[3];
 	            $contributor            = $instance[4];
-	            $unixEpoch              = (!empty($instance[5])) ? $instance[5] : 'Null Value' ;
+	            $unixEpoch              = (!empty($instance[5])) ? $instance[5] : null;
 	            $uniqueID               = $instance[6];
-	            $predLifeStage          = (!empty($instance[7]))  ? $instance[7]  : 'Null Value' ;
-	            $preyLifeStage          = (!empty($instance[8]))  ? $instance[8]  : 'Null Value' ;
-	            $predBodyPart           = (!empty($instance[9]))  ? $instance[9]  : 'Null Value' ;
-	            $preyBodyPart           = (!empty($instance[10])) ? $instance[10] : 'Null Value' ;
-	            $predPhysiologicalState = (!empty($instance[11])) ? $instance[11] : 'Null Value' ;
-	            $preyPhysiologicalState = (!empty($instance[12])) ? $instance[12] : 'Null Value' ;
+	            $predLifeStage          = (!empty($instance[7]))  ? $instance[7]  : null;
+	            $preyLifeStage          = (!empty($instance[8]))  ? $instance[8]  : null;
+	            $predBodyPart           = (!empty($instance[9]))  ? $instance[9]  : null;
+	            $preyBodyPart           = (!empty($instance[10])) ? $instance[10] : null;
+	            $predPhysiologicalState = (!empty($instance[11])) ? $instance[11] : null;
+	            $preyPhysiologicalState = (!empty($instance[12])) ? $instance[12] : null;
 
 				$instanceDictionary[$instanceElement] = $uniqueID;
 				switch ($predOrPrey) {
@@ -48,12 +48,12 @@ class ServiceObjectProcessor
 				$instanceElement++;
 			}else { # if the ID already exists in the instanceDictionary, then just add the instance properties to the [$foundElement][0]
 				$instanceName           = $instance[0];
-	            $predLifeStage          = (!empty($instance[7]))  ? $instance[7]  : 'Null Value' ;
-	            $preyLifeStage          = (!empty($instance[8]))  ? $instance[8]  : 'Null Value' ;
-	            $predBodyPart           = (!empty($instance[9]))  ? $instance[9]  : 'Null Value' ;
-	            $preyBodyPart           = (!empty($instance[10])) ? $instance[10] : 'Null Value' ;
-	            $predPhysiologicalState = (!empty($instance[11])) ? $instance[11] : 'Null Value' ;
-	            $preyPhysiologicalState = (!empty($instance[12])) ? $instance[12] : 'Null Value' ;
+	            $predLifeStage          = (!empty($instance[7]))  ? $instance[7]  : null;
+	            $preyLifeStage          = (!empty($instance[8]))  ? $instance[8]  : null;
+	            $predBodyPart           = (!empty($instance[9]))  ? $instance[9]  : null;
+	            $preyBodyPart           = (!empty($instance[10])) ? $instance[10] : null;
+	            $predPhysiologicalState = (!empty($instance[11])) ? $instance[11] : null;
+	            $preyPhysiologicalState = (!empty($instance[12])) ? $instance[12] : null;
 
 				switch ($predOrPrey) {
 					case 'prey':
