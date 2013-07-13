@@ -37,6 +37,6 @@ class TrophicServiceRESTTest extends PHPUnit_Framework_TestCase
         $expected = "http://eol.org/pages/327955";
         $this->assertEquals($expected, $taxonURL);
     }
+    #toDO build test to check new URL for interaction filters
 }
-
 ?>

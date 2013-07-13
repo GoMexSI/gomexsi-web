@@ -21,6 +21,7 @@ class TrophicServiceREST implements TrophicService
     public function findObservedPreyForPredator($srcTaxon, $interactionFilters, $locationConstraints)
     {
         $constraints['includeObservations'] = true;
+        $this->setInteractionFilters($interactionFilters['prey'], $constraints);
         $this->setLocationConstraints($locationConstraints, $constraints);
         return $this->queryBuilder($srcTaxon, 'preysOn', $constraints);
     }
@@ -28,10 +29,15 @@ class TrophicServiceREST implements TrophicService
     public function findObservedPredatorsForPrey($srcTaxon, $interactionFilters, $locationConstraints)
     {
         $constraints['includeObservations'] = true;
+        $this->setInteractionFilters($interactionFilters['pred'], $constraints);
         $this->setLocationConstraints($locationConstraints, $constraints);
         return $this->queryBuilder($srcTaxon, 'preyedUponBy', $constraints);
     }
-
+/*    public function findObservedParasitesForHost()
+    {
+        //todo implement the rest of all of these UI options .. Mutalists, Commensals, Amensals, Primary Hosts, Secondary Hosts
+        //There will be method for each one.. 
+    }*/
     public function findCloseTaxonNameMatches($name)
     {
         return $this->query('findCloseMatchesForTaxon', $name, null);
@@ -59,10 +65,20 @@ class TrophicServiceREST implements TrophicService
             $constraints['se_lng'] =  -80.61;
         }
     }
+    // each call will pass in the relevant filter one at a time, must do it this way because each findObserved* is treated as a unique rest call and needs a unique URL
+    private function setInteractionFilters($interactionFilter, &$constraints)
+    {
+        if(!$interactionFilter) {
+            $constraints['interactionFilter'] = $interactionFilter; // the type of interaction does not matter. The URL will build itself regardless of type(ie pred, prey, parasite... etc)
+        }
+    }
     #Helper fuction for query. Builds the correct strings and parameters for the query function
     private function queryBuilder($scientificName, $interactionType, $constraints) 
     {
         $operation = $interactionType;
+        if(isset($constraints['interactionFilter'])) { #if there is some interaction filter, it should be added after the interactionType
+            $operation = $operation . '/' . rawurlencode($constraints['interactionFilter']);
+        }
         if ($constraints['includeObservations']) {
             $operation = $operation . '?includeObservations=true';
             if(isset($constraints['nw_lat'])) {
