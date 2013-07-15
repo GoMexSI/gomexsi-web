@@ -332,11 +332,11 @@ jQuery(document).ready(function($) {
 						// Type summary.
 						$(resultsSection).children('.container').append('<div class="results-subsection ' + type + '-summary" />');
 						var typeSummary = $('#' + subject.baseID + ' .' + type + '-summary');
-						$(typeSummary).append('<form><label class="view-option toggle-summary-all"><input type="checkbox" /> Show All ' + formatType(type, true, true) + '</label></form>');
+						$(typeSummary).append('<form><span class="top-ten-note">Top ten items shown.</span><label class="view-option toggle-summary-all"><input type="checkbox" /> Show All ' + formatType(type, true, true) + '</label></form>');
 						$(typeSummary).append('<h4 class="subsection-title toggle">' + formatType(type, true, true) + ' Summary</h4>');
 						$(typeSummary).append('<div class="container" />');
 						$(typeSummary).children('.container').append('<table class="summary"><tbody></tbody></table>');
-						
+						$(typeSummary).children('.container').append('<div class="summary-description">Percent frequency of occurrence over all instances queried.</div>');
 						
 						// Sort the prey list by number of instances for a given prey. We must dump the prey list into an array so it can be sorted.
 						var typeList = subject[type + 'List'];
@@ -481,8 +481,10 @@ jQuery(document).ready(function($) {
 			$('.toggle-summary-all').click(function(e){
 				if($(this).children('input').prop('checked')){
 					$(this).closest('.results-subsection').find('.overflow').show();
+					$(this).closest('.results-subsection').find('.top-ten-note').hide();
 				} else {
 					$(this).closest('.results-subsection').find('.overflow').hide();
+					$(this).closest('.results-subsection').find('.top-ten-note').show();
 				}
 			});
 			
