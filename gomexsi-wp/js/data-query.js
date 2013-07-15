@@ -332,7 +332,7 @@ jQuery(document).ready(function($) {
 						// Type summary.
 						$(resultsSection).children('.container').append('<div class="results-subsection ' + type + '-summary" />');
 						var typeSummary = $('#' + subject.baseID + ' .' + type + '-summary');
-						$(typeSummary).append('<form><span class="top-ten-note">Top ten items shown.</span><label class="view-option toggle-summary-all"><input type="checkbox" /> Show All ' + formatType(type, true, true) + '</label></form>');
+						$(typeSummary).append('<form><label class="view-option toggle-summary-all"><input type="checkbox" /> Show All ' + formatType(type, true, true) + '</label> <div class="top-ten-note view-option">Top ten items shown.</div></form>');
 						$(typeSummary).append('<h4 class="subsection-title toggle">' + formatType(type, true, true) + ' Summary</h4>');
 						$(typeSummary).append('<div class="container" />');
 						$(typeSummary).children('.container').append('<table class="summary"><tbody></tbody></table>');

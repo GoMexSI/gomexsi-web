@@ -690,6 +690,11 @@ hr.section-break {
 	background: #808080;
 }
 
+.summary-description {
+	font-style: italic;
+	padding: 15px 0 0;
+}
+
 /* Instance Details */
 
 .query-results .instance-details .single-instance {
