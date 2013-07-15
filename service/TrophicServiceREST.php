@@ -6,6 +6,8 @@ class NonValidLocationParameterException extends Exception {}
 
 class TrophicServiceREST implements TrophicService 
 {
+    private $finalURL;
+
     public function findPreyForPredator($srcTaxon) 
     {
         $constraints['includeObservations'] = false;
@@ -68,9 +70,10 @@ class TrophicServiceREST implements TrophicService
     // each call will pass in the relevant filter one at a time, must do it this way because each findObserved* is treated as a unique rest call and needs a unique URL
     private function setInteractionFilters($interactionFilter, &$constraints)
     {
-        if(!$interactionFilter) {
+        if($interactionFilter != false) {
             $constraints['interactionFilter'] = $interactionFilter; // the type of interaction does not matter. The URL will build itself regardless of type(ie pred, prey, parasite... etc)
         }
+
     }
     #Helper fuction for query. Builds the correct strings and parameters for the query function
     private function queryBuilder($scientificName, $interactionType, $constraints) 
@@ -105,6 +108,8 @@ class TrophicServiceREST implements TrophicService
         } else {
             $url = $url_prefix;
         }
+
+        $this->finalURL = $url;
 
         $response = file_get_contents($url);
         $response = json_decode($response);
@@ -159,6 +164,11 @@ class TrophicServiceREST implements TrophicService
                 $i+=1;
             }
             return $container;
+    }
+    #function only used to test URL in unit tests
+    public function getURL()
+    {
+        return $this->finalURL;
     }
 }
 
