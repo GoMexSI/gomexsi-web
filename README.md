@@ -1,4 +1,4 @@
-gomexsi - TAMUCC..
+[gomexsi TAMUCC](http://gomexsi.tamucc.edu/) 
 =======
 
 [![Build Status](https://travis-ci.org/jhpoelen/gomexsi.png)](https://travis-ci.org/jhpoelen/gomexsi)
