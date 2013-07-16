@@ -423,15 +423,15 @@ jQuery(document).ready(function($) {
 								var singleBodyPart = instance[type + 'Data'][j][type + 'BodyPart'];
 								var singlePhysiologicalState = instance[type + 'Data'][j][type + 'PhysiologicalState'];
 								
-								if(typeof singleLifeStage !== 'undefined' && singleLifeStage.toLowerCase() !== 'unknown' && singleLifeStage){
+								if(typeof singleLifeStage !== 'undefined' && singleLifeStage && singleLifeStage.toLowerCase() !== 'unknown'){
 									singleLifeStage = 'Life Stage: ' + singleLifeStage;
 									singleDetails.push(singleLifeStage);
 								}
-								if(typeof singleBodyPart !== 'undefined' && singleBodyPart.toLowerCase() !== 'unknown' && singleBodyPart){
+								if(typeof singleBodyPart !== 'undefined' && singleBodyPart && singleBodyPart.toLowerCase() !== 'unknown'){
 									singleBodyPart = 'Body Part: ' + singleBodyPart;
 									singleDetails.push(singleBodyPart);
 								}
-								if(typeof singlePhysiologicalState !== 'undefined' && singlePhysiologicalState.toLowerCase() !== 'unknown' && singlePhysiologicalState){
+								if(typeof singlePhysiologicalState !== 'undefined' && singlePhysiologicalState && singlePhysiologicalState.toLowerCase() !== 'unknown'){
 									singlePhysiologicalState = 'Physiological State: ' + singlePhysiologicalState;
 									singleDetails.push(singlePhysiologicalState);
 								}
@@ -534,7 +534,7 @@ jQuery(document).ready(function($) {
 					
 					// Success callback function.
 					function(data, textStatus, jqXHR){
-						var externalUrl = data['URL']; log(externalUrl);
+						var externalUrl = data['URL'];
 						
 						if(typeof externalUrl !== 'undefined'){
 							var externalSource = '';
