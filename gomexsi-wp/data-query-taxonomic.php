@@ -213,6 +213,7 @@
 										</div>
 									</div>
 								</div>
+							</div>
 								
 							<input type="hidden" name="serviceType" value="rest" />
 							<input type="hidden" name="action" value="rhm_data_query" />
