@@ -145,27 +145,6 @@
 								</div>
 								
 								<div class="form-section clearfix">
-									<p>Typical users can ignore the options below. They are used by the developers as we finalize the query features.</p>
-									<label>Service Type:
-										<select name="serviceType">
-											<option value="rest">Live</option>
-											<option value="mock">Mock</option>
-										</select>
-									</label>
-									
-									<label>Request URL:
-										<select name="url">
-											<option value="http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php">RequestHandler.php</option>
-											<option value="http://gomexsi.tamucc.edu/gomexsi/query-full-mock.php">Full Mock Data</option>
-										</select>
-									</label>
-									
-									<br />
-									
-									Status: <span id="status"></span>
-								</div>
-								
-								<div class="form-section clearfix">
 									<div class="query-instructions">Resize the box on the map to limit your results.</div>
 								</div>
 							</div>
@@ -175,15 +154,15 @@
 							<input type="hidden" name="boundSouth" value="" />
 							<input type="hidden" name="boundWest" value="" />
 							
+							<input type="hidden" name="serviceType" value="rest" />
 							<input type="hidden" name="action" value="rhm_data_query" />
-							
 							<input type="submit" id="form-submit" class="gradient" value="Submit Query" />
 							<div id="status"></div>
 						</form>
 						
 						<div id="query-map-top"></div>
 						<div id="query-map"></div>
-												
+						
 						<div id="query-results-header" class="clearfix">
 							<a id="query-results-download" href="#query-results-download-options" class="visuallyhidden">Download the raw data</a>
 							<span id="query-results-info"></span>

@@ -214,24 +214,7 @@
 									</div>
 								</div>
 								
-								<div class="form-section clearfix">
-									<p>Typical users can ignore the options below. They are used by the developers as we finalize the query features.</p>
-									<label>Service Type:
-										<select name="serviceType">
-											<option value="rest">Live</option>
-											<option value="mock">Mock</option>
-										</select>
-									</label>
-									
-									<label>Request URL:
-										<select name="url">
-											<option value="http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php">RequestHandler.php</option>
-											<option value="http://gomexsi.tamucc.edu/gomexsi/query-full-mock.php">Full Mock Data</option>
-										</select>
-									</label>
-								</div>
-							</div>
-							
+							<input type="hidden" name="serviceType" value="rest" />
 							<input type="hidden" name="action" value="rhm_data_query" />
 							<input type="submit" id="form-submit" class="gradient" value="Submit Query" />
 							<div id="status"></div>

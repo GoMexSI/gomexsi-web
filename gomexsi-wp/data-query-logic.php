@@ -3,9 +3,9 @@
 // This file is called in functions.php.  It is separated for easy maintenance.
 
 // Target URL, which will give the results.
-$url = $_POST['url'];
+//$url = $_POST['url'];
 //$url = 'http://gomexsi.tamucc.edu/gomexsi/query-test-return.php';
-//$url = 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php';
+$url = 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php';
 
 // Build the query for POST.
 $query = array();
