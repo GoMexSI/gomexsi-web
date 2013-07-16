@@ -767,7 +767,7 @@ hr.section-break {
 	width: auto;
 }
 
-.query-results .instance-details .prey .name:after {
+.query-results .instance-details .species-list .name:after {
 	content: ', ';
 	margin-right: 4px;
 }
@@ -784,7 +784,8 @@ hr.section-break {
 	width: 200px;
 }
 
-.query-results .instance-details .species-list.expanded .name:after {
+.query-results .instance-details .species-list.expanded .name:after,
+.query-results .instance-details .species-list li:last-child .name:after {
 	content: '';
 	margin: 0;
 }
