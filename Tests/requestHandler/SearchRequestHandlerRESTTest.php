@@ -197,7 +197,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 		$jsonTestString = '{"scientificName":"Homo sapiens","URL":"http://eol.org/pages/327955"}';
 
-		$jsonObject = $this->handler->createJSONResponse();
+		$jsonObject = $this->handler->createMimeResponse();
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
 

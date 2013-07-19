@@ -13,14 +13,17 @@ class RequestParser
 	private $shouldIncludePredators = false;
 	private $locationConstraints = null;
 	private $interactionFilters = null;
+	private $responseType;
 
 	public function parse($toParse)
 	{
 		$this->determineServiceType($toParse);
 		$this->determineSearchType($toParse);
+		$this->determineResponseType($toParse);
 		$this->addInteractionFilters($toParse);
 		$this->addLocationConstraints($toParse);
 	}
+	#someday refactor this to a factory
 	private function determineSearchType($toParse)
 	{
 		if (!empty($toParse['suggestion'])) {
@@ -48,6 +51,14 @@ class RequestParser
 		} 
 
 		return $this->searchType;
+	}
+	private function determineResponseType($toParse)
+	{
+			if(!empty($toParse['rawData'])) {
+				$this->responseType = "CSV";
+			}else {
+				$this->responseType = "JSON";
+			}
 	}
 	private function determineServiceType($toParse)
 	{
@@ -112,6 +123,10 @@ class RequestParser
 	public function getInteractionFilters()
 	{
 		return $this->interactionFilters;
+	}
+	public function getResponseType()
+	{
+		return $this->responseType;
 	}
 }
 

@@ -1,12 +1,14 @@
 <?php
-
+require_once 'MimeResponse.php';
 require_once 'ServiceObjectProcessor.php';
 
-class RequestJSONResponse
+class MimeResponseJSON
 {
-	public function convertToJSONObject($phpObject)
+	public function cleanObject($phpObject)
     {
-		return(json_encode($phpObject));
+		$JSON = json_encode($phpObject);
+        $JSON = str_replace("\\/","/", $JSON); #this line previously had the conditional if($searchType == 'taxonURLLookup'), should not cause any issues with out it
+        return $JSON;
 	}
 
     public function addPreyListToResponse($responseObject, $serviceObject)
@@ -56,14 +58,5 @@ class RequestJSONResponse
     }
 }
 
-class ResponseObject
-{
-    public $scientificName;
-}
-class FuzzyResponseObject
-{
-    public $fuzzyName;
-    public $matches = array();
-}
 
 ?>

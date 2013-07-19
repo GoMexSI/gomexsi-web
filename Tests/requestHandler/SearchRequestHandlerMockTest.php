@@ -182,7 +182,7 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 
 		$jsonTestString = '[{"fuzzyName":"Scomb","matches":["Ariopsis felis","Scomberomorus cavalla"]}]';
 		
-		$jsonObject = $this->handler->createJSONResponse();
+		$jsonObject = $this->handler->createMimeResponse();
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
 	public function testFindExternalTaxonURLMock()
@@ -194,7 +194,7 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 
 		$jsonTestString = '{"scientificName":"homo sapiens","URL":"http://eol.org/pages/327955"}';
 
-		$jsonObject = $this->handler->createJSONResponse();
+		$jsonObject = $this->handler->createMimeResponse();
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
 

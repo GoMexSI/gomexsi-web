@@ -1,7 +1,10 @@
 <?php
 class UnknownSpeciesClassificationTypeException extends Exception {}
 
-/*Two parallel arrays are used in the class to keep track of and store observation instances.
+/*
+Used Only for JSON response right now
+
+Two parallel arrays are used in the class to keep track of and store observation instances.
 One array instanceDictionary holds only the tmp_and_unique_specimen_id at its corresponding index. preyInstances/predInstances 
 holds all the instance data related to the observation. instanceDictionary is used to index 
 preyInstances/predInstances. As the return from the rest service is parsed, instanceDictionary 

@@ -1,12 +1,13 @@
 <?php 
 
 require_once 'RequestParser.php';
-require_once 'RequestJSONResponse.php';
+require_once 'MimeResponseFactory.php';
 
 class SearchRequestHandler
 {
     private $trophicService;
     private $parser;
+    private $mimeResponse;
 
     public function __construct()
     {
@@ -16,7 +17,7 @@ class SearchRequestHandler
     {
     	$this->parsePOST($urlPost); 
     	$this->getTrophicService();
-        return $this->createJSONResponse();
+        return $this->createMimeResponse(); #mime is a reference to 'Internet media type'
     }
     public function parsePOST($urlPost)
     {
@@ -30,10 +31,18 @@ class SearchRequestHandler
     	$this->trophicService = $serviceFactory->createServiceOfType($this->parser->getServiceType());
     	return $this->trophicService;
     }
-
-    public function createJSONResponse()
+    public function getMimeResponse()
     {
-        $jsonConverter = new RequestJSONResponse();
+        $responseFactory = new MimeResponseFactory();
+        $this->mimeResponse = $responseFactory->createMimeOfType($this->parser->getResponseType());
+        return $this->mimeResponse;
+
+    }
+    public function createMimeResponse()
+    {
+        $responseFactory = new MimeResponseFactory();
+        $this->mimeResponse = $responseFactory->createMimeOfType($this->parser->getResponseType());
+
         $searchType = $this->parser->getSearchType();
         $responseObjectContainer = array();
 
@@ -42,7 +51,7 @@ class SearchRequestHandler
         if ($searchType == 'fuzzySearch') {
             $fuzzyResponseObject = new FuzzyResponseObject();
             $phpServiceObject = $this->trophicService->findCloseTaxonNameMatches($speciesSubject);
-            $jsonConverter->addFuzzySearchResultToResponse($fuzzyResponseObject, $phpServiceObject);
+            $this->mimeResponse->addFuzzySearchResultToResponse($fuzzyResponseObject, $phpServiceObject);
             $fuzzyResponseObject->fuzzyName = $speciesSubject;
             $responseObjectContainer[0] = $fuzzyResponseObject;
         } elseif ($searchType == 'exactMatchObservation') {
@@ -50,11 +59,11 @@ class SearchRequestHandler
             
             if ($this->parser->shouldIncludePrey()) {
                 $phpServiceObject = $this->trophicService->findObservedPreyForPredator($speciesSubject, $this->parser->getInteractionFilters(), $this->parser->getLocationConstraints());
-                $jsonConverter->addObservationToResponse($responseObject, $phpServiceObject, 'prey');
+                $this->mimeResponse->addObservationToResponse($responseObject, $phpServiceObject, 'prey');
             } 
             if ($this->parser->shouldIncludePredators()) {
                 $phpServiceObject = $this->trophicService->findObservedPredatorsForPrey($speciesSubject, $this->parser->getInteractionFilters(), $this->parser->getLocationConstraints());
-                $jsonConverter->addObservationToResponse($responseObject, $phpServiceObject, 'pred');
+                $this->mimeResponse->addObservationToResponse($responseObject, $phpServiceObject, 'pred');
             }
             $responseObject->scientificName = $speciesSubject;
             $responseObjectContainer[0] = $responseObject;
@@ -63,7 +72,7 @@ class SearchRequestHandler
             $responseObject = new ResponseObject();
             
             $phpServiceObject = $this->trophicService->findExternalTaxonURL($speciesSubject);
-            $jsonConverter->addTaxonURLLookupToResponse($responseObject, $phpServiceObject);
+            $this->mimeResponse->addTaxonURLLookupToResponse($responseObject, $phpServiceObject);
             $responseObject->scientificName = $speciesSubject;
             $responseObjectContainer = $responseObject;
         }else {
@@ -71,25 +80,30 @@ class SearchRequestHandler
             
             if ($this->parser->shouldIncludePrey()) {
                 $phpServiceObject = $this->trophicService->findPreyForPredator($speciesSubject);
-                $jsonConverter->addPreyListToResponse($responseObject, $phpServiceObject);
+                $this->mimeResponse->addPreyListToResponse($responseObject, $phpServiceObject);
             } 
             if ($this->parser->shouldIncludePredators()) {
                 $phpServiceObject = $this->trophicService->findPredatorForPrey($speciesSubject);
-                $jsonConverter->addPredatorListToResponse($responseObject, $phpServiceObject);
+                $this->mimeResponse->addPredatorListToResponse($responseObject, $phpServiceObject);
             } 
             $responseObject->scientificName = $speciesSubject;
             $responseObjectContainer[0] = $responseObject;
         }
         
-        $JSON = $jsonConverter->convertToJSONObject($responseObjectContainer);
+        $mimeResponseFinalObject = $this->mimeResponse->cleanObject($responseObjectContainer);
 
-        if($searchType == 'taxonURLLookup') {
-            $JSON = str_replace("\\/","/", $JSON); 
-        }
-
-        return $JSON;
+        return $mimeResponseFinalObject;
     }
 
 
+}
+class ResponseObject
+{
+    public $scientificName;
+}
+class FuzzyResponseObject
+{
+    public $fuzzyName;
+    public $matches = array();
 }
 ?>
