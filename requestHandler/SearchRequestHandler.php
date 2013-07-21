@@ -36,7 +36,6 @@ class SearchRequestHandler
         $responseFactory = new MimeResponseFactory();
         $this->mimeResponse = $responseFactory->createMimeOfType($this->parser->getResponseType());
         return $this->mimeResponse;
-
     }
     public function createMimeResponse()
     {
@@ -58,11 +57,11 @@ class SearchRequestHandler
             $responseObject = new ResponseObject();
             
             if ($this->parser->shouldIncludePrey()) {
-                $phpServiceObject = $this->trophicService->findObservedPreyForPredator($speciesSubject, $this->parser->getInteractionFilters(), $this->parser->getLocationConstraints());
+                $phpServiceObject = $this->trophicService->findObservedPreyForPredator($speciesSubject, $this->parser->getInteractionFilters(), $this->parser->getLocationConstraints(),$this->parser->getResponseType());
                 $this->mimeResponse->addObservationToResponse($responseObject, $phpServiceObject, 'prey');
             } 
             if ($this->parser->shouldIncludePredators()) {
-                $phpServiceObject = $this->trophicService->findObservedPredatorsForPrey($speciesSubject, $this->parser->getInteractionFilters(), $this->parser->getLocationConstraints());
+                $phpServiceObject = $this->trophicService->findObservedPredatorsForPrey($speciesSubject, $this->parser->getInteractionFilters(), $this->parser->getLocationConstraints(),$this->parser->getResponseType());
                 $this->mimeResponse->addObservationToResponse($responseObject, $phpServiceObject, 'pred');
             }
             $responseObject->scientificName = $speciesSubject;

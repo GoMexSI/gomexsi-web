@@ -20,17 +20,19 @@ class TrophicServiceREST implements TrophicService
         return $this->queryBuilder($srcTaxon, 'preyedUponBy', $constraints);
     }
 
-    public function findObservedPreyForPredator($srcTaxon, $interactionFilters, $locationConstraints)
+    public function findObservedPreyForPredator($srcTaxon, $interactionFilters, $locationConstraints, $mimeType)
     {
         $constraints['includeObservations'] = true;
+        $constraints['mime'] = ($mimeType == "CSV") ? "csv" : null; # if we ever add support for xml or other mime types probably just always include a "type=someMimeType", but for now only needed for type=csv
         $this->setInteractionFilters($interactionFilters['prey'], $constraints);
         $this->setLocationConstraints($locationConstraints, $constraints);
         return $this->queryBuilder($srcTaxon, 'preysOn', $constraints);
     }
 
-    public function findObservedPredatorsForPrey($srcTaxon, $interactionFilters, $locationConstraints)
+    public function findObservedPredatorsForPrey($srcTaxon, $interactionFilters, $locationConstraints, $mimeType)
     {
         $constraints['includeObservations'] = true;
+        $constraints['mime'] = ($mimeType == "CSV") ? "csv" : null; # if we ever add support for xml or other mime types probably just always include a "type=someMimeType", but for now only needed for type=csv
         $this->setInteractionFilters($interactionFilters['pred'], $constraints);
         $this->setLocationConstraints($locationConstraints, $constraints);
         return $this->queryBuilder($srcTaxon, 'preyedUponBy', $constraints);
@@ -87,7 +89,10 @@ class TrophicServiceREST implements TrophicService
             if(isset($constraints['nw_lat'])) {
                 $operation = $operation . '&nw_lat=' . $constraints['nw_lat'] . '&nw_lng=' . $constraints['nw_lng'] . '&se_lat=' . $constraints['se_lat'] . '&se_lng=' . $constraints['se_lng'];
             }
-        }   
+        }
+        if(!empty($constraints['mime'])) {
+            $operation = $operation . '&type=' . $constraints['mime'];
+        }
         return $this->query('taxon', $scientificName, $operation);
     }
     /* 
@@ -112,13 +117,17 @@ class TrophicServiceREST implements TrophicService
         $this->finalURL = $url;
 
         $response = file_get_contents($url);
+        $undecodedResponse = $response;
         $response = json_decode($response);
 
-        if(strpos($operation, 'Observations') !== FALSE) { # Observational query
+        if((strpos($operation, 'Observations') !== FALSE) && (strpos($operation, 'csv') === FALSE)) { # Observational query
             return $this->observationalSearchContainerPopulator($response);
+        } elseif ((strpos($operation, 'Observations') !== FALSE) && (strpos($operation, 'csv') !== FALSE)) { # Observational query, with non JSON response(csv)
+            //var_dump($undecodedResponse);
+            return $undecodedResponse; // used for anything returned from the rest non JSON encoded
         } elseif ($method == 'findExternalUrlForTaxon') {  # External URL lookup query
             return $response->{'url'};
-        } else {                                           # Fuzzy lookup returns and exhaustive list return, TODO contemplate moving this into a function
+        } else { # Fuzzy lookup returns and exhaustive list return, TODO contemplate moving this into a function
             $columns = $response->{'columns'};
             $preyDataList = $response->{'data'};
             $preyNames = array();

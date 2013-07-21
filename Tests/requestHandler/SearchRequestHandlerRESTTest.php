@@ -200,6 +200,21 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$jsonObject = $this->handler->createMimeResponse();
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
+/*	public function testRawDataDowloadCSV()
+	{
+		$post = array("serviceType" => "REST",
+			//"findPrey"=>"on",
+			"findPred"=>"on",
+			"subjectName" => "Ariopsis felis",
+			"rawData" => "CSV");
+		$this->handler->parsePOST($post);
 
+		$this->handler->getTrophicService();
+
+		$jsonTestString = '{"scientificName":"Homo sapiens","URL":"http://eol.org/pages/327955"}';
+
+		$mime = $this->handler->createMimeResponse();
+		$this->assertEquals($jsonTestString, $mime);
+	}*/
 }
 ?>

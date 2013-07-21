@@ -50,7 +50,7 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
     	$this->handler->parsePOST($this->observationPostRequest);
 
 		$trophicService = $this->handler->getTrophicService();
-		$trophicResultString = $trophicService->findObservedPreyForPredator("Ariopsi felis", null, null);
+		$trophicResultString = $trophicService->findObservedPreyForPredator("Ariopsi felis", null, null, null);
 		
 		$this->assertEquals((count($expectedPreyResult)/7), count($trophicResultString)); #7 catogries 
 
