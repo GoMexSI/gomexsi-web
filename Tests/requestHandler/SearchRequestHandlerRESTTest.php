@@ -242,8 +242,6 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$containsValue = (strpos($mime, $testValue[$i]) !== false) ? true : false;
 			$this->assertEquals($containsValue, true, 'missing ' . $testValue[$i] . ' tag from CSV data dump');
 		}
-		var_dump($mime);
-
 	}
 }
 ?>
