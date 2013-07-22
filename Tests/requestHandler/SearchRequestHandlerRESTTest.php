@@ -200,21 +200,50 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$jsonObject = $this->handler->createMimeResponse();
 		$this->assertEquals($jsonTestString, $jsonObject);
 	}
-/*	public function testRawDataDowloadCSV()
+	public function testRawDataDowloadCSV()
 	{
 		$post = array("serviceType" => "REST",
-			//"findPrey"=>"on",
-			"findPred"=>"on",
+			"findPrey"=>"on",
 			"subjectName" => "Ariopsis felis",
 			"rawData" => "CSV");
+
+		#prey test
 		$this->handler->parsePOST($post);
-
 		$this->handler->getTrophicService();
-
-		$jsonTestString = '{"scientificName":"Homo sapiens","URL":"http://eol.org/pages/327955"}';
+		$testValue = 'preyName';
 
 		$mime = $this->handler->createMimeResponse();
-		$this->assertEquals($jsonTestString, $mime);
-	}*/
+		$containsValue = (strpos($mime, $testValue) !== false) ? true : false;
+		$this->assertEquals($containsValue, true, "missing preyName tag from CSV data dump");
+
+		#predator test
+		unset($post['findPrey']);
+		$post['findPredators'] = "on";
+
+		$this->handler->parsePOST($post);
+		$this->handler->getTrophicService();
+		$testValue = 'predatorName';
+
+		$mime = $this->handler->createMimeResponse();
+		$containsValue = (strpos($mime, $testValue) !== false) ? true : false;
+		$this->assertEquals($containsValue, true, "missing predatorName tag from CSV data dump");
+
+		#predator and prey test
+		$post['findPrey'] = "on";
+
+		$this->handler->parsePOST($post);
+		$this->handler->getTrophicService();
+		$testValue[0] = 'predatorName';
+		$testValue[1] = 'preyName';
+
+		$mime = $this->handler->createMimeResponse();
+
+		for($i = 0; $i < 2; $i++) {
+			$containsValue = (strpos($mime, $testValue[$i]) !== false) ? true : false;
+			$this->assertEquals($containsValue, true, 'missing ' . $testValue[$i] . ' tag from CSV data dump');
+		}
+		var_dump($mime);
+
+	}
 }
 ?>

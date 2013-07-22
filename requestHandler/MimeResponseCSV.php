@@ -9,7 +9,7 @@ class MimeResponseCSV implements MimeResponse
 {
 	public function cleanObject($phpObject)
 	{
-        $csv = $phpObject[0]->scientificName . "\n" . $phpObject[0]->csv;
+        $csv = '"' . $phpObject[0]->scientificName . '"' . "\n" . $phpObject[0]->csv;
 		return $csv;
 	}
     public function addPreyListToResponse($responseObject, $serviceObject)

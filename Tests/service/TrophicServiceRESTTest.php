@@ -47,10 +47,13 @@ class TrophicServiceRESTTest extends PHPUnit_Framework_TestCase
     }
     public function testRawDataDownloadURL()
     {
-        //$interactionFilter = array('prey' => 'Callinectes sapidus');
         $trophicService = new TrophicServiceREST();
         $trophicService->findObservedPreyForPredator('Ariopsis felis', null, null, "CSV");
         $expected = "http://46.4.36.142:8080/taxon/Ariopsis%20felis/preysOn?includeObservations=true&nw_lat=30.28&nw_lng=-97.89&se_lat=18.04&se_lng=-80.61&type=csv";
+        $this->assertEquals($expected, $trophicService->getURL());
+
+        $trophicService->findObservedPredatorsForPrey('Ariopsis felis', null, null, "CSV");
+        $expected = "http://46.4.36.142:8080/taxon/Ariopsis%20felis/preyedUponBy?includeObservations=true&nw_lat=30.28&nw_lng=-97.89&se_lat=18.04&se_lng=-80.61&type=csv";
         $this->assertEquals($expected, $trophicService->getURL());
     }
 }
