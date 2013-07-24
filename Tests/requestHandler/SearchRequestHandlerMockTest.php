@@ -85,7 +85,7 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 		unset($this->observationPostRequestPred["findPrey"]);
 		
 		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequestPred);
-		$necessaryValues = array('scientificName','predLifeStage','predPhysiologicalState','}]}]');
+		$necessaryValues = array('scientificName','predLifeStage','}]}]');
 		
 		foreach ($necessaryValues as $value) {
 			$containsValue = (strpos($jsonObject, $value) !== FALSE) ? true : false;
@@ -98,7 +98,7 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 		$this->observationPostRequestPred["findPrey"] = "on";
 		
 		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequestPred);
-		$necessaryValues = array('scientificName','preyLifeStage','preyPhysiologicalState','preyLifeStage','predPhysiologicalState','}]}]');
+		$necessaryValues = array('scientificName','preyLifeStage','preyPhysiologicalState','preyLifeStage','}]}]');
 		
 		foreach ($necessaryValues as $value) {
 			$containsValue = (strpos($jsonObject, $value) !== FALSE) ? true : false;

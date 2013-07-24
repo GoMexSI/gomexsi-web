@@ -51,6 +51,7 @@ class TrophicServiceREST implements TrophicService
     {
         return $this->query('findExternalUrlForTaxon', $taxonName, null);
     }
+    
     private function setLocationConstraints($locationConstraints, &$constraints)
     {
         if(isset($locationConstraints)) {
@@ -123,20 +124,19 @@ class TrophicServiceREST implements TrophicService
         if((strpos($operation, 'Observations') !== FALSE) && (strpos($operation, 'csv') === FALSE)) { # Observational query
             return $this->observationalSearchContainerPopulator($response);
         } elseif ((strpos($operation, 'Observations') !== FALSE) && (strpos($operation, 'csv') !== FALSE)) { # Observational query, with non JSON response(csv)
-            //var_dump($undecodedResponse);
             return $undecodedResponse; // used for anything returned from the rest non JSON encoded
         } elseif ($method == 'findExternalUrlForTaxon') {  # External URL lookup query
             return $response->{'url'};
-        } else { # Fuzzy lookup returns and exhaustive list return, TODO contemplate moving this into a function
+        } else { # Fuzzy lookup returns and exhaustive list return
             $columns = $response->{'columns'};
-            $preyDataList = $response->{'data'};
-            $preyNames = array();
-            foreach ($preyDataList as $preyData) {
-                foreach ($preyData as $preyName) {
-                    $preyNames[] = $preyName;
+            $taxonDataList = $response->{'data'};
+            $taxonNames = array();
+            foreach ($taxonDataList as $taxonData) {
+                foreach ($taxonData as $taxonName) {
+                    $taxonNames[] = $taxonName;
                 }
             }
-            return $preyNames;
+            return $taxonNames;
         }
     }
     /*
@@ -151,25 +151,66 @@ class TrophicServiceREST implements TrophicService
             $columns = $response->{'columns'};
             $dataList = $response->{'data'};
             $container = array();
+            $headerPositions = array();
+            $j = 0;
+            foreach ($columns as $headerTitle) {
+                switch ($headerTitle) {
+                    case 'target_taxon_name':
+                        $headerPositions['tax'] = $j;
+                        break;
+                    case 'latitude':
+                        $headerPositions['lat'] = $j;
+                        break;
+                    case 'longitude':
+                        $headerPositions['long'] = $j;
+                        break;
+                    case 'altitude':
+                        $headerPositions['alt'] = $j;
+                        break;
+                    case 'study.title':
+                        $headerPositions['study'] = $j;
+                        break;
+                    case 'collection_time_in_unix_epoch':
+                        $headerPositions['epoch'] = $j;
+                        break;
+                    case 'tmp_and_unique_specimen_id':
+                        $headerPositions['id'] = $j;
+                        break;
+                    case 'predator_life_stage':
+                        $headerPositions['predLS'] = $j;
+                        break;
+                    case 'prey_life_stage':
+                        $headerPositions['preyLS'] = $j;
+                        break;
+                    case 'prey_body_part':
+                        $headerPositions['preyBP'] = $j;
+                        break;
+                    case 'prey_physiological_state':
+                        $headerPositions['preyPS'] = $j;
+                        break;
+                    default:
+                        #some new header property
+                        break;
+                }
+                $j+=1;
+            }
+            $headerPositions['tax'] = (!empty($headerPositions['tax'])) ? $headerPositions['tax'] : 0;// remove this after JSON object is updated
             $i = 0;
             foreach ($dataList as $taxonData) 
             {
                 $container[$i] = array();
-                $container[$i][0] = $taxonData[0]; #preyName
-                $container[$i][1] = $taxonData[1]; #latitude
-                $container[$i][2] = $taxonData[2]; #longitude
-                $container[$i][3] = $taxonData[3]; #altitude
-                $container[$i][4] = $taxonData[4]; #contributor
-                $container[$i][5] = $taxonData[5]; #unix epoch
-                $container[$i][6] = $taxonData[6]; #tmp_and_unique_specimen_id
-                $container[$i][7] = $taxonData[7]; #predator life stage
-                $container[$i][8] = $taxonData[8]; #prey life stage
-                $container[$i][9] = $taxonData[9]; #predator body part
-                $container[$i][10] = $taxonData[10]; #prey body part
-                $container[$i][11] = $taxonData[11]; #predator physiological state
-                $container[$i][12] = $taxonData[12]; #prey physiological state
+                $container[$i][0] = $taxonData[$headerPositions['tax']]; #subjectTaxon
+                $container[$i][1] = $taxonData[$headerPositions['lat']]; #latitude
+                $container[$i][2] = $taxonData[$headerPositions['long']]; #longitude
+                $container[$i][3] = $taxonData[$headerPositions['alt']]; #altitude
+                $container[$i][4] = $taxonData[$headerPositions['study']]; #contributor
+                $container[$i][5] = $taxonData[$headerPositions['epoch']]; #unix epoch
+                $container[$i][6] = $taxonData[$headerPositions['id']]; #tmp_and_unique_specimen_id
+                $container[$i][7] = $taxonData[$headerPositions['predLS']]; #predator life stage
+                $container[$i][8] = $taxonData[$headerPositions['preyLS']]; #prey life stage
+                $container[$i][9] = $taxonData[$headerPositions['preyBP']]; #prey body part
+                $container[$i][10] = $taxonData[$headerPositions['preyPS']]; #prey physiological state
 
-                #could do a nested for, but the straight assignment will probably be faster for huge datasets
                 $i+=1;
             }
             return $container;

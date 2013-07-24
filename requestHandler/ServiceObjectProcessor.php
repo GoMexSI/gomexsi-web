@@ -11,6 +11,7 @@ preyInstances/predInstances. As the return from the rest service is parsed, inst
 is updated, allowing all of the unique observations to be grouped properly in preyInstances/predInstances*/
 class ServiceObjectProcessor
 {
+	#change this to work based on head names, and not position. Use interaction type to define stuff
 	public function populateResponseObject($responseObject, $serviceObject, $predOrPrey) 
 	{
 		$instanceDictionary = array(); #dictionary that holds the tmp_and_unique_specimen_id
@@ -27,12 +28,10 @@ class ServiceObjectProcessor
 	            $contributor            = $instance[4];
 	            $unixEpoch              = (!empty($instance[5])) ? $instance[5] : null;
 	            $uniqueID               = $instance[6];
-	            $predLifeStage          = (!empty($instance[7]))  ? $instance[7]  : null;
+	            $predLifeStage          = (!empty($instance[7]))  ? $instance[7]  : null; #remove based on issue #44
 	            $preyLifeStage          = (!empty($instance[8]))  ? $instance[8]  : null;
-	            $predBodyPart           = (!empty($instance[9]))  ? $instance[9]  : null;
-	            $preyBodyPart           = (!empty($instance[10])) ? $instance[10] : null;
-	            $predPhysiologicalState = (!empty($instance[11])) ? $instance[11] : null;
-	            $preyPhysiologicalState = (!empty($instance[12])) ? $instance[12] : null;
+	            $preyBodyPart           = (!empty($instance[9])) ? $instance[9] : null;
+	            $preyPhysiologicalState = (!empty($instance[10])) ? $instance[10] : null; #remove based on issue #44
 
 				$instanceDictionary[$instanceElement] = $uniqueID;
 				switch ($predOrPrey) {
@@ -41,7 +40,7 @@ class ServiceObjectProcessor
                         $responseObject->preyInstances[$instanceElement] = array('preyData' => array($instanceList), 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
                         break;
                     case 'pred':
-                    	$instanceList = array("$predOrPrey" => $instanceName, 'predLifeStage' => $predLifeStage, 'predBodyPart' => $predBodyPart, 'predPhysiologicalState' => $predPhysiologicalState);
+                    	$instanceList = array("$predOrPrey" => $instanceName, 'predLifeStage' => $predLifeStage);
                         $responseObject->predInstances[$instanceElement] = array('predData' => array($instanceList), 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
                         break;
                     default:
@@ -53,10 +52,8 @@ class ServiceObjectProcessor
 				$instanceName           = $instance[0];
 	            $predLifeStage          = (!empty($instance[7]))  ? $instance[7]  : null;
 	            $preyLifeStage          = (!empty($instance[8]))  ? $instance[8]  : null;
-	            $predBodyPart           = (!empty($instance[9]))  ? $instance[9]  : null;
-	            $preyBodyPart           = (!empty($instance[10])) ? $instance[10] : null;
-	            $predPhysiologicalState = (!empty($instance[11])) ? $instance[11] : null;
-	            $preyPhysiologicalState = (!empty($instance[12])) ? $instance[12] : null;
+	            $preyBodyPart           = (!empty($instance[9])) ? $instance[9] : null;
+	            $preyPhysiologicalState = (!empty($instance[10])) ? $instance[10] : null;
 
 				switch ($predOrPrey) {
 					case 'prey':
@@ -64,7 +61,7 @@ class ServiceObjectProcessor
 						array_push($responseObject->preyInstances[$foundElement]['preyData'], $instanceList);
 						break;
 					case 'pred':
-                    	$instanceList = array("$predOrPrey" => $instanceName, 'predLifeStage' => $predLifeStage, 'predBodyPart' => $predBodyPart, 'predPhysiologicalState' => $predPhysiologicalState);
+                    	$instanceList = array("$predOrPrey" => $instanceName, 'predLifeStage' => $predLifeStage);
 						array_push($responseObject->predInstances[$foundElement]['predData'], $instanceList);
 						break;
 					default:
