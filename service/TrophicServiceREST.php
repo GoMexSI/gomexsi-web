@@ -168,6 +168,7 @@ class TrophicServiceREST implements TrophicService
                         $headerPositions['alt'] = $j;
                         break;
                     case 'study.title':
+                    case 'study_title':
                         $headerPositions['study'] = $j;
                         break;
                     case 'collection_time_in_unix_epoch':
