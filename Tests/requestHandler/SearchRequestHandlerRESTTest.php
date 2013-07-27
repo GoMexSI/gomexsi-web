@@ -210,11 +210,11 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		#prey test
 		$this->handler->parsePOST($post);
 		$this->handler->getTrophicService();
-		$testValue = 'preyName';
+		$testValue = 'target_taxon_name';
 
 		$mime = $this->handler->createMimeResponse();
 		$containsValue = (strpos($mime, $testValue) !== false) ? true : false;
-		$this->assertEquals($containsValue, true, "missing preyName tag from CSV data dump");
+		$this->assertEquals($containsValue, true, "missing [" . $testValue . "] tag from CSV data dump");
 
 		#predator test
 		unset($post['findPrey']);
@@ -222,11 +222,11 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 		$this->handler->parsePOST($post);
 		$this->handler->getTrophicService();
-		$testValue = 'predatorName';
+		$testValue = 'source_taxon_name';
 
 		$mime = $this->handler->createMimeResponse();
 		$containsValue = (strpos($mime, $testValue) !== false) ? true : false;
-		$this->assertEquals($containsValue, true, "missing predatorName tag from CSV data dump");
+		$this->assertEquals($containsValue, true, "missing [" . $testvalue . "] tag from CSV data dump");
 
 		#predator and prey test
 		$post['findPrey'] = "on";

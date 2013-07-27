@@ -127,7 +127,31 @@ class TrophicServiceREST implements TrophicService
             return $undecodedResponse; // used for anything returned from the rest non JSON encoded
         } elseif ($method == 'findExternalUrlForTaxon') {  # External URL lookup query
             return $response->{'url'};
-        } else { # Fuzzy lookup returns and exhaustive list return
+        } elseif (isset($operation)) { # exhaustive list return
+            
+            $columns = $response->{'columns'};
+            $i = 0;
+            $has_target_taxon_name_column = false;
+            foreach ($columns as $column) {
+                if ($column == 'target_taxon_name') {
+                    $has_target_taxon_name_column = true;
+                    break;
+                }
+                $i+=1;
+            }
+
+            $taxonDataList = $response->{'data'};
+            $taxonNames = array();
+            
+            foreach ($taxonDataList as $taxonData)
+            if ($has_target_taxon_name_column) {
+                foreach ($taxonData[$i] as $taxonName) {
+                    $taxonNames[] = $taxonName;
+                }
+            }
+            
+            return $taxonNames;
+        } else { # Fuzzy lookup 
             $columns = $response->{'columns'};
             $taxonDataList = $response->{'data'};
             $taxonNames = array();
@@ -167,26 +191,25 @@ class TrophicServiceREST implements TrophicService
                     case 'altitude':
                         $headerPositions['alt'] = $j;
                         break;
-                    case 'study.title':
                     case 'study_title':
                         $headerPositions['study'] = $j;
                         break;
                     case 'collection_time_in_unix_epoch':
                         $headerPositions['epoch'] = $j;
                         break;
-                    case 'tmp_and_unique_specimen_id':
+                    case 'tmp_and_unique_source_specimen_id':
                         $headerPositions['id'] = $j;
                         break;
-                    case 'predator_life_stage':
+                    case 'source_specimen_life_stage':
                         $headerPositions['predLS'] = $j;
                         break;
-                    case 'prey_life_stage':
+                    case 'source_specimen_stage':
                         $headerPositions['preyLS'] = $j;
                         break;
-                    case 'prey_body_part':
+                    case 'target_specimen_body_part':
                         $headerPositions['preyBP'] = $j;
                         break;
-                    case 'prey_physiological_state':
+                    case 'target_specimen_physiological_state':
                         $headerPositions['preyPS'] = $j;
                         break;
                     default:
