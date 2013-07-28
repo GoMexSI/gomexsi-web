@@ -203,7 +203,7 @@ class TrophicServiceREST implements TrophicService
                     case 'source_specimen_life_stage':
                         $headerPositions['predLS'] = $j;
                         break;
-                    case 'source_specimen_stage':
+                    case 'target_specimen_life_stage':
                         $headerPositions['preyLS'] = $j;
                         break;
                     case 'target_specimen_body_part':

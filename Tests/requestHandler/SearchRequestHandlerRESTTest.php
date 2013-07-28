@@ -238,7 +238,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 		$mime = $this->handler->createMimeResponse();
 		$containsValue = (strpos($mime, $testValue) !== false) ? true : false;
-		$this->assertEquals($containsValue, true, "missing [" . $testvalue . "] tag from CSV data dump");
+		$this->assertEquals($containsValue, true, "missing [" . $testValue . "] tag from CSV data dump");
 
 		#predator and prey test
 		$post['findPrey'] = "on";
