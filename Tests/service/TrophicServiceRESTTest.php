@@ -39,10 +39,10 @@ class TrophicServiceRESTTest extends PHPUnit_Framework_TestCase
     }
     public function testBuildInteractionFilterURL()
     {
-        $interactionFilter = array('prey' => 'Rattus rattus');
+        $interactionFilter = array('prey' => 'Callinectes sapidus');
         $trophicService = new TrophicServiceREST();
-        $trophicService->findObservedPreyForPredator('Homo sapiens', $interactionFilter, null, null);
-        $expected = "http://46.4.36.142:8080/taxon/Homo%20sapiens/preysOn/Rattus%20rattus?includeObservations=true&nw_lat=30.28&nw_lng=-97.89&se_lat=18.04&se_lng=-80.61";
+        $trophicService->findObservedPreyForPredator('Scomberomorus cavalla', $interactionFilter, null, null);
+        $expected = "http://46.4.36.142:8080/taxon/Scomberomorus%20cavalla/preysOn/Callinectes%20sapidus?includeObservations=true&nw_lat=30.28&nw_lng=-97.89&se_lat=18.04&se_lng=-80.61";
         $this->assertEquals($expected, $trophicService->getURL());
     }
     public function testRawDataDownloadURL()

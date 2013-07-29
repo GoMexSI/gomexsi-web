@@ -3,6 +3,7 @@ require_once 'TrophicService.php';
 
 class NotImplementedException extends Exception {}
 class NonValidLocationParameterException extends Exception {}
+class UnsupportedInteractionTypeException extends Exception {}
 
 class TrophicServiceREST implements TrophicService 
 {
@@ -169,6 +170,18 @@ class TrophicServiceREST implements TrophicService
       PURPOSE: Helper function that populates the return container for observational queries
 
       This function takes the response from the rest service and converts it into a more usable format
+
+
+      NOTE: due to the requirements of this specfic project there should never be a time when the predator_body_part
+            or predator_physiological_state is returned to UI. We will remove them from the REST return at this point in
+            the code. 
+
+            Case interaction_type == preyedUponBy -> then target represents predator; do not populate
+            Case interaction_type == preysOn -> then source represents predator; do not populate
+
+            source_taxon_name is what the user search is based on. IE if they type in 'Callinectes sapidus' then this will
+            always be the source. The interaction_type will change based on what they want(this is subject to change down the line
+            if the REST is optimized).
     */
     private function observationalSearchContainerPopulator($response){
 
@@ -180,7 +193,10 @@ class TrophicServiceREST implements TrophicService
             foreach ($columns as $headerTitle) {
                 switch ($headerTitle) {
                     case 'target_taxon_name':
-                        $headerPositions['tax'] = $j;
+                        $headerPositions['tax'] = $j; 
+                        break;
+                    case 'interaction_type':
+                        $headerPositions['interactionType'] = $j; 
                         break;
                     case 'latitude':
                         $headerPositions['lat'] = $j;
@@ -201,24 +217,45 @@ class TrophicServiceREST implements TrophicService
                         $headerPositions['id'] = $j;
                         break;
                     case 'source_specimen_life_stage':
-                        $headerPositions['predLS'] = $j;
+                        $headerPositions['sourceLS'] = $j;
                         break;
                     case 'target_specimen_life_stage':
-                        $headerPositions['preyLS'] = $j;
+                        $headerPositions['targetLS'] = $j;
+                        break;
+                    case 'source_specimen_body_part':
+                        $headerPositions['sourceBP'] = $j;
                         break;
                     case 'target_specimen_body_part':
-                        $headerPositions['preyBP'] = $j;
+                        $headerPositions['targetBP'] = $j;
+                        break;
+                    case 'source_specimen_physiological_state':
+                        $headerPositions['sourcePS'] = $j;
                         break;
                     case 'target_specimen_physiological_state':
-                        $headerPositions['preyPS'] = $j;
+                        $headerPositions['targetPS'] = $j;
                         break;
                     default:
                         #some new header property
                         break;
                 }
+
                 $j+=1;
             }
-            $headerPositions['tax'] = (!empty($headerPositions['tax'])) ? $headerPositions['tax'] : 0;// remove this after JSON object is updated
+            
+            if($dataList[0][$headerPositions['interactionType']] == 'preyedUponBy') { // target = predator
+                $headerPositions['predLS'] = $headerPositions['targetLS'];
+                $headerPositions['preyLS'] = $headerPositions['sourceLS'];
+                $headerPositions['preyBP'] = $headerPositions['sourceBP'];
+                $headerPositions['preyPS'] = $headerPositions['sourcePS'];
+            } elseif ($dataList[0][$headerPositions['interactionType']] == 'preysOn') { // source = predator
+                $headerPositions['predLS'] = $headerPositions['sourceLS'];
+                $headerPositions['preyLS'] = $headerPositions['targetLS'];
+                $headerPositions['preyBP'] = $headerPositions['targetBP'];
+                $headerPositions['preyPS'] = $headerPositions['targetPS'];
+            } else {
+                throw new UnsupportedInteractionTypeException('Interaction type ' . $dataList[0][$headerPositions['interactionType']] . ' is not yet supported!');
+            }
+
             $i = 0;
             foreach ($dataList as $taxonData) 
             {
