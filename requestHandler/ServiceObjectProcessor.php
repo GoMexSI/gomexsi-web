@@ -11,7 +11,8 @@ preyInstances/predInstances. As the return from the rest service is parsed, inst
 is updated, allowing all of the unique observations to be grouped properly in preyInstances/predInstances*/
 class ServiceObjectProcessor
 {
-	#change this to work based on head names, and not position. Use interaction type to define stuff
+	# $instance is populated in the service based on the header sent not the order of the data. Just
+	# using an indexed array here for lack of better object. 
 	public function populateResponseObject($responseObject, $serviceObject, $predOrPrey) 
 	{
 		$instanceDictionary = array(); #dictionary that holds the tmp_and_unique_specimen_id
