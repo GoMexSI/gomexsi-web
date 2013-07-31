@@ -244,7 +244,7 @@ jQuery(document).ready(function($) {
 				}
 			} else {
 				this.subjects = '';
-				log('No data.');
+				log('No data detected. Raw output from RequestHandler.php:'); log(data);
 			}
 		}
 		
