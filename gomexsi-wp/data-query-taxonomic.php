@@ -76,7 +76,7 @@
 						<hr class="section-break" />
 						
 						<div id="query-results-header" class="clearfix">
-							<a id="query-results-download" href="#" class="visuallyhidden">Download the raw data</a>
+							<a id="query-results-download" href="#" target="_blank" class="visuallyhidden">Download the raw data</a>
 							<span id="query-results-info"></span>
 						</div>
 						
@@ -98,7 +98,6 @@
 
 <div id="hideaway" class="visuallyhidden">
 	<div id="map-canvas"></div>
-	<div id="query-results-download-options">Raw data download will be available soon.</div>
 </div>
 
 <?php get_sidebar(); ?>

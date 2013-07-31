@@ -578,22 +578,6 @@ jQuery(document).ready(function($) {
 				});
 			});
 			
-			$('#query-results-download').click(function(e){
-//				e.preventDefault();
-				
-/*
-				var options = $('#query-results-download-options').html();
-				
-				$.fancybox({
-					'type': 'inline',
-					'href': '#query-results-download-options',
-					'onClosed': function(){
-						$('div#hideaway .fancybox-inline-tmp').html(options).attr('id', 'query-results-download-options').attr('style','').removeClass('fancybox-inline-tmp');
-					}
-				});
-*/
-			});
-			
 			$('body').click(function(e){
 				// If a name tip box is open, then clicking anywhere else will remove it.
 				$('.name-tip-box').remove();

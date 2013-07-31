@@ -47,7 +47,7 @@ if(curl_error($curl)){
 curl_close ($curl);
 
 // Set filename based on subject name and date and time of request.
-$filename = str_replace('+', '_', $query['subjectName']) . date('Y_m_d_G-i-s') . '.csv';
+$filename = str_replace(' ', '_', $query['subjectName']) . '_' . date('Y_m_d_G-i-s') . '.csv';
 
 // Set headers to force download.
 header('Content-Type: application/csv');
