@@ -956,7 +956,7 @@ jQuery(document).ready(function($) {
 					$('#status').html('Query complete.');
 					
 					// Build the raw data download link.
-					$('#query-results-download').attr('href', 'http://gomexsi.tamucc.edu/gomexsi/data-query-raw.php?' + r.queryString);
+					$('#query-results-download').attr('href', 'http://gomexsi.tamucc.edu/gomexsi/gomexsi-wp/data-query-raw.php?' + r.queryString);
 					
 					// Animate scrolling to the results area.
 					if(modeIs('spatial') || modeIs('taxonomic')){
