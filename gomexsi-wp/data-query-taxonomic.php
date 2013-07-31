@@ -76,7 +76,7 @@
 						<hr class="section-break" />
 						
 						<div id="query-results-header" class="clearfix">
-							<a id="query-results-download" href="#query-results-download-options" class="visuallyhidden">Download the raw data</a>
+							<a id="query-results-download" href="#" class="visuallyhidden">Download the raw data</a>
 							<span id="query-results-info"></span>
 						</div>
 						

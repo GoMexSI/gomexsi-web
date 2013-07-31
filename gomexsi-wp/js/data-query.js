@@ -579,8 +579,9 @@ jQuery(document).ready(function($) {
 			});
 			
 			$('#query-results-download').click(function(e){
-				e.preventDefault();
+//				e.preventDefault();
 				
+/*
 				var options = $('#query-results-download-options').html();
 				
 				$.fancybox({
@@ -590,6 +591,7 @@ jQuery(document).ready(function($) {
 						$('div#hideaway .fancybox-inline-tmp').html(options).attr('id', 'query-results-download-options').attr('style','').removeClass('fancybox-inline-tmp');
 					}
 				});
+*/
 			});
 			
 			$('body').click(function(e){
@@ -884,7 +886,7 @@ jQuery(document).ready(function($) {
 			var queryError = '';
 			
 			// Must have a name in the subjectName field.
-			if($('input[name="subjectName"]').val()){
+			if($(subjectNameInput).val()){
 				validSubject = true;
 			} else {
 				queryError += '<p><img src="/wp-content/themes/gomexsi-wp/img/error.png" alt="Error" style="position: relative; top: 2px" /> Please enter a name or taxonomy in the <em><strong>Name</strong></em> section.</p>';
@@ -953,8 +955,8 @@ jQuery(document).ready(function($) {
 					$('#status').addClass('success');
 					$('#status').html('Query complete.');
 					
-					// Show raw results on page.
-					$('#raw-results').html(data);
+					// Build the raw data download link.
+					$('#query-results-download').attr('href', 'http://gomexsi.tamucc.edu/gomexsi/data-query-raw.php?' + r.queryString);
 					
 					// Animate scrolling to the results area.
 					if(modeIs('spatial') || modeIs('taxonomic')){
@@ -974,15 +976,12 @@ jQuery(document).ready(function($) {
 				
 				// Clear results area.
 				$('#query-results').html('').hide();
-				$('#raw-results').html('');
+				
+				// Clear the raw data download link.
+				$('#query-results-download').attr('href', '#');
 			});
 		});
 		
-		if($(subjectNameInput).val()){
-			$('form#data-query').submit();
-		}
-		
-
 	}
 	
 });
