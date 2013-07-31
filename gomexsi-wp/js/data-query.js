@@ -933,6 +933,8 @@ jQuery(document).ready(function($) {
 					// The function to process the results data.
 					var r = new Results(data);
 					
+					r.queryString = queryString;
+					
 					r.processResults();
 					
 					if(modeIs('taxonomic') || modeIs('spatial')){
