@@ -3,8 +3,6 @@
 // This file is called in functions.php.  It is separated for easy maintenance.
 
 // Target URL, which will give the results.
-//$url = $_POST['url'];
-//$url = 'http://gomexsi.tamucc.edu/gomexsi/query-test-return.php';
 $url = 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php';
 
 // Build the query for POST.
@@ -41,15 +39,6 @@ if(curl_error($curl)){
 
 // Close.
 curl_close ($curl);
-
-$filename = str_replace('+', '_', $query['subjectName']) . date('Y_m_d_G-i-s') . '.csv';
-
-header('Content-Type: application/csv');
-header('Content-Disposition: attachment; filename=' . $filename);
-header('Expires: 0');
-header("Content-Transfer-Encoding: binary");
-header('Pragma: no-cache');
-
 
 // Output the returned data. 
 echo $result;
