@@ -424,15 +424,12 @@ jQuery(document).ready(function($) {
 								var singlePhysiologicalState = instance[type + 'Data'][j][type + 'PhysiologicalState'];
 								
 								if(typeof singleLifeStage !== 'undefined' && singleLifeStage && singleLifeStage.toLowerCase() !== 'unknown'){
-									singleLifeStage = 'Life Stage: ' + singleLifeStage;
 									singleDetails.push(singleLifeStage);
 								}
 								if(typeof singleBodyPart !== 'undefined' && singleBodyPart && singleBodyPart.toLowerCase() !== 'unknown'){
-									singleBodyPart = 'Body Part: ' + singleBodyPart;
 									singleDetails.push(singleBodyPart);
 								}
 								if(typeof singlePhysiologicalState !== 'undefined' && singlePhysiologicalState && singlePhysiologicalState.toLowerCase() !== 'unknown'){
-									singlePhysiologicalState = 'Physiological State: ' + singlePhysiologicalState;
 									singleDetails.push(singlePhysiologicalState);
 								}
 								if(singleDetails.length == 0){
