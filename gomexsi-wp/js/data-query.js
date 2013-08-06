@@ -664,7 +664,7 @@ jQuery(document).ready(function($) {
 			}
 		}
 		
-		Results.prototype.makeExLines = function(){
+		Results.prototype.makeExLines = function(i){
 			jsPlumb.Defaults.Container = 'ex-area';
 			jsPlumb.Defaults.PaintStyle = {
 				lineWidth: 4,
@@ -674,24 +674,29 @@ jQuery(document).ready(function($) {
 			var subjectID = $('.ex-subject').first().attr('id');
 			var subjectBottomEndpoint, subjectTopEndpoint;
 			
-			$.each($('#ex-area .ex-pred'), function(){
-				subjectTopEndpoint = jsPlumb.addEndpoint(subjectID, {
-					anchor: 'TopCenter',
-					endpoint: 'Blank'
-				});
-				
-				var predID = $(this).attr('id');
-				var predEndpoint = jsPlumb.addEndpoint(predID, {
-					anchor: 'BottomCenter',
-					endpoint: 'Blank'
-				});
-				
-				jsPlumb.connect({
-					source: subjectTopEndpoint,
-					target: predEndpoint,
-					connector: ['Straight', {strokeStyle: '#'}]
-				});
-				
+			var exPred = $('#ex-area .ex-pred');
+			var exPredLastRowIndex = $(exPred).length - 3;
+			
+			$.each($(exPred), function(i){
+				// Limit lines to the last three boxes only.
+				if(i >= exPredLastRowIndex){
+					subjectTopEndpoint = jsPlumb.addEndpoint(subjectID, {
+						anchor: 'TopCenter',
+						endpoint: 'Blank'
+					});
+					
+					var predID = $(this).attr('id');
+					var predEndpoint = jsPlumb.addEndpoint(predID, {
+						anchor: 'BottomCenter',
+						endpoint: 'Blank'
+					});
+					
+					jsPlumb.connect({
+						source: subjectTopEndpoint,
+						target: predEndpoint,
+						connector: ['Straight', {strokeStyle: '#'}]
+					});
+				}
 			});
 			
 			jsPlumb.Defaults.PaintStyle = {
@@ -699,24 +704,26 @@ jQuery(document).ready(function($) {
 				strokeStyle: '#2e9900'
 			}
 			
-			$.each($('#ex-area .ex-prey'), function(){
-				subjectBottomEndpoint = jsPlumb.addEndpoint(subjectID, {
-					anchor: 'BottomCenter',
-					endpoint: 'Blank'
-				});
-
-				var preyID = $(this).attr('id');
-				var preyEndpoint = jsPlumb.addEndpoint(preyID, {
-					anchor: 'TopCenter',
-					endpoint: 'Blank'
-				});
-				
-				jsPlumb.connect({
-					source: preyEndpoint,
-					target: subjectBottomEndpoint,
-					connector: 'Straight'
-				});
-				
+			$.each($('#ex-area .ex-prey'), function(i){
+				// Limit lines to the first three boxes only.
+				if(i < 3){
+					subjectBottomEndpoint = jsPlumb.addEndpoint(subjectID, {
+						anchor: 'BottomCenter',
+						endpoint: 'Blank'
+					});
+	
+					var preyID = $(this).attr('id');
+					var preyEndpoint = jsPlumb.addEndpoint(preyID, {
+						anchor: 'TopCenter',
+						endpoint: 'Blank'
+					});
+					
+					jsPlumb.connect({
+						source: preyEndpoint,
+						target: subjectBottomEndpoint,
+						connector: 'Straight'
+					});
+				}
 			});
 		}
 		
