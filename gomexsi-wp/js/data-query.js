@@ -675,11 +675,23 @@ jQuery(document).ready(function($) {
 			var subjectBottomEndpoint, subjectTopEndpoint;
 			
 			var exPred = $('#ex-area .ex-pred');
-			var exPredLastRowIndex = $(exPred).length - 3;
+			var exPredLength = $(exPred).length;
+			var exPredMod = exPredLength % 3;
+			switch(exPredMod){
+				case 0:
+					var exPredLineIndices = [exPredLength - 1, exPredLength - 2, exPredLength - 3];
+					break;
+				case 1:
+					var exPredLineIndices = [exPredLength - 1, exPredLength - 2, exPredLength - 4];
+					break;
+				case 2:
+					var exPredLineIndices = [exPredLength - 1, exPredLength - 2, exPredLength - 3];
+					break;
+			}
 			
 			$.each($(exPred), function(i){
-				// Limit lines to the last three boxes only.
-				if(i >= exPredLastRowIndex){
+				// Limit lines to the last box in each column.
+				if($.inArray(i, exPredLineIndices)){
 					subjectTopEndpoint = jsPlumb.addEndpoint(subjectID, {
 						anchor: 'TopCenter',
 						endpoint: 'Blank'
