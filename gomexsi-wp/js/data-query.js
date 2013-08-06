@@ -690,9 +690,9 @@ jQuery(document).ready(function($) {
 			} log("exPredLineIndices:"); log(exPredLineIndices);
 			
 			$.each(exPred, function(i){
-				log("Evaluating exPred " + i". In array: " + $.inArray(i, exPredLineIndices));
+				log("Evaluating exPred " + i + ". In array: " + $.inArray(i, exPredLineIndices));
 				// Limit lines to the last box in each column.
-				if($.inArray(i, exPredLineIndices)){
+				if($.inArray(i, exPredLineIndices) != -1){
 					subjectTopEndpoint = jsPlumb.addEndpoint(subjectID, {
 						anchor: 'TopCenter',
 						endpoint: 'Blank'
