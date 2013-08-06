@@ -18,6 +18,11 @@ class ServiceObjectProcessor
 		$instanceDictionary = array(); #dictionary that holds the tmp_and_unique_specimen_id
 		$instanceElement = 0; # element where the tmp_and_unique_specimen_id will be stored
 		$instanceName = "nullName";
+
+		if (empty($serviceObject)) { # if the service object is empty, dont do anything to the response object.
+			return;
+		}
+
 		foreach ($serviceObject as $instance) { 
 			$foundElement = array_search($instance[6], $instanceDictionary); # $instance[6] is the unique_specimen_id
 

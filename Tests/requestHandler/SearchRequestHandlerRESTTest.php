@@ -169,6 +169,13 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			$containsValue = (strpos($actualResponse, $value) !== FALSE) ? true : false;
 			$this->assertTrue($containsValue, $value . ' is missing from the observed list (from the REST service), for the species Callinectes sapidus');
 		}
+
+		$this->observationPostRequestPred["subjectName"] = "Scomberomorus cavalla";
+		$actualResponse = $this->handler->requestHandlerDriver($this->observationPostRequestPred);
+
+		$containsValue = (strpos($actualResponse, 'preyInstances') !== FALSE) ? true : false;
+		$this->assertTrue($containsValue, 'preyInstances' . ' is missing from the observed list (from the REST service), for the species Scomberomorus cavalla');
+		
 	}
 
 	

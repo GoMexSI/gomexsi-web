@@ -241,7 +241,9 @@ class TrophicServiceREST implements TrophicService
 
                 $j+=1;
             }
-            
+            if(empty($dataList)){ # if nothng is returned from the rest, dont do anything below this
+                return null;
+            }
             if($dataList[0][$headerPositions['interactionType']] == 'preyedUponBy') { // target = predator
                 $headerPositions['predLS'] = $headerPositions['targetLS'];
                 $headerPositions['preyLS'] = $headerPositions['sourceLS'];
@@ -255,7 +257,7 @@ class TrophicServiceREST implements TrophicService
             } else {
                 throw new UnsupportedInteractionTypeException('Interaction type ' . $dataList[0][$headerPositions['interactionType']] . ' is not yet supported!');
             }
-
+ 
             $i = 0;
             foreach ($dataList as $taxonData) 
             {
