@@ -664,7 +664,7 @@ jQuery(document).ready(function($) {
 			}
 		}
 		
-		Results.prototype.makeExLines = function(i){
+		Results.prototype.makeExLines = function(){
 			jsPlumb.Defaults.Container = 'ex-area';
 			jsPlumb.Defaults.PaintStyle = {
 				lineWidth: 4,
@@ -690,6 +690,7 @@ jQuery(document).ready(function($) {
 			} log("exPredLineIndices:"); log(exPredLineIndices);
 			
 			$.each(exPred, function(i){
+				log("Evaluating exPred " + i". In array: " + $.inArray(i, exPredLineIndices));
 				// Limit lines to the last box in each column.
 				if($.inArray(i, exPredLineIndices)){
 					subjectTopEndpoint = jsPlumb.addEndpoint(subjectID, {
