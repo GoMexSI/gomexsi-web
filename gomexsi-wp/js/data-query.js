@@ -424,7 +424,7 @@ jQuery(document).ready(function($) {
 								var singlePhysiologicalState = instance[type + 'Data'][j][type + 'PhysiologicalState'];
 								
 								if(typeof singleLifeStage !== 'undefined' && singleLifeStage && singleLifeStage.toLowerCase() !== 'unknown'){
-									singleDetails.push(singleLifeStage);
+									singleDetails.push(singleTypeName + ' ' + singleLifeStage.toLowerCase());
 								}
 								if(typeof singleBodyPart !== 'undefined' && singleBodyPart && singleBodyPart.toLowerCase() !== 'unknown'){
 									singleDetails.push(singleBodyPart);
