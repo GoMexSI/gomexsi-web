@@ -676,7 +676,7 @@ jQuery(document).ready(function($) {
 			
 			var exPred = $('#ex-area .ex-pred');
 			var exPredLength = $(exPred).length;
-			var exPredMod = exPredLength % 3;
+			var exPredMod = exPredLength % 3; log("Modulus: " + exPredMod)
 			switch(exPredMod){
 				case 0:
 					var exPredLineIndices = [exPredLength - 1, exPredLength - 2, exPredLength - 3];
@@ -687,7 +687,7 @@ jQuery(document).ready(function($) {
 				case 2:
 					var exPredLineIndices = [exPredLength - 1, exPredLength - 2, exPredLength - 3];
 					break;
-			}
+			} log("exPredLineIndices:"); log(exPredLineIndices);
 			
 			$.each(exPred, function(i){
 				// Limit lines to the last box in each column.
