@@ -689,7 +689,7 @@ jQuery(document).ready(function($) {
 					break;
 			}
 			
-			$.each($(exPred), function(i){
+			$.each(exPred, function(i){
 				// Limit lines to the last box in each column.
 				if($.inArray(i, exPredLineIndices)){
 					subjectTopEndpoint = jsPlumb.addEndpoint(subjectID, {
@@ -716,7 +716,9 @@ jQuery(document).ready(function($) {
 				strokeStyle: '#2e9900'
 			}
 			
-			$.each($('#ex-area .ex-prey'), function(i){
+			var exPrey = $('#ex-area .ex-prey');
+			
+			$.each(exPrey, function(i){
 				// Limit lines to the first three boxes only.
 				if(i < 3){
 					subjectBottomEndpoint = jsPlumb.addEndpoint(subjectID, {
