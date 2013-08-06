@@ -623,6 +623,35 @@ jQuery(document).ready(function($) {
 		}
 		
 		// Exploration Mode
+		Results.prototype.clearExArea = function(){
+			jsPlumb.Defaults.Container = 'ex-area';
+			
+			var subjectID = $('.ex-subject').first().attr('id');
+			jsPlumb.remove(subjectID);
+			
+			var exPred = $('#ex-area .ex-pred');
+			
+			$.each(exPred, function(i){
+				try{
+					var predID = $(this).attr('id');
+					jsPlumb.remove(predID);
+				} catch(err){
+					log(err);
+				}
+			});
+			
+			var exPrey = $('#ex-area .ex-prey');
+			
+			$.each(exPrey, function(i){
+				try{
+					var preyID = $(this).attr('id');
+					jsPlumb.remove(preyID);
+				} catch(err){
+					log(err);
+				}
+			});
+		}
+		
 		Results.prototype.makeExArea = function(){
 			$('#ex-area').html('');
 			
@@ -676,7 +705,7 @@ jQuery(document).ready(function($) {
 			
 			var exPred = $('#ex-area .ex-pred');
 			var exPredLength = $(exPred).length;
-			var exPredMod = exPredLength % 3; log("Modulus: " + exPredMod)
+			var exPredMod = exPredLength % 3;
 			switch(exPredMod){
 				case 0:
 					var exPredLineIndices = [exPredLength - 1, exPredLength - 2, exPredLength - 3];
@@ -685,30 +714,33 @@ jQuery(document).ready(function($) {
 					var exPredLineIndices = [exPredLength - 1, exPredLength - 2, exPredLength - 4];
 					break;
 				case 2:
-					var exPredLineIndices = [exPredLength - 1, exPredLength - 2, exPredLength - 3];
+					var exPredLineIndices = [exPredLength - 1, exPredLength - 2];
 					break;
-			} log("exPredLineIndices:"); log(exPredLineIndices);
+			}
 			
 			$.each(exPred, function(i){
-				log("Evaluating exPred " + i + ". In array: " + $.inArray(i, exPredLineIndices));
-				// Limit lines to the last box in each column.
-				if($.inArray(i, exPredLineIndices) != -1){
-					subjectTopEndpoint = jsPlumb.addEndpoint(subjectID, {
-						anchor: 'TopCenter',
-						endpoint: 'Blank'
-					});
-					
-					var predID = $(this).attr('id');
-					var predEndpoint = jsPlumb.addEndpoint(predID, {
-						anchor: 'BottomCenter',
-						endpoint: 'Blank'
-					});
-					
-					jsPlumb.connect({
-						source: subjectTopEndpoint,
-						target: predEndpoint,
-						connector: ['Straight', {strokeStyle: '#'}]
-					});
+				try{
+					// Limit lines to the last box in each column.
+					if($.inArray(i, exPredLineIndices) != -1){
+						subjectTopEndpoint = jsPlumb.addEndpoint(subjectID, {
+							anchor: 'TopCenter',
+							endpoint: 'Blank'
+						});
+						
+						var predID = $(this).attr('id');
+						var predEndpoint = jsPlumb.addEndpoint(predID, {
+							anchor: 'BottomCenter',
+							endpoint: 'Blank'
+						});
+						
+						jsPlumb.connect({
+							source: subjectTopEndpoint,
+							target: predEndpoint,
+							connector: ['Straight', {strokeStyle: '#'}]
+						});
+					}
+				} catch(err){
+					log("Some lines may not have drawn properly because of: " + err + ". Don't worry, it's no big deal.");
 				}
 			});
 			
@@ -720,24 +752,28 @@ jQuery(document).ready(function($) {
 			var exPrey = $('#ex-area .ex-prey');
 			
 			$.each(exPrey, function(i){
-				// Limit lines to the first three boxes only.
-				if(i < 3){
-					subjectBottomEndpoint = jsPlumb.addEndpoint(subjectID, {
-						anchor: 'BottomCenter',
-						endpoint: 'Blank'
-					});
-	
-					var preyID = $(this).attr('id');
-					var preyEndpoint = jsPlumb.addEndpoint(preyID, {
-						anchor: 'TopCenter',
-						endpoint: 'Blank'
-					});
-					
-					jsPlumb.connect({
-						source: preyEndpoint,
-						target: subjectBottomEndpoint,
-						connector: 'Straight'
-					});
+				try{
+					// Limit lines to the first three boxes only.
+					if(i < 3){
+						subjectBottomEndpoint = jsPlumb.addEndpoint(subjectID, {
+							anchor: 'BottomCenter',
+							endpoint: 'Blank'
+						});
+		
+						var preyID = $(this).attr('id');
+						var preyEndpoint = jsPlumb.addEndpoint(preyID, {
+							anchor: 'TopCenter',
+							endpoint: 'Blank'
+						});
+						
+						jsPlumb.connect({
+							source: preyEndpoint,
+							target: subjectBottomEndpoint,
+							connector: 'Straight'
+						});
+					}
+				} catch(err){
+					log("Some lines may not have drawn properly because of: " + err + ". Don't worry, it's no big deal.");
 				}
 			});
 		}
@@ -950,7 +986,8 @@ jQuery(document).ready(function($) {
 						r.makeResultsHeader();
 						r.resultsListeners();
 						r.mapListner();
-					} else {
+					} else if(modeIs('exploration')) {
+						r.clearExArea();
 						r.makeExArea();
 						r.makeExLines();
 						r.exListeners();
