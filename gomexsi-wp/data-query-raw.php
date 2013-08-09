@@ -50,7 +50,7 @@ curl_close ($curl);
 $filename = str_replace(' ', '_', $query['subjectName']) . '_' . date('Y_m_d_G-i-s') . '.csv';
 
 // Set headers to force download.
-header('Content-Type: application/csv');
+header('Content-Type: text/csv');
 header('Content-Disposition: attachment; filename=' . $filename);
 header('Expires: 0');
 header("Content-Transfer-Encoding: binary");
