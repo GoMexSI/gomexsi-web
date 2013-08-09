@@ -213,7 +213,10 @@ class TrophicServiceREST implements TrophicService
                     case 'collection_time_in_unix_epoch':
                         $headerPositions['epoch'] = $j;
                         break;
-                    case 'tmp_and_unique_target_specimen_id':
+
+                    case 'tmp_and_unique_source_specimen_id':
+                        // note that this id is used to aggregate results.  
+                        // for preysOn interaction, the source specimen id is the predator specimen id.
                         $headerPositions['id'] = $j;
                         break;
                     case 'source_specimen_life_stage':
