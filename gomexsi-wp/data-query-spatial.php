@@ -86,7 +86,7 @@
 						<div id="query-map"></div>
 						
 						<div id="query-results-header" class="clearfix">
-							<a id="query-results-download" href="#" target="_blank" class="visuallyhidden">Download the raw data</a>
+							<a id="query-results-download" href="#" class="visuallyhidden">Download the raw data</a>
 							<span id="query-results-info"></span>
 						</div>
 						
