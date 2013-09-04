@@ -40,7 +40,9 @@ class RequestParser
 		} elseif (!empty($toParse['deepLinks'])) { # URL lookup 
 			$this->searchType = 'taxonURLLookup';
 			$this->subjectName = $toParse['deepLinks'];
-		} else { # default behavior
+		} 
+		#TODO this is location where interaction type needs to be fixed to remove hardcoding
+		else { # default behavior
 			$this->searchType = 'exactMatchObservation'; 
 			$this->subjectName = $toParse['subjectName'];
 			$this->shouldIncludePrey = !empty($toParse['findPrey']);
