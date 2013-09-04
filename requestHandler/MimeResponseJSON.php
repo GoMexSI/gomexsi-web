@@ -2,7 +2,7 @@
 require_once 'MimeResponse.php';
 require_once 'ServiceObjectProcessor.php';
 
-class MimeResponseJSON
+class MimeResponseJSON implements MimeResponse 
 {
 	public function cleanObject($phpObject)
     {

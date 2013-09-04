@@ -20,7 +20,8 @@ class TrophicServiceREST implements TrophicService
         $constraints['includeObservations'] = false;
         return $this->queryBuilder($srcTaxon, 'preyedUponBy', $constraints);
     }
-
+    // these functions should be disappearing as code is updated to allow for more types of interactions 
+    // such as: Mutalists, Commensals, Amensals, Primary Hosts, Secondary Hosts
     public function findObservedPreyForPredator($srcTaxon, $interactionFilters, $locationConstraints, $mimeType)
     {
         $constraints['includeObservations'] = true;
@@ -29,7 +30,7 @@ class TrophicServiceREST implements TrophicService
         $this->setLocationConstraints($locationConstraints, $constraints);
         return $this->queryBuilder($srcTaxon, 'preysOn', $constraints);
     }
-
+    // these functions should be disappearing as code is updated to allow for more types of interactions 
     public function findObservedPredatorsForPrey($srcTaxon, $interactionFilters, $locationConstraints, $mimeType)
     {
         $constraints['includeObservations'] = true;
@@ -38,11 +39,15 @@ class TrophicServiceREST implements TrophicService
         $this->setLocationConstraints($locationConstraints, $constraints);
         return $this->queryBuilder($srcTaxon, 'preyedUponBy', $constraints);
     }
-/*    public function findObservedParasitesForHost()
+    // new function to replace the above one
+    public function findObservedTargetForSource($srcTaxon, $interactionFilters, $locationConstraints, $mimeType, $interaction)
     {
-        //todo implement the rest of all of these UI options .. Mutalists, Commensals, Amensals, Primary Hosts, Secondary Hosts
-        //There will be method for each one.. 
-    }*/
+        $constraints['includeObservations'] = true;
+        $constraints['mime'] = ($mimeType == "CSV") ? "csv" : null; # if we ever add support for xml or other mime types probably just always include a "type=someMimeType", but for now only needed for type=csv
+        $this->setInteractionFilters($interactionFilters[$interaction->getTargetTitle()], $constraints);
+        $this->setLocationConstraints($locationConstraints, $constraints);
+        return $this->queryBuilder($srcTaxon, $interaction->getInteractionTitle(), $constraints);
+    }
     public function findCloseTaxonNameMatches($name)
     {
         return $this->query('findCloseMatchesForTaxon', $name, null);

@@ -2,12 +2,16 @@
 
 require_once 'RequestParser.php';
 require_once 'MimeResponseFactory.php';
+require_once 'InteractionFactory.php';
+
+class MissingInteractionTypeException extends Exception {}
 
 class SearchRequestHandler
 {
     private $trophicService;
     private $parser;
     private $mimeResponse;
+    private $interactionLisit = array();
 
     public function __construct()
     {
@@ -30,6 +34,24 @@ class SearchRequestHandler
     	$serviceFactory = new TrophicServiceFactory();
     	$this->trophicService = $serviceFactory->createServiceOfType($this->parser->getServiceType());
     	return $this->trophicService;
+    }
+    // this fucntion will use all of the properties from the RequestParser to populate
+    // interactions.
+    public function createInteractionsList()
+    {
+        $interactionFactory = new InteractionFactory();
+        $instanceExists = false;
+        if($this->parser->shouldIncludePrey()) {
+            $this->interactionLisit[0] = new InteractionPreysOn();
+            $instanceExists = true;
+        }
+        if($this->parser->shouldIncludePredators()) {
+            $this->interactionLisit[1] = new InteractionPreyedUponBy();
+            $instanceExists = true;
+        }
+        if(!$instanceExists) {
+            throw new MissingInteractionTypeException('There must be an interaction given! RequestParser must define interaction');
+        }
     }
     public function getMimeResponse()
     {
@@ -55,14 +77,19 @@ class SearchRequestHandler
             $responseObjectContainer[0] = $fuzzyResponseObject;
         } elseif ($searchType == 'exactMatchObservation') {
             $responseObject = new ResponseObject();
-            
-            if ($this->parser->shouldIncludePrey()) {
+            $this->createInteractionsList();
+/*            if ($this->parser->shouldIncludePrey()) {
                 $phpServiceObject = $this->trophicService->findObservedPreyForPredator($speciesSubject, $this->parser->getInteractionFilters(), $this->parser->getLocationConstraints(),$this->parser->getResponseType());
                 $this->mimeResponse->addObservationToResponse($responseObject, $phpServiceObject, 'prey');
             } 
             if ($this->parser->shouldIncludePredators()) {
                 $phpServiceObject = $this->trophicService->findObservedPredatorsForPrey($speciesSubject, $this->parser->getInteractionFilters(), $this->parser->getLocationConstraints(),$this->parser->getResponseType());
                 $this->mimeResponse->addObservationToResponse($responseObject, $phpServiceObject, 'pred');
+            }*/
+            // new code to make new interactions work
+            foreach ($this->interactionLisit as $interaction) {
+                $phpServiceObject = $this->trophicService->findObservedTargetForSource($speciesSubject, $this->parser->getInteractionFilters(), $this->parser->getLocationConstraints(),$this->parser->getResponseType(), $interaction);
+                $this->mimeResponse->addObservationToResponse($responseObject, $phpServiceObject, $interaction->getTargetTitle());
             }
             $responseObject->scientificName = $speciesSubject;
             $responseObjectContainer[0] = $responseObject;
