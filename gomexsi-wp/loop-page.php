@@ -2,12 +2,21 @@
 	<?php
 		$post_ID = get_the_ID();
 		$subtitle = get_post_meta($post_ID, 'wpcf-subtitle', true);
+		$subtitulo = get_post_meta($post_ID, 'wpcf-subtitulo', true);
 	?>
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<header class="entry-header">
-			<?php if($subtitle) : ?>
+			<?php if(($subtitle && qtrans_getLanguage() == 'en') || ($subtitulo && qtrans_getLanguage() == 'es')) : ?>
 				<h1 class="page-title no-underline"><?php the_title(); ?></h1>
-				<div class="subtitle"><?php echo $subtitle; ?></div>
+				<div class="subtitle">
+					<?php
+						if(qtrans_getLanguage() == 'en'){
+							echo $subtitle;
+						elseif(qtrans_getLanguage() == 'es'){
+							echo $subtitulo;
+						}
+					?>
+				</div>
 			<?php else : ?>
 				<h1 class="page-title"><?php the_title(); ?></h1>
 			<?php endif; ?>
