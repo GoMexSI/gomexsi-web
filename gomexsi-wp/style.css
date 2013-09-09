@@ -182,14 +182,16 @@ a.external:after {
 	border-bottom: 2px #006199 solid;
 }
 
-#content .front-page-subtitle {
-	margin-left: -100px;
-	background: #e5e5e5;
+#content h1.page-title.no-underline {
+	border-bottom: none;
+}
+
+#content .subtitle {
 	padding: 0 0 10px;
-	margin-top: -15px;
 	font-weight: 700;
 	font-size: 112.5%;
 	color: #404040;
+	border-bottom: 2px #006199 solid;
 }
 
 body.blog #content article.post,
