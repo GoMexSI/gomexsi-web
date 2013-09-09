@@ -183,11 +183,15 @@ a.external:after {
 }
 
 #content h1.page-title.no-underline {
+	margin-bottom: 0;
+	padding-bottom: 0;
 	border-bottom: none;
 }
 
 #content .subtitle {
-	padding: 0 0 10px;
+	margin-top: -5px;
+	margin-bottom: 20px;
+	padding-bottom: 5px;
 	font-weight: 700;
 	font-size: 112.5%;
 	color: #404040;
