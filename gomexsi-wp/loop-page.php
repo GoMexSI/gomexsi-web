@@ -6,7 +6,7 @@
 	?>
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<header class="entry-header">
-			<?php if($subtitle && qtrans_getLanguage() == 'en') : ?>
+			<?php if(($subtitle && qtrans_getLanguage() == 'en') || ($subtitulo && qtrans_getLanguage() == 'es')) : ?>
 				<h1 class="page-title no-underline"><?php the_title(); ?></h1>
 				<div class="subtitle">
 					<?php
