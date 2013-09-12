@@ -159,12 +159,10 @@ class TrophicServiceREST implements TrophicService
             return $taxonNames;
         } else { # Fuzzy lookup 
             $columns = $response->{'columns'};
-            $taxonDataList = $response->{'data'};
+            $taxonMatches = $response->{'data'};
             $taxonNames = array();
-            foreach ($taxonDataList as $taxonData) {
-                foreach ($taxonData as $taxonName) {
-                    $taxonNames[] = $taxonName;
-                }
+            foreach ($taxonMatches as $taxonMatch) {
+                $taxonNames[] = $taxonMatch[0];
             }
             return $taxonNames;
         }
