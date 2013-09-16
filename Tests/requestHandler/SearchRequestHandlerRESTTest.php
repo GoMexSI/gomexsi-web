@@ -181,18 +181,18 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 	
 	public function testGetTrophicServiceRESTFindCloseTaxonNameMatches()
 	{
-		$this->postRequest["suggestion"] = "Adm";
+		$this->postRequest["suggestion"] = "Admonti";
 		$this->handler->parsePOST($this->postRequest);
 
 		$trophicService = $this->handler->getTrophicService();
-		$actualMatches = $trophicService->findCloseTaxonNameMatches("Adm");
+		$actualMatches = $trophicService->findCloseTaxonNameMatches("Admonti");
 		
 		$this->assertTrue(in_array("Admontia blanda", $actualMatches));		
 	}
 
 	public function testCreateJSONResponseRESTFindCloseTaxonNameMatches()
 	{
-		$this->postRequest["suggestion"] = "Adm";
+		$this->postRequest["suggestion"] = "Admonti";
 
 		$jsonObject = json_decode($this->handler->requestHandlerDriver($this->postRequest));
 		$actualMatches = $jsonObject[0]->matches;
