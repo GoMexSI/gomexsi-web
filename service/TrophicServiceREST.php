@@ -250,6 +250,7 @@ class TrophicServiceREST implements TrophicService
             if(empty($dataList)){ # if nothng is returned from the rest, dont do anything below this
                 return null;
             }
+            // SupportedInteractions
             if($dataList[0][$headerPositions['interactionType']] == 'preyedUponBy') { // target = predator
                 $headerPositions['predLS'] = $headerPositions['targetLS'];
                 $headerPositions['preyLS'] = $headerPositions['sourceLS'];
@@ -289,6 +290,8 @@ class TrophicServiceREST implements TrophicService
     {
         return $this->finalURL;
     }
+
+
 }
 
 ?>

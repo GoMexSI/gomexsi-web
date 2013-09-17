@@ -1,6 +1,7 @@
 <?php
+require_once 'Interaction.php';
 
-class InteractionPreysOn
+class InteractionPreysOn implements Interaction
 {
 	public function getSourceTitle() 
 	{

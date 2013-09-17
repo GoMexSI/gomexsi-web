@@ -50,7 +50,7 @@ class RequestParser
 			if (!$this->shouldIncludePrey && !$this->shouldIncludePredators) {
 				throw new CorruptSearchTypeParameterException('Search Type could not be determined based on parameters given');	
 			}
-		} 
+		}
 
 		return $this->searchType;
 	}

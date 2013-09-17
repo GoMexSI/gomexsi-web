@@ -40,16 +40,16 @@ class SearchRequestHandler
     public function createInteractionsList()
     {
         $interactionFactory = new InteractionFactory();
-        $instanceExists = false;
+        $interactionExists = false;
         if($this->parser->shouldIncludePrey()) {
-            $this->interactionLisit[0] = new InteractionPreysOn();
-            $instanceExists = true;
+            array_push($this->interactionLisit, new InteractionPreysOn());
+            $interactionExists = true;
         }
         if($this->parser->shouldIncludePredators()) {
-            $this->interactionLisit[1] = new InteractionPreyedUponBy();
-            $instanceExists = true;
+            array_push($this->interactionLisit, new InteractionPreyedUponBy());
+            $interactionExists = true;
         }
-        if(!$instanceExists) {
+        if(!$interactionExists) {
             throw new MissingInteractionTypeException('There must be an interaction given! RequestParser must define interaction');
         }
     }
