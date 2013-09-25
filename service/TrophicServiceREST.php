@@ -1,5 +1,6 @@
 <?php
 require_once 'TrophicService.php';
+require_once '/../interaction/SupportedInteractions.php';
 
 class NotImplementedException extends Exception {}
 class NonValidLocationParameterException extends Exception {}
@@ -57,7 +58,10 @@ class TrophicServiceREST implements TrophicService
     {
         return $this->query('findExternalUrlForTaxon', $taxonName, null);
     }
-    
+    public function findSupportedInteractions()
+    {
+        return $this->query('interactionTypes', null, null);
+    }
     private function setLocationConstraints($locationConstraints, &$constraints)
     {
         if(isset($locationConstraints)) {
@@ -124,8 +128,9 @@ class TrophicServiceREST implements TrophicService
         $this->finalURL = $url;
 
         $response = file_get_contents($url);
-        $undecodedResponse = $response;
-        $response = json_decode($response);
+        $undecodedResponse = $response; # for csv and such
+        $arrayResponse = json_decode($response, true); # to return json in array format
+        $response = json_decode($response); # to return json in std object format
 
         if((strpos($operation, 'Observations') !== FALSE) && (strpos($operation, 'csv') === FALSE)) { # Observational query
             return $this->observationalSearchContainerPopulator($response);
@@ -134,7 +139,6 @@ class TrophicServiceREST implements TrophicService
         } elseif ($method == 'findExternalUrlForTaxon') {  # External URL lookup query
             return $response->{'url'};
         } elseif (isset($operation)) { # exhaustive list return
-            
             $columns = $response->{'columns'};
             $i = 0;
             $has_target_taxon_name_column = false;
@@ -157,7 +161,7 @@ class TrophicServiceREST implements TrophicService
             }
             
             return $taxonNames;
-        } else { # Fuzzy lookup 
+        } elseif ($method == 'findCloseMatchesForTaxon') { # Fuzzy lookup 
             $columns = $response->{'columns'};
             $taxonMatches = $response->{'data'};
             $taxonNames = array();
@@ -165,6 +169,12 @@ class TrophicServiceREST implements TrophicService
                 $taxonNames[] = $taxonMatch[0];
             }
             return $taxonNames;
+        } elseif ($method == 'interactionTypes') { # supported interaction types
+                $interactions = array();
+            foreach ($arrayResponse as $interactionName => $interactionGroup) {
+                $interactions[$interactionName] = array('source' => $interactionGroup['source'], 'target' => $interactionGroup['target']);
+            }
+            return $interactions;
         }
     }
     /*
@@ -192,6 +202,8 @@ class TrophicServiceREST implements TrophicService
             $dataList = $response->{'data'};
             $container = array();
             $headerPositions = array();
+            $interactions = new SupportedInteractions();
+
             $j = 0;
             foreach ($columns as $headerTitle) {
                 switch ($headerTitle) {
@@ -250,7 +262,7 @@ class TrophicServiceREST implements TrophicService
             if(empty($dataList)){ # if nothng is returned from the rest, dont do anything below this
                 return null;
             }
-            // SupportedInteractions
+            // SupportedInteractions -- need to figure out how to make this work.. not going to make special cases, data drivin if its in the data then send it, UI can not show if we want
             if($dataList[0][$headerPositions['interactionType']] == 'preyedUponBy') { // target = predator
                 $headerPositions['predLS'] = $headerPositions['targetLS'];
                 $headerPositions['preyLS'] = $headerPositions['sourceLS'];
@@ -264,7 +276,24 @@ class TrophicServiceREST implements TrophicService
             } else {
                 throw new UnsupportedInteractionTypeException('Interaction type ' . $dataList[0][$headerPositions['interactionType']] . ' is not yet supported!');
             }
- 
+
+            #need to do all this in one sitting
+/*            $interactionType = $dataList[0][$headerPositions['interactionType']];
+            $taget = $interactions->interactionToTarget($interactionType);
+            $source = $interactions->interactionToSource($interactionType);
+
+            if(in_array($interactionType, $interactions->getSupportedInteractions())) {
+                $headerPositions[$taget . 'LS'] = $headerPositions['targetLS'];
+                $headerPositions[$source . 'LS'] = $headerPositions['sourceLS'];
+                $headerPositions[$taget . 'BP'] = $headerPositions['tagetBP'];
+                $headerPositions[$source . 'BP'] = $headerPositions['sourceBP'];
+                $headerPositions[$taget . 'PS'] = $headerPositions['tagetPS'];
+                $headerPositions[$source . 'PS'] = $headerPositions['sourcePS'];
+            }else {
+                throw new UnsupportedInteractionTypeException('Interaction type ' . $dataList[0][$headerPositions['interactionType']] . ' is not yet supported!');
+            }*/
+            #!predator_body_part
+            #!predator_physiological_state
             $i = 0;
             foreach ($dataList as $taxonData) 
             {
@@ -281,6 +310,17 @@ class TrophicServiceREST implements TrophicService
                 $container[$i][9] = $taxonData[$headerPositions['preyBP']]; #prey body part
                 $container[$i][10] = $taxonData[$headerPositions['preyPS']]; #prey physiological state
 
+
+                #need to do all of this in one sitting
+/*                if($interactionType == 'preysOn' || $interactionType == 'preyedUponBy') {# special case for these two interaction types
+                    $container[$i][9] = $taxonData[$headerPositions['preyBP']]; #prey body part
+                    $container[$i][10] = $taxonData[$headerPositions['preyPS']]; #prey physiological state
+                }else { # standard case where all relationships can be returned to the UI
+                    $container[$i][9] = $taxonData[$headerPositions[$source . 'BP']]; 
+                    $container[$i][10] = $taxonData[$headerPositions[$target . 'BP']];
+                    $container[$i][11] = $taxonData[$headerPositions[$source . 'PS']];
+                    $container[$i][12] = $taxonData[$headerPositions[$target . 'PS']];  
+                }*/
                 $i+=1;
             }
             return $container;

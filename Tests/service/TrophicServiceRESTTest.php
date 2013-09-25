@@ -56,5 +56,11 @@ class TrophicServiceRESTTest extends PHPUnit_Framework_TestCase
         $expected = "http://46.4.36.142:8080/taxon/Ariopsis%20felis/preyedUponBy?includeObservations=true&nw_lat=30.28&nw_lng=-97.89&se_lat=18.04&se_lng=-80.61&type=csv";
         $this->assertEquals($expected, $trophicService->getURL());
     }
+    public function testFindSupportedInteractions()
+    {
+        $trophicService = new TrophicServiceREST();
+        $interactionObject = $trophicService->findSupportedInteractions();
+        $this->assertTrue((isset($interactionObject["preysOn"]) && isset($interactionObject["preyedUponBy"])), "Missing interactons");
+    }
 }
 ?>

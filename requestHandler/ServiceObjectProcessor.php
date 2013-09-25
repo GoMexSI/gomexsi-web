@@ -13,7 +13,7 @@ class ServiceObjectProcessor
 {
 	# $instance is populated in the service based on the header sent not the order of the data. Just
 	# using an indexed array here for lack of better object. 
-	public function populateResponseObject($responseObject, $serviceObject, $predOrPrey) 
+	public function populateResponseObject($responseObject, $serviceObject, $interaction) 
 	{
 		$instanceDictionary = array(); #dictionary that holds the tmp_and_unique_specimen_id
 		$instanceElement = 0; # element where the tmp_and_unique_specimen_id will be stored
@@ -27,6 +27,7 @@ class ServiceObjectProcessor
 			$foundElement = array_search($instance[6], $instanceDictionary); # $instance[6] is the unique_specimen_id
 
 			if($foundElement === false) { #if tmp_and_unique_specimen_id does not already exist in the list, add to the list
+				
 				$instanceName           = $instance[0];
 	            $latitude               = $instance[1];
 	            $longitude              = $instance[2];
@@ -34,25 +35,35 @@ class ServiceObjectProcessor
 	            $contributor            = $instance[4];
 	            $unixEpoch              = (!empty($instance[5])) ? $instance[5] : null;
 	            $uniqueID               = $instance[6];
-	            $predLifeStage          = (!empty($instance[7]))  ? $instance[7]  : null; #remove based on issue #44
+	            $predLifeStage          = (!empty($instance[7]))  ? $instance[7]  : null; // call this source
 	            $preyLifeStage          = (!empty($instance[8]))  ? $instance[8]  : null;
-	            $preyBodyPart           = (!empty($instance[9])) ? $instance[9] : null;
+	            $preyBodyPart           = (!empty($instance[9])) ? $instance[9] : null; // call source
 	            $preyPhysiologicalState = (!empty($instance[10])) ? $instance[10] : null; #remove based on issue #44
 
 				$instanceDictionary[$instanceElement] = $uniqueID;
-				switch ($predOrPrey) {
+				switch ($interaction->getTargetTitle()) {
                     case 'prey':
-                    	$instanceList = array("$predOrPrey" => $instanceName, 'preyLifeStage' => $preyLifeStage, 'preyBodyPart' => $preyBodyPart, 'preyPhysiologicalState' => $preyPhysiologicalState);
+                    	$instanceList = array($interaction->getTargetTitle() => $instanceName, 'preyLifeStage' => $preyLifeStage, 'preyBodyPart' => $preyBodyPart, 'preyPhysiologicalState' => $preyPhysiologicalState);
                         $responseObject->preyInstances[$instanceElement] = array('preyData' => array($instanceList), 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
                         break;
                     case 'pred':
-                    	$instanceList = array("$predOrPrey" => $instanceName, 'predLifeStage' => $predLifeStage);
+                    	$instanceList = array($interaction->getTargetTitle() => $instanceName, 'predLifeStage' => $predLifeStage);
                         $responseObject->predInstances[$instanceElement] = array('predData' => array($instanceList), 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
                         break;
                     default:
-                        throw new UnknownSpeciesClassificationTypeException('type [' . $predOrPrey . '] not recognized as valid parameter type');
+                        throw new UnknownSpeciesClassificationTypeException('type [' . $interaction->getTargetTitle() . '] not recognized as valid parameter type');
                     	break;
 				}
+/*				$lifeStage = $interaction->getTargetTitle() . 'LifeStage';
+				if($interaction->getTargetTitle() == 'pred') { // special case 
+					$instanceList = array($interaction->getTargetTitle() => $instanceName, $interaction->getTargetTitle() . 'LifeStage' => $$lifeStage);
+                    $responseObject->predInstances[$instanceElement] = array('predData' => array($instanceList), 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
+				} else { // standard case
+					$bodyPart = $interaction->getTargetTitle() . 'BodyPart';
+					$physiologicalState = $interaction->getTargetTitle() . 'PhysiologicalState';
+                	$instanceList = array($interaction->getTargetTitle() => $instanceName, $interaction->getTargetTitle() . 'LifeStage' => $$lifeStage, $interaction->getTargetTitle() . 'BodyPart' => $$bodyPart, $interaction->getTargetTitle() . 'PhysiologicalState' => $$physiologicalState);
+                    $responseObject->preyInstances[$instanceElement] = array('preyData' => array($instanceList), 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
+				}*/
 				$instanceElement++;
 			}else { # if the ID already exists in the instanceDictionary, then just add the instance properties to the [$foundElement][0]
 				$instanceName           = $instance[0];
@@ -61,17 +72,17 @@ class ServiceObjectProcessor
 	            $preyBodyPart           = (!empty($instance[9])) ? $instance[9] : null;
 	            $preyPhysiologicalState = (!empty($instance[10])) ? $instance[10] : null;
 
-				switch ($predOrPrey) {
+				switch ($interaction->getTargetTitle()) {
 					case 'prey':
-                    	$instanceList = array("$predOrPrey" => $instanceName, 'preyLifeStage' => $preyLifeStage, 'preyBodyPart' => $preyBodyPart, 'preyPhysiologicalState' => $preyPhysiologicalState);
+                    	$instanceList = array($interaction->getTargetTitle() => $instanceName, 'preyLifeStage' => $preyLifeStage, 'preyBodyPart' => $preyBodyPart, 'preyPhysiologicalState' => $preyPhysiologicalState);
 						array_push($responseObject->preyInstances[$foundElement]['preyData'], $instanceList);
 						break;
 					case 'pred':
-                    	$instanceList = array("$predOrPrey" => $instanceName, 'predLifeStage' => $predLifeStage);
+                    	$instanceList = array($interaction->getTargetTitle() => $instanceName, 'predLifeStage' => $predLifeStage);
 						array_push($responseObject->predInstances[$foundElement]['predData'], $instanceList);
 						break;
 					default:
-                        throw new UnknownSpeciesClassificationTypeException('type [' . $predOrPrey . '] not recognized as valid parameter type');
+                        throw new UnknownSpeciesClassificationTypeException('type [' . $interaction->getTargetTitle() . '] not recognized as valid parameter type');
 						break;
 				}
 			}

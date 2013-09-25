@@ -1,6 +1,6 @@
 <?php
 require_once 'MimeResponse.php';
-require_once 'ServiceObjectProcessor.php';
+require_once '/../requestHandler/ServiceObjectProcessor.php';
 
 class MimeResponseJSON implements MimeResponse 
 {
@@ -36,10 +36,10 @@ class MimeResponseJSON implements MimeResponse
 
         $responseObject->predInstances[0] = $pred;
     }
-    public function addObservationToResponse($responseObject, $serviceObject, $predOrPrey)
+    public function addObservationToResponse($responseObject, $serviceObject, $interaction)
     {
         $objectProcessor = new ServiceObjectProcessor();
-        $objectProcessor->populateResponseObject($responseObject, $serviceObject, $predOrPrey);
+        $objectProcessor->populateResponseObject($responseObject, $serviceObject, $interaction);
     }
     
     public function addFuzzySearchResultToResponse($responseObject, $serviceObject)
