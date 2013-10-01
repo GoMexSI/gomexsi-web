@@ -37,9 +37,10 @@ jQuery(document).ready(function($) {
 	// Start by checking to see if we're on the data query page template.
 	if(modeIs('query')){
 		var subjectNameInput = $('form#data-query input[name="subjectName"]');
-		$(subjectNameInput).focus();
 		if($(subjectNameInput).val()){
 			$('form#data-query').submit();
+		} else {
+			$(subjectNameInput).focus();
 		}
 		
 		/* ==============================
