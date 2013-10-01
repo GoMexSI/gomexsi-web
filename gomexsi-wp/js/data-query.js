@@ -39,7 +39,7 @@ jQuery(document).ready(function($) {
 		var subjectNameInput = $('form#data-query input[name="subjectName"]');
 		$(subjectNameInput).focus();
 		if($(subjectNameInput).val()){
-			$('form#data-query').trigger('submit');
+			$('form#data-query').submit();
 		}
 		
 		/* ==============================
