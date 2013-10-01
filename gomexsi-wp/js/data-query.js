@@ -580,7 +580,7 @@ jQuery(document).ready(function($) {
 				$('.name-tip-box').remove();
 			});
 			
-			$('.ex-link').click(function(e){
+			$('body').on('click','.ex-link',function(e){
 				e.preventDefault();
 				$(this).children('form').submit();
 			});
