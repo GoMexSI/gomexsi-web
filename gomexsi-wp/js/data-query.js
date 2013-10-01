@@ -38,7 +38,7 @@ jQuery(document).ready(function($) {
 	if(modeIs('query')){
 		var subjectNameInput = $('form#data-query input[name="subjectName"]');
 		if($(subjectNameInput).val()){
-			$('form#data-query').submit();
+			$('form#data-query').trigger('submit');
 		} else {
 			$(subjectNameInput).focus();
 		}

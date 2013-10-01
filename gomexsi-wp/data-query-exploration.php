@@ -17,7 +17,7 @@
 					</header>
 					<?php if(is_user_logged_in()) : ?>
 						<p><strong>Note: Some features are not yet finalized. If you run into any issues, <a href="/feedback/">please give us feedback</a>.</strong></p>
-						<form action="" id="data-query" class="clearfix">
+						<form action="" method="post" id="data-query" class="clearfix">
 							<div class="query-inputs">
 								<div id="form-section-name" class="form-section clearfix">
 									<label>
