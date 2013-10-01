@@ -784,7 +784,7 @@ jQuery(document).ready(function($) {
 				var sciName = $(this).attr('data-sci-name');
 				
 				$('form#data-query input[name="subjectName"]').val(sciName);
-				$('form#data-query').submit();
+				$('form#data-query').trigger('submit');
 			});
 		}
 		
