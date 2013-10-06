@@ -40,7 +40,7 @@ class TrophicServiceREST implements TrophicService
         $this->setLocationConstraints($locationConstraints, $constraints);
         return $this->queryBuilder($srcTaxon, 'preyedUponBy', $constraints);
     }
-    // new function to replace the above one
+    // new function to replace the above ones
     public function findObservedTargetForSource($srcTaxon, $interactionFilters, $locationConstraints, $mimeType, $interaction)
     {
         $constraints['includeObservations'] = true;
@@ -262,8 +262,9 @@ class TrophicServiceREST implements TrophicService
             if(empty($dataList)){ # if nothng is returned from the rest, dont do anything below this
                 return null;
             }
+            # old code remove
             // SupportedInteractions -- need to figure out how to make this work.. not going to make special cases, data drivin if its in the data then send it, UI can not show if we want
-            if($dataList[0][$headerPositions['interactionType']] == 'preyedUponBy') { // target = predator
+/*            if($dataList[0][$headerPositions['interactionType']] == 'preyedUponBy') { // target = predator
                 $headerPositions['predLS'] = $headerPositions['targetLS'];
                 $headerPositions['preyLS'] = $headerPositions['sourceLS'];
                 $headerPositions['preyBP'] = $headerPositions['sourceBP'];
@@ -275,25 +276,23 @@ class TrophicServiceREST implements TrophicService
                 $headerPositions['preyPS'] = $headerPositions['targetPS'];
             } else {
                 throw new UnsupportedInteractionTypeException('Interaction type ' . $dataList[0][$headerPositions['interactionType']] . ' is not yet supported!');
-            }
+            }*/
 
-            #need to do all this in one sitting
-/*            $interactionType = $dataList[0][$headerPositions['interactionType']];
-            $taget = $interactions->interactionToTarget($interactionType);
+            $interactionType = $dataList[0][$headerPositions['interactionType']];
+            $target = $interactions->interactionToTarget($interactionType);
             $source = $interactions->interactionToSource($interactionType);
-
+            # here we change the words target and source to the real represenation of the name IE pred, prey, host.. or whatever
             if(in_array($interactionType, $interactions->getSupportedInteractions())) {
-                $headerPositions[$taget . 'LS'] = $headerPositions['targetLS'];
+                $headerPositions[$target . 'LS'] = $headerPositions['targetLS'];
                 $headerPositions[$source . 'LS'] = $headerPositions['sourceLS'];
-                $headerPositions[$taget . 'BP'] = $headerPositions['tagetBP'];
+                $headerPositions[$target . 'BP'] = $headerPositions['targetBP'];
                 $headerPositions[$source . 'BP'] = $headerPositions['sourceBP'];
-                $headerPositions[$taget . 'PS'] = $headerPositions['tagetPS'];
+                $headerPositions[$target . 'PS'] = $headerPositions['targetPS'];
                 $headerPositions[$source . 'PS'] = $headerPositions['sourcePS'];
             }else {
                 throw new UnsupportedInteractionTypeException('Interaction type ' . $dataList[0][$headerPositions['interactionType']] . ' is not yet supported!');
-            }*/
-            #!predator_body_part
-            #!predator_physiological_state
+            }
+
             $i = 0;
             foreach ($dataList as $taxonData) 
             {
@@ -305,13 +304,14 @@ class TrophicServiceREST implements TrophicService
                 $container[$i][4] = $taxonData[$headerPositions['study']]; #contributor
                 $container[$i][5] = $taxonData[$headerPositions['epoch']]; #unix epoch
                 $container[$i][6] = $taxonData[$headerPositions['id']]; #tmp_and_unique_specimen_id
-                $container[$i][7] = $taxonData[$headerPositions['predLS']]; #predator life stage
-                $container[$i][8] = $taxonData[$headerPositions['preyLS']]; #prey life stage
-                $container[$i][9] = $taxonData[$headerPositions['preyBP']]; #prey body part
-                $container[$i][10] = $taxonData[$headerPositions['preyPS']]; #prey physiological state
+                $container[$i][$target . 'LS']  = $taxonData[$headerPositions[$target . 'LS']];
+                $container[$i][$source . 'LS'] = $taxonData[$headerPositions[$source . 'LS']];
+                $container[$i][$target . 'BP']  = $taxonData[$headerPositions[$target . 'BP']]; 
+                $container[$i][$source . 'BP'] = $taxonData[$headerPositions[$source . 'BP']];
+                $container[$i][$target . 'PS']  = $taxonData[$headerPositions[$target . 'PS']];
+                $container[$i][$source . 'PS'] = $taxonData[$headerPositions[$source . 'PS']]; 
 
 
-                #need to do all of this in one sitting
 /*                if($interactionType == 'preysOn' || $interactionType == 'preyedUponBy') {# special case for these two interaction types
                     $container[$i][9] = $taxonData[$headerPositions['preyBP']]; #prey body part
                     $container[$i][10] = $taxonData[$headerPositions['preyPS']]; #prey physiological state

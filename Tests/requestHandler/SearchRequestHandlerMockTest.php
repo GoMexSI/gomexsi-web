@@ -74,7 +74,6 @@ class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
 	{		
 		$jsonObject = $this->handler->requestHandlerDriver($this->observationPostRequest);
 		$necessaryValues = array('scientificName','preyLifeStage','preyPhysiologicalState','}]}]');
-		
 		foreach ($necessaryValues as $value) {
 			$containsValue = (strpos($jsonObject, $value) !== FALSE) ? true : false;
 			$this->assertTrue($containsValue, $value . ' is missing from the observed prey list (from the REST service), for the predator Callinectes sapidus');

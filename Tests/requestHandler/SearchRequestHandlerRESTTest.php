@@ -150,7 +150,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 		$actualResponse = $this->handler->requestHandlerDriver($locationPost);
 		$somePredValues = array('Micropogonias undulatus', 'Parasite', 'Actinopterygii', 'Pectinariidae', 'Palaemonetes vulgaris');
-		
+
 		foreach ($somePredValues as $pred) {
 			$containsValue = (strpos($actualResponse, $pred) !== FALSE) ? true : false;
 			$this->assertTrue($containsValue, $pred . ' is missing from the observed pred list (from the REST service), for the predator Callinectes sapidus');
@@ -164,7 +164,6 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 		$actualResponse = $this->handler->requestHandlerDriver($this->observationPostRequestPred);
 		$requiredValues = array('preyInstances', 'predInstances');
-		
 		foreach ($requiredValues as $value) {
 			$containsValue = (strpos($actualResponse, $value) !== FALSE) ? true : false;
 			$this->assertTrue($containsValue, $value . ' is missing from the observed list (from the REST service), for the species Callinectes sapidus');
