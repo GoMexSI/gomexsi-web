@@ -1,6 +1,6 @@
 <?php
 require_once 'TrophicService.php';
-require_once '/../interaction/SupportedInteractions.php';
+require_once __DIR__.'/../interaction/SupportedInteractions.php';
 
 class NotImplementedException extends Exception {}
 class NonValidLocationParameterException extends Exception {}

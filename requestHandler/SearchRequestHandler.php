@@ -1,8 +1,9 @@
 <?php 
 
 require_once 'RequestParser.php';
-require_once '/../mimeResponse/MimeResponseFactory.php';
-require_once '/../interaction/InteractionFactory.php';
+// see http://stackoverflow.com/questions/2253625/php-require-once-not-working-the-way-i-want-it-to-relative-path-issue#2253685
+require_once __DIR__.'/../mimeResponse/MimeResponseFactory.php';
+require_once __DIR__.'/../interaction/InteractionFactory.php';
 
 class MissingInteractionTypeException extends Exception {}
 

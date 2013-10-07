@@ -1,5 +1,5 @@
 <?php
-require_once '/../service/TrophicServiceFactory.php';
+require_once __DIR__.'/../service/TrophicServiceFactory.php';
 
 class NonSupportedInteractionType extends Exception {}
 

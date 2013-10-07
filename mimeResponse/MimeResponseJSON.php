@@ -1,6 +1,6 @@
 <?php
 require_once 'MimeResponse.php';
-require_once '/../requestHandler/ServiceObjectProcessor.php';
+require_once __DIR__.'/../requestHandler/ServiceObjectProcessor.php';
 
 class MimeResponseJSON implements MimeResponse 
 {
