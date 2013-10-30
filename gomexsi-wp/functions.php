@@ -18,6 +18,7 @@ function rhm_child_theme_setup(){
 	// Ajax data query.
 	add_action( 'wp_ajax_nopriv_rhm_data_query', 'rhm_data_query' );
 	add_action( 'wp_ajax_rhm_data_query', 'rhm_data_query' );
+	add_action( 'wp_ajax_rhm_ref_tag', 'rhm_ref_tag' );
 	
 	// Enqueue Google Maps API script.
 	add_action( 'wp_enqueue_scripts', 'rhm_enqueue_google_maps_api' );
@@ -128,6 +129,38 @@ function rhm_ajax_register(){
 // Handle data query.
 function rhm_data_query(){
 	include 'data-query-logic.php';
+}
+
+// Handle ref_tag click.
+function rhm_ref_tag(){
+	// REST URL, including the reference tag text.
+	$url = 'http://trophicgraph.com:8080/findExternalUrlForStudy/' . rawurlencode($_POST['ref_tag']);
+	
+	// Initialize cURL request.
+	$curl = curl_init($url);
+	
+	// Fail if the other server gives an error.
+	curl_setopt($curl, CURLOPT_FAILONERROR, true);
+	
+	// Return result as string instead of parsing.
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+	
+	// Execute request and store result.
+	$result = curl_exec ($curl);
+	
+	if(curl_error($curl)){
+		$result = curl_error($curl);
+	}
+	
+	// Close.
+	curl_close ($curl);
+	
+	// Output the returned data. 
+	echo $result;
+	
+	// Must die here or else WordPress' Ajax system will die('0') afterwards,
+	// resulting in a '0' stuck on the end of our returned data.
+	die();
 }
 
 // Enque Google Maps API on template pages that need it.

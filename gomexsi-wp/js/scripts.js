@@ -122,5 +122,83 @@ jQuery(document).ready(function($) {
 	});
 	
 	$("a[href$='.jpg'],a[href$='.jpeg'],a[href$='.png'],a[href$='.gif']").fancybox();
+	
+	/* =============================================================================
+	   Article Reference Tooltip
+	   ========================================================================== */
+	$('body').delegate('.ref-tag-link', 'click', function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		
+		// Remove any existing ref tag boxes.
+		$('.ref-tag-box').remove();
+		
+		var ref_tag = $(this).text();
+		log(ref_tag);
+		
+		var wrapper = $(this).parent('.ref-tag-wrapper');
+		$(wrapper).append('<div class="ref-tag-box loading"><div class="container"><ul></ul></div><div class="bridge"></div></div>');
+		var box = $(wrapper).find('.ref-tag-box');
+		var linkList = $(wrapper).find('ul');
+		
+		// POST to the WordPress Ajax system.
+		$.post(
+			
+			// URL to the WordPress Ajax system.
+			'/wp-admin/admin-ajax.php',
+			
+			// The object containing the POST data.
+			{
+				action	: 'rhm_ref_tag',
+				ref_tag	: ref_tag
+			},
+			
+			// Success callback function.
+			function(data, textStatus, jqXHR){
+				log(data);
+				
+				var externalUrl = data.url;
+				
+				log(externalUrl);
+				
+				$(box).removeClass('loading');
+				
+				if(typeof externalUrl !== 'undefined'){
+					$(linkList).append('<li><a href="' + externalUrl + '" class="external" target="_blank">Details of Study (FWC)</a></li>');
+				} else {
+					$(linkList).append('<li>Details of Study Unavailable</li>');
+					if($(wrapper).closest('.tablepress').length == 0){
+						$(linkList).append('<li>See <em>Data References</em> in the menu for full citation.</li>');
+					}
+				}
+			},
+		
+			// Expect JSON data.
+			'json'
+			
+		// Failure callback function.
+		).fail(function(jqXHR, textStatus, errorThrown){
+			log(errorThrown);
+		});
+	});
+	
+	$('body').click(function(e){
+		// If a name tip box is open, then clicking anywhere else will remove it.
+		$('.ref-tag-box').remove();
+	});
+	
+	// Go through tables of data references and wrap the reference tags with the necessary HTML.
+	$('.tablepress').each(function(){
+		var refTagHeader = $(this).find('th:contains("Reference tag"), th:contains("Reference Tag"), th:contains("Ref tag"), th:contains("Ref Tag")');
+		var colClass = $(refTagHeader).attr('class');
+		var colClassMatch = colClass.match(/column-\d+/);
+		if(typeof colClassMatch[0] != 'undefined'){
+			var colClassSelector = 'td.' + colClassMatch[0];
+			$(this).find(colClassSelector).each(function(){
+				$(this).html('<div class="ref-tag-wrapper"><a href="#" class="ref-tag-link">' + $(this).text() + '</a></div>');
+			});
+		}
+	});
 });
+
 

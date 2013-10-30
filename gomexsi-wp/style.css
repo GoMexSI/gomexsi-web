@@ -834,9 +834,10 @@ hr.section-break {
 	*display: inline;
 }
 
-/* Name Tip */
+/* Name Tip & Ref Tag */
 
-.name-tip-wrapper {
+.name-tip-wrapper,
+.ref-tag-wrapper {
 	display: inline-block;
 	position: relative;
 	
@@ -845,26 +846,38 @@ hr.section-break {
 	*display: inline;
 }
 
-a.name-tip-link {
+a.name-tip-link,
+a.ref-tag-link {
 	color: #000;
 	text-decoration: none;
 }
 
-.name-tip-wrapper:hover a.name-tip-link {
+.name-tip-wrapper:hover a.name-tip-link,
+.ref-tag-wrapper:hover a.ref-tag-link {
 	color: #007abf;
 }
 
-.name-tip-box {
+.name-tip-box,
+.ref-tag-box {
 	position: absolute;
 	bottom: 100%;
 	left: 50%;
 	margin-left: -90px;
 	padding-bottom: 10px;
 	width: 180px;
+	line-height: 1;
 	z-index: 1;
 }
 
-.name-tip-box .container {
+.ref-tag-box.loading .container {
+	min-height: 13px;
+	background-image: url('img/bg-tool-tip-loading.gif');
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.name-tip-box .container,
+.ref-tag-box .container {
 	padding: 10px;
 	font-size: 13px;
 	text-align: center;
@@ -876,22 +889,26 @@ a.name-tip-link {
 	border-radius: 5px;
 }
 
-.name-tip-box ul {
+.name-tip-box ul,
+.ref-tag-box ul {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 
-.name-tip-box li {
+.name-tip-box li,
+.ref-tag-box li {
 	margin: 0 0 5px;
 }
 
 
-.name-tip-box li:last-child {
+.name-tip-box li:last-child,
+.ref-tag-box li:last-child {
 	margin: 0;
 }
 
-.name-tip-box .bridge {
+.name-tip-box .bridge,
+.ref-tag-box .bridge {
 	position: absolute;
 	bottom: 0;
 	width: 100%;

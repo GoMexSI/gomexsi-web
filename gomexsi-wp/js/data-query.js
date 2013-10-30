@@ -452,7 +452,7 @@ jQuery(document).ready(function($) {
 							});
 							
 							var instanceReference = ('ref' in instance ? instance.ref : 'Reference unknown.');
-							$(singleInstance).append('<div class="reference"><h5 class="label">Reference:</h5> ' + instanceReference + '</div>');
+							$(singleInstance).append('<div class="reference"><h5 class="label">Reference:</h5> <div class="ref-tag-wrapper"><a href="#" class="ref-tag-link">' + instanceReference + '</a></div></div>');
 						});
 						
 						$(resultsSection).append('<hr class="section-break" />');
