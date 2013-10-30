@@ -155,12 +155,8 @@ jQuery(document).ready(function($) {
 			
 			// Success callback function.
 			function(data, textStatus, jqXHR){
-				log(data);
-				
 				var externalUrl = data.url;
-				
-				log(externalUrl);
-				
+
 				$(box).removeClass('loading');
 				
 				if(typeof externalUrl !== 'undefined'){
@@ -195,7 +191,10 @@ jQuery(document).ready(function($) {
 		if(typeof colClassMatch[0] != 'undefined'){
 			var colClassSelector = 'td.' + colClassMatch[0];
 			$(this).find(colClassSelector).each(function(){
-				$(this).html('<div class="ref-tag-wrapper"><a href="#" class="ref-tag-link">' + $(this).text() + '</a></div>');
+				var refTag = $(this).text();
+				refTag = refTag.replace(/[,;\.]/g, '');
+				refTag = refTag.replace(/\s+/g, ' ');
+				$(this).html('<div class="ref-tag-wrapper"><a href="#" class="ref-tag-link">' + refTag + '</a></div>');
 			});
 		}
 	});
