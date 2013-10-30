@@ -1,4 +1,4 @@
-[GoMexSI Texas A&M Corpus Christi](http://gomexsi.tamucc.edu/) 
+[GoMexSI at Texas A&M Corpus Christi](http://gomexsi.tamucc.edu/) 
 =======
 
 [![Build Status](https://travis-ci.org/jhpoelen/gomexsi.png)](https://travis-ci.org/jhpoelen/gomexsi)
