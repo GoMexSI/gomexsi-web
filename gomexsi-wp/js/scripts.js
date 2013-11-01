@@ -1,8 +1,11 @@
 jQuery(document).ready(function($) {
-
-/* =============================================================================
-   Login and Registration
-   ========================================================================== */
+	
+	/* Fancybox */
+	$("a[href$='.jpg'],a[href$='.jpeg'],a[href$='.png'],a[href$='.gif']").fancybox();
+	
+	/* =============================================================================
+	   Login and Registration
+	   ========================================================================== */
 	
 	// Show the login form when link is clicked.
 	$('a#login-link, a.login-link').click(function(e){
@@ -121,11 +124,11 @@ jQuery(document).ready(function($) {
 		);
 	});
 	
-	$("a[href$='.jpg'],a[href$='.jpeg'],a[href$='.png'],a[href$='.gif']").fancybox();
 	
 	/* =============================================================================
 	   Article Reference Tooltip
 	   ========================================================================== */
+	
 	$('body').delegate('.ref-tag-link', 'click', function(e){
 		e.preventDefault();
 		e.stopPropagation();
@@ -198,6 +201,77 @@ jQuery(document).ready(function($) {
 			});
 		}
 	});
+	
+	
+	
+	/* =============================================================================
+	   Article Reference Tooltip
+	   ========================================================================== */
+	if($('.stats').length){
+		// POST to the WordPress Ajax system.
+		$.post(
+			
+			// URL to the WordPress Ajax system.
+			'/wp-admin/admin-ajax.php',
+			
+			// The object containing the POST data.
+			{action : 'rhm_stats_request'},
+			
+			// Success callback function.
+			function(data, textStatus, jqXHR){
+				log(data);
+				
+				$('.stats-visits').each(function(i){
+					var start = parseInt($(this).html());
+					var end = data.visits;
+					countUp($(this), start, end, .02, 1);
+				});
+				
+				$('.stats-predators').each(function(i){
+					var start = parseInt($(this).html());
+					var end = data.predators;
+					countUp($(this), start, end, .02, 1);
+				});
+				
+				$('.stats-prey').each(function(i){
+					var start = parseInt($(this).html());
+					var end = data.prey;
+					countUp($(this), start, end, .02, 1);
+				});
+				
+				$('.stats-interactions').each(function(i){
+					var start = parseInt($(this).html());
+					var end = data.interactions;
+					countUp($(this), start, end, .02, 1);
+				});
+				
+				$('.stats-studies').each(function(i){
+					var start = parseInt($(this).html());
+					var end = data.studies;
+					countUp($(this), start, end, .02, 1);
+				});
+			},
+		
+			// Expect JSON data.
+			'json'
+			
+		// Failure callback function.
+		).fail(function(jqXHR, textStatus, errorThrown){
+			log(errorThrown);
+		});
+
+	}
 });
 
+
+function countUp(jQObject, currentValue, endValue, factor, delay){
+	var t = setTimeout(function(){
+		if(currentValue < endValue){
+			var delta = Math.ceil((endValue - currentValue) * factor);
+			currentValue = currentValue + delta;
+			$(jQObject).html($.format.number(currentValue, '#,###'));
+			countUp(jQObject, currentValue, endValue, factor, delay);
+		}
+	}, delay);
+}
 
