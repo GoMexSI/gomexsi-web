@@ -339,11 +339,12 @@ table thead {
 
 .single-stat {
 	float: left;
-	width: 20%;
+	width: 33%;
 	box-sizing: border-box;
 	text-align: center;
 	border-right: 1px #006199 solid;
 	border-left: 1px #ffffff solid;
+	line-height: 1;
 }
 
 .single-stat:first-child,
@@ -359,8 +360,9 @@ table thead {
 .stats-number {
 	width: 90%;
 	margin: 0 auto;
+	padding: 3px;
 	color: #007abf;
-	font-size: 30px;
+	font-size: 42px;
 	font-weight: 700;
 	border-bottom: 1px #e0e0e0 solid;
 }
@@ -368,9 +370,9 @@ table thead {
 .stats-label {
 	width: 90%;
 	margin: 0 auto;
-	padding-top: 3px;
+	padding: 6px 3px 3px;
 	color: #006199;
-	font-size: 12px;
+	font-size: 14px;
 	border-top: 1px #f2f2f2 solid;
 }
 

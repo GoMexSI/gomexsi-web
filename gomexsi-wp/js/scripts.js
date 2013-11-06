@@ -221,6 +221,7 @@ jQuery(document).ready(function($) {
 			function(data, textStatus, jqXHR){
 				log(data);
 				
+/*
 				$('.stats-visits').each(function(i){
 					var start = parseInt($(this).html());
 					var end = data.visits;
@@ -238,16 +239,23 @@ jQuery(document).ready(function($) {
 					var end = data.prey;
 					countUp($(this), start, end, .02, 1);
 				});
-				
-				$('.stats-interactions').each(function(i){
-					var start = parseInt($(this).html());
-					var end = data.interactions;
-					countUp($(this), start, end, .02, 1);
-				});
+*/
 				
 				$('.stats-studies').each(function(i){
 					var start = parseInt($(this).html());
 					var end = data.studies;
+					countUp($(this), start, end, .02, 1);
+				});
+				
+				$('.stats-interactors').each(function(i){
+					var start = parseInt($(this).html());
+					var end = data.interactors;
+					countUp($(this), start, end, .02, 1);
+				});
+				
+				$('.stats-interactions').each(function(i){
+					var start = parseInt($(this).html());
+					var end = data.interactions;
 					countUp($(this), start, end, .02, 1);
 				});
 			},

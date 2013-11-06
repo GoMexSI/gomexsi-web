@@ -202,10 +202,11 @@ function rhm_stats_handler( $atts, $content = null ) {
 	
 	$output = '<div class="stats gradient">';
 	$output .= '<div class="container gradient clearfix">';
-	$output .= '<div class="single-stat first"><div class="stats-studies stats-number">0</div><div class="stats-label">Contributing Studies</div></div>';
-	$output .= '<div class="single-stat"><div class="stats-visits stats-number">0</div><div class="stats-label">Visits Since Launch</div></div>';
-	$output .= '<div class="single-stat"><div class="stats-predators stats-number">0</div><div class="stats-label">Predators in Database</div></div>';
-	$output .= '<div class="single-stat"><div class="stats-prey stats-number">0</div><div class="stats-label">Prey in Database</div></div>';
+/* 	$output .= '<div class="single-stat"><div class="stats-visits stats-number">0</div><div class="stats-label">Visits Since Launch</div></div>'; */
+/* 	$output .= '<div class="single-stat"><div class="stats-predators stats-number">0</div><div class="stats-label">Predators in Database</div></div>'; */
+/* 	$output .= '<div class="single-stat"><div class="stats-prey stats-number">0</div><div class="stats-label">Prey in Database</div></div>'; */
+	$output .= '<div class="single-stat first"><div class="stats-studies stats-number">0</div><div class="stats-label">References/Contributors</div></div>';
+	$output .= '<div class="single-stat"><div class="stats-interactors stats-number">0</div><div class="stats-label">Unique Interactors</div></div>';
 	$output .= '<div class="single-stat last"><div class="stats-interactions stats-number">0</div><div class="stats-label">Total Interactions</div></div>';
 	$output .= '</div>';
 	$output .= '</div>';
@@ -216,6 +217,7 @@ function rhm_stats_handler( $atts, $content = null ) {
 function rhm_stats_request(){
 	$stats = array();
 	
+/*
 	$site_visits_url = 'http://gomexsi.tamucc.edu/piwik/index.php?module=API&method=VisitsSummary.getVisits&idSite=1&period=range&date=2013-04-01,today&format=json&token_auth=f45983179513d9be6f7d4dbe7d23f40c';
 	$curl_visitors = curl_init($site_visits_url);				// Initialize cURL request.
 	curl_setopt($curl_visitors, CURLOPT_FAILONERROR, true);		// Fail if the other server gives an error.
@@ -229,8 +231,9 @@ function rhm_stats_request(){
 		$stats['visits'] = $site_visits->value;
 	}
 	curl_close ($curl_visitors);								// Close.
+*/
 	
-	$data_stats_url = 'http://trophicgraph.com:8080/info';
+	$data_stats_url = 'http://trophicgraph.com:8080/info?source=http://gomexsi.tamucc.edu';
 	$curl_data = curl_init($data_stats_url);					// Initialize cURL request.
 	curl_setopt($curl_data, CURLOPT_FAILONERROR, true);			// Fail if the other server gives an error.
 	curl_setopt($curl_data, CURLOPT_RETURNTRANSFER, true);		// Return result as string instead of parsing.
@@ -247,6 +250,7 @@ function rhm_stats_request(){
 		$stats['interactions'] = $data_stats->data[0][1];
 		$stats['predators'] = $data_stats->data[0][2];
 		$stats['prey'] = $data_stats->data[0][3];
+		$stats['interactors'] = $data_stats->data[0][2] + $data_stats->data[0][3];
 	}
 	curl_close ($curl_data);									// Close.
 	
