@@ -1,3 +1,15 @@
+function countUp(jQObject, currentValue, endValue, factor, delay){
+	var t = setTimeout(function(){
+		if(currentValue < endValue){
+			var delta = Math.ceil((endValue - currentValue) * factor);
+			currentValue = currentValue + delta;
+			$(jQObject).html($.format.number(currentValue, '#,###'));
+			countUp(jQObject, currentValue, endValue, factor, delay);
+		}
+	}, delay);
+}
+
+
 jQuery(document).ready(function($) {
 	
 	/* Fancybox */
@@ -205,9 +217,11 @@ jQuery(document).ready(function($) {
 	
 	
 	/* =============================================================================
-	   Article Reference Tooltip
+	   Stats Counter Shortcode
 	   ========================================================================== */
+	console.log('Test.');
 	if($('.stats').length){
+		console.log('Stats container found.');
 		// POST to the WordPress Ajax system.
 		$.post(
 			
@@ -215,11 +229,13 @@ jQuery(document).ready(function($) {
 			'/wp-admin/admin-ajax.php',
 			
 			// The object containing the POST data.
-			{action : 'rhm_stats_request'},
+			{'action' : 'rhm_stats_request'},
 			
 			// Success callback function.
 			function(data, textStatus, jqXHR){
-				log(data);
+				console.log(textStatus);
+				console.log(jqXHR);
+				console.log(data);
 				
 /*
 				$('.stats-visits').each(function(i){
@@ -258,6 +274,7 @@ jQuery(document).ready(function($) {
 					var end = data.interactions;
 					countUp($(this), start, end, .02, 1);
 				});
+				
 			},
 		
 			// Expect JSON data.
@@ -265,21 +282,10 @@ jQuery(document).ready(function($) {
 			
 		// Failure callback function.
 		).fail(function(jqXHR, textStatus, errorThrown){
-			log(errorThrown);
+			console.log('Failed to retrieve stats.');
+			console.log(errorThrown);
 		});
-
 	}
 });
 
-
-function countUp(jQObject, currentValue, endValue, factor, delay){
-	var t = setTimeout(function(){
-		if(currentValue < endValue){
-			var delta = Math.ceil((endValue - currentValue) * factor);
-			currentValue = currentValue + delta;
-			$(jQObject).html($.format.number(currentValue, '#,###'));
-			countUp(jQObject, currentValue, endValue, factor, delay);
-		}
-	}, delay);
-}
 

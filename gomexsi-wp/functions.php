@@ -20,10 +20,10 @@ function rhm_child_theme_setup(){
 	add_action( 'wp_ajax_rhm_data_query', 'rhm_data_query' );
 
 	// Ajax reference tags.
-	add_action( 'wp_ajax_rhm_ref_tag', 'rhm_ref_tag' );
+	add_action( 'wp_ajax_nopriv_rhm_ref_tag', 'rhm_ref_tag' );
 	
 	// Ajax statistics.
-	add_action( 'wp_ajax_rhm_stats_request', 'rhm_stats_request' );
+	add_action( 'wp_ajax_nopriv_rhm_stats_request', 'rhm_stats_request' );
 	
 	// Enqueue Google Maps API script.
 	add_action( 'wp_enqueue_scripts', 'rhm_enqueue_google_maps_api' );
@@ -255,6 +255,7 @@ function rhm_stats_request(){
 	curl_close ($curl_data);									// Close.
 	
 	echo json_encode($stats);
+	//echo '{"studies": 49, "interactions": 69584, "predators": 273, "prey": 1247, "interactors": 1520}';
 	
 	die('');
 }
