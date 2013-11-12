@@ -24,6 +24,7 @@ function rhm_child_theme_setup(){
 	
 	// Ajax statistics.
 	add_action( 'wp_ajax_nopriv_rhm_stats_request', 'rhm_stats_request' );
+	add_action( 'wp_ajax_rhm_stats_request', 'rhm_stats_request' );
 	
 	// Enqueue Google Maps API script.
 	add_action( 'wp_enqueue_scripts', 'rhm_enqueue_google_maps_api' );
