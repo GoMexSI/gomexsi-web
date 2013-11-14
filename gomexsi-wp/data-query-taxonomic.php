@@ -78,6 +78,7 @@
 						<div id="query-results-header" class="clearfix">
 							<a id="query-results-download" href="#" class="visuallyhidden">Download the raw data</a>
 							<span id="query-results-info"></span>
+							<div id="nametip-instructions" class="visuallyhidden">Click on species names for links to additional resources.</div>
 						</div>
 						
 						<div id="results-area"></div>

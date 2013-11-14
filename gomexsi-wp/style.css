@@ -623,6 +623,13 @@ hr.section-break {
 	background: url('img/bg-download-raw-data.png') 0 0 no-repeat;
 }
 
+#query-results-header #nametip-instructions {
+	clear: both;
+	margin-top: 5px;
+	font-size: 93.75%;
+	color: #404040;
+}
+
 /* Results Area General */
 
 .query-results {

@@ -465,7 +465,7 @@ jQuery(document).ready(function($) {
 		// Populate the results header area.
 		Results.prototype.makeResultsHeader = function(){
 			$('#query-results-info').html('Returned ' + this.totalSubjectCount + ($(this.totalSubjectCount).length > 1 ? ' results' : ' result') + ' with ' + this.totalInstanceCount + ' instances recorded.');
-			$('#query-results-download').removeClass('visuallyhidden');
+			$('#query-results-download, #nametip-instructions').removeClass('visuallyhidden');
 		}
 		
 		// Section toggles and name links.
