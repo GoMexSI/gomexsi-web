@@ -21,6 +21,7 @@ function rhm_child_theme_setup(){
 
 	// Ajax reference tags.
 	add_action( 'wp_ajax_nopriv_rhm_ref_tag', 'rhm_ref_tag' );
+	add_action( 'wp_ajax_rhm_ref_tag', 'rhm_ref_tag' );
 	
 	// Ajax statistics.
 	add_action( 'wp_ajax_nopriv_rhm_stats_request', 'rhm_stats_request' );
@@ -164,7 +165,7 @@ function rhm_ref_tag(){
 	// Close.
 	curl_close ($curl);
 	
-	// Output the returned data. 
+	// Output the returned data.
 	echo $result;
 	
 	// Must die here or else WordPress' Ajax system will die('0') afterwards,

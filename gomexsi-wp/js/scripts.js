@@ -170,6 +170,7 @@ jQuery(document).ready(function($) {
 			
 			// Success callback function.
 			function(data, textStatus, jqXHR){
+				log(data);
 				var externalUrl = data.url;
 
 				$(box).removeClass('loading');
