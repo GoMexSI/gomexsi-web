@@ -48,7 +48,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 	}
 	public function testGetTrophicServiceRESTFindPredatorForPrey()
 	{
-		$expectedPredNames = array("Zalieutes mcgintyi", "Syacium gunteri", "Pomatoschistus microps", "Zoarces viviparus", "Pleuronectes platessa", "Paralichthyes albigutta", "Retusa obtusa", "Symphurus civitatus");
+		$expectedPredNames = array("Zalieutes mcgintyi", "Syacium gunteri", "Pomatoschistus microps", "Zoarces viviparus", "Pleuronectes platessa", "Paralichthyes albigutta", "Retusa obtusa");
 
 		$this->postRequest["subjectName"] = "Foraminifera";
 		unset($this->postRequest["findPrey"]);
@@ -84,7 +84,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		unset($this->postRequest["findPrey"]);
 		$this->postRequest["findPredators"] = "on";
 
-		$expected = '[{"scientificName":"Foraminifera","predInstances":[{"pred":["Zalieutes mcgintyi","Syacium gunteri","Pomatoschistus microps","Zoarces viviparus","Symphurus plagiusa","Prionotus roseus","Stenotomus caprinus","Syacium papillosum","Monolene sessilicauda","Fundulus similis","Trichopsetta ventralis","Opisthonema oglinum","Coelorinchus caribbaeus","Bembrops anatirostris","Bellator militaris","Pomatoschistus minutus","Leiostomus xanthurus","Crangon crangon","Platichthys flesus","Pleuronectes platessa","Decapterus punctatus","Paralichthyes albigutta","Retusa obtusa","Symphurus civitatus"]}]}]';
+		$expected = '[{"scientificName":"Foraminifera","predInstances":[{"pred":["Zalieutes mcgintyi","Syacium gunteri","Pomatoschistus microps","Zoarces viviparus","Symphurus plagiusa","Prionotus roseus","Stenotomus caprinus","Syacium papillosum","Monolene sessilicauda","Fundulus similis","Trichopsetta ventralis","Opisthonema oglinum","Coelorinchus caribbaeus","Bembrops anatirostris","Bellator militaris","Pomatoschistus minutus","Leiostomus xanthurus","Crangon crangon","Platichthys flesus","Pleuronectes platessa","Decapterus punctatus","Paralichthyes albigutta","Retusa obtusa"]}]}]';
 		
 		$actual = $this->handler->requestHandlerDriver($this->postRequest);
 
@@ -108,7 +108,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 	public function testCreateJSONResponseRESTFindObservedPrey()
 	{
 		$actualResponse = $this->handler->requestHandlerDriver($this->observationPostRequest);
-		$somePreyValues = array('Actinopterygii', 'Callinectes sapidus', 'Mollusca', 'Portunus', 'Brevoortia patronus', 'Neopanope sayi', 'Ruppia maritima');
+		$somePreyValues = array('Actinopterygii', 'Callinectes sapidus', 'Mollusca', 'Portunus', 'Brevoortia patronus');
 		$position = 0;
 		$count = 0;
 		
