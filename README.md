@@ -1,7 +1,7 @@
 [GoMexSI at Texas A&M Corpus Christi](http://gomexsi.tamucc.edu/) 
 =======
 
-[![Build Status](https://travis-ci.org/jhpoelen/gomexsi.png)](https://travis-ci.org/jhpoelen/gomexsi)
+[![Build Status](https://travis-ci.org/GoMexSI/gomexsi-web.png)](https://travis-ci.org/GoMexSI/gomexsi-web)
 
 #### Sequence Diagram
 
