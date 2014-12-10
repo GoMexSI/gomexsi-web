@@ -3,7 +3,7 @@
 
 [![Build Status](https://travis-ci.org/jhpoelen/gomexsi.png)](https://travis-ci.org/jhpoelen/gomexsi)
 
-### Sequence Diagram
+#### Sequence Diagram
 
 [![Request handling](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=dGl0bGUgaW52b2tpbmcgYSB0cm9waGljIHNlcnZpY2UKClVJLT5SZXF1ZXN0SGFuZGxlcjogaHR0cCBwb3N0IHIAFAYKABQOACAScGFyc2UAQAcAHBFGYWN0b3J5OiBjcmVhdGVTAHQHABAHLT4ACgcAGAgKABoHAIEGEgB2EQAxCWZpbmRQcmV5Rm9yUHJlZGF0b3IAgRMhAIEIBlJlc3BvbnNlAIFSEVVJAIF7DgAgBwo&s=napkin)](http://www.websequencediagrams.com/?lz=dGl0bGUgaW52b2tpbmcgYSB0cm9waGljIHNlcnZpY2UKClVJLT5SZXF1ZXN0SGFuZGxlcjogaHR0cCBwb3N0IHIAFAYKABQOACAScGFyc2UAQAcAHBFGYWN0b3J5OiBjcmVhdGVTAHQHABAHLT4ACgcAGAgKABoHAIEGEgB2EQAxCWZpbmRQcmV5Rm9yUHJlZGF0b3IAgRMhAIEIBlJlc3BvbnNlAIFSEVVJAIF7DgAgBwo&s=napkin)
 
