@@ -1,7 +1,7 @@
 [GoMexSI at Texas A&M Corpus Christi](http://gomexsi.tamucc.edu/) 
 =======
 
-[![Build Status](https://travis-ci.org/GoMexSI/gomexsi-web.png)](https://travis-ci.org/GoMexSI/gomexsi-web)
+[![Build Status](https://travis-ci.org/GoMexSI/gomexsi-web.png)](https://travis-ci.org/GoMexSI/gomexsi-web)[![Code Climate](https://codeclimate.com/github/GoMexSI/gomexsi-web/badges/gpa.svg)](https://codeclimate.com/github/GoMexSI/gomexsi-web)
 
 #### Sequence Diagram
 
