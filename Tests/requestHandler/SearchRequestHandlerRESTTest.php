@@ -24,7 +24,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 	public function testRequestHandlerDriver()
 	{
-		$expected = '[{"scientificName":"Zalieutes mcgintyi","preyInstances":[{"prey":["Foraminifera","Goniadella","Goniada maculata","Teleostei","Crustacea","Animalia","Rhachotropis","Paraonidae","Phyllodoce arenae","Opheliidae","Ophiodromus","Spionidae","Amphipoda","Nematoda","Lumbrineridae","Onuphidae","Anchialina typica","Nemertea","Bathymedon","Sediment","Xanthoidea"]}]}]';
+		$expected = '[{"scientificName":"Zalieutes mcgintyi","preyInstances":[{"prey":["Foraminiferida","Goniadella","Goniada maculata","Teleostei","Crustacea","Animalia","Rhachotropis","Paraonidae","Phyllodoce arenae","Opheliidae","Ophiodromus","Spionidae","Amphipoda","Nematoda","Lumbrineridae","Onuphidae","Anchialina typica","Nemertea","Bathymedon","Sediment","Xanthoidea"]}]}]';
 		$actual = $this->handler->requestHandlerDriver($this->postRequest);
 
 		$this->assertSimilarResponse($actual, $expected, "preyInstances", "prey");
@@ -33,7 +33,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 	public function testGetTrophicServiceRESTFindPreyForPredator()
 	{
 		$trophicResultString = array();
-		$expectedPreyNames = array("Foraminifera", "Goniadella", "Goniada maculata", "Teleostei", "Crustacea", "Animalia", "Rhachotropis", "Paraonidae", "Phyllodoce arenae", "Opheliidae", "Ophiodromus", "Spionidae", "Amphipoda", "Nematoda", "Lumbrineridae", "Onuphidae", "Anchialina typica", "Nemertea", "Bathymedon", "Sediment", "Xanthoidea");
+		$expectedPreyNames = array("Foraminiferida", "Goniadella", "Goniada maculata", "Teleostei", "Crustacea", "Animalia", "Rhachotropis", "Paraonidae", "Phyllodoce arenae", "Opheliidae", "Ophiodromus", "Spionidae", "Amphipoda", "Nematoda", "Lumbrineridae", "Onuphidae", "Anchialina typica", "Nemertea", "Bathymedon", "Sediment", "Xanthoidea");
 
 		$this->postRequest["subjectName"] = "Zalieutes mcgintyi";
 		$this->postRequest["findPrey"] = "on";
@@ -50,13 +50,13 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 	{
 		$expectedPredNames = array("Zalieutes mcgintyi", "Syacium gunteri", "Pomatoschistus microps", "Zoarces viviparus", "Pleuronectes platessa", "Paralichthyes albigutta", "Retusa obtusa");
 
-		$this->postRequest["subjectName"] = "Foraminifera";
+		$this->postRequest["subjectName"] = "Foraminiferida";
 		unset($this->postRequest["findPrey"]);
 		$this->postRequest["findPredators"] = "on";
 		$this->handler->parsePOST($this->postRequest);
 
 		$trophicService = $this->handler->getTrophicService();
-		$actualPredNames = $trophicService->findPredatorForPrey("Foraminifera");
+		$actualPredNames = $trophicService->findPredatorForPrey("Foraminiferida");
 
 		$this->assertActualContainsExpected($actualPredNames, $expectedPredNames);
 	}
@@ -72,7 +72,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$this->postRequest["findPrey"] = "on";
 		unset($this->postRequest["findPredators"]);
 
-		$expected = '[{"scientificName":"Zalieutes mcgintyi","preyInstances":[{"prey":["Foraminifera","Goniadella","Goniada maculata","Teleostei","Crustacea","Animalia","Rhachotropis","Paraonidae","Phyllodoce arenae","Opheliidae","Ophiodromus","Spionidae","Amphipoda","Nematoda","Lumbrineridae","Onuphidae","Anchialina typica","Nemertea","Bathymedon","Sediment","Xanthoidea"]}]}]';
+		$expected = '[{"scientificName":"Zalieutes mcgintyi","preyInstances":[{"prey":["Foraminiferida","Goniadella","Goniada maculata","Teleostei","Crustacea","Animalia","Rhachotropis","Paraonidae","Phyllodoce arenae","Opheliidae","Ophiodromus","Spionidae","Amphipoda","Nematoda","Lumbrineridae","Onuphidae","Anchialina typica","Nemertea","Bathymedon","Sediment","Xanthoidea"]}]}]';
 		
 		$actual = $this->handler->requestHandlerDriver($this->postRequest);
 		$this->assertSimilarResponse($actual, $expected, "preyInstances", "prey");
@@ -80,11 +80,11 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 	public function testCreateJSONResponseRESTFindPredatorForPrey()
 	{
-		$this->postRequest["subjectName"] = "Foraminifera";
+		$this->postRequest["subjectName"] = "Foraminiferida";
 		unset($this->postRequest["findPrey"]);
 		$this->postRequest["findPredators"] = "on";
 
-		$expected = '[{"scientificName":"Foraminifera","predInstances":[{"pred":["Zalieutes mcgintyi","Syacium gunteri","Pomatoschistus microps","Zoarces viviparus","Symphurus plagiusa","Prionotus roseus","Stenotomus caprinus","Syacium papillosum","Monolene sessilicauda","Fundulus similis","Trichopsetta ventralis","Opisthonema oglinum","Coelorinchus caribbaeus","Bembrops anatirostris","Bellator militaris","Pomatoschistus minutus","Leiostomus xanthurus","Crangon crangon","Platichthys flesus","Pleuronectes platessa","Decapterus punctatus","Paralichthyes albigutta","Retusa obtusa"]}]}]';
+		$expected = '[{"scientificName":"Foraminiferida","predInstances":[{"pred":["Zalieutes mcgintyi","Syacium gunteri","Pomatoschistus microps","Zoarces viviparus","Symphurus plagiusa","Prionotus roseus","Stenotomus caprinus","Syacium papillosum","Monolene sessilicauda","Fundulus similis","Trichopsetta ventralis","Opisthonema oglinum","Coelorinchus caribbaeus","Bembrops anatirostris","Bellator militaris","Pomatoschistus minutus","Leiostomus xanthurus","Crangon crangon","Platichthys flesus","Pleuronectes platessa","Decapterus punctatus","Paralichthyes albigutta","Retusa obtusa"]}]}]';
 		
 		$actual = $this->handler->requestHandlerDriver($this->postRequest);
 

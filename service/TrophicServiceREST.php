@@ -8,9 +8,11 @@ class UnsupportedInteractionTypeException extends Exception {}
 
 class TrophicServiceREST implements TrophicService 
 {
+    const URL_PREFIX = 'http://api.globalbioticinteractions.org/';
+
     private $finalURL;
 
-    public function findPreyForPredator($srcTaxon) 
+    public function findPreyForPredator($srcTaxon)
     {
         $constraints['includeObservations'] = false;
         return $this->queryBuilder($srcTaxon, 'preysOn', $constraints);
@@ -117,7 +119,7 @@ class TrophicServiceREST implements TrophicService
     */
     private function query($method, $name, $operation) 
     {
-        $url_prefix = 'http://46.4.36.142:8080/' . $method . '/' . rawurlencode($name);
+        $url_prefix = self::URL_PREFIX . $method . '/' . rawurlencode($name);
 
         if (isset($operation)){
             $url = $url_prefix . '/' . $operation;
@@ -262,22 +264,6 @@ class TrophicServiceREST implements TrophicService
             if(empty($dataList)){ # if nothng is returned from the rest, dont do anything below this
                 return null;
             }
-            # old code remove
-            // SupportedInteractions -- need to figure out how to make this work.. not going to make special cases, data drivin if its in the data then send it, UI can not show if we want
-/*            if($dataList[0][$headerPositions['interactionType']] == 'preyedUponBy') { // target = predator
-                $headerPositions['predLS'] = $headerPositions['targetLS'];
-                $headerPositions['preyLS'] = $headerPositions['sourceLS'];
-                $headerPositions['preyBP'] = $headerPositions['sourceBP'];
-                $headerPositions['preyPS'] = $headerPositions['sourcePS'];
-            } elseif ($dataList[0][$headerPositions['interactionType']] == 'preysOn') { // source = predator
-                $headerPositions['predLS'] = $headerPositions['sourceLS'];
-                $headerPositions['preyLS'] = $headerPositions['targetLS'];
-                $headerPositions['preyBP'] = $headerPositions['targetBP'];
-                $headerPositions['preyPS'] = $headerPositions['targetPS'];
-            } else {
-                throw new UnsupportedInteractionTypeException('Interaction type ' . $dataList[0][$headerPositions['interactionType']] . ' is not yet supported!');
-            }*/
-
             $interactionType = $dataList[0][$headerPositions['interactionType']];
             $target = $interactions->interactionToTarget($interactionType);
             $source = $interactions->interactionToSource($interactionType);
@@ -312,15 +298,6 @@ class TrophicServiceREST implements TrophicService
                 $container[$i][$source . 'PS'] = $taxonData[$headerPositions[$source . 'PS']]; 
 
 
-/*                if($interactionType == 'preysOn' || $interactionType == 'preyedUponBy') {# special case for these two interaction types
-                    $container[$i][9] = $taxonData[$headerPositions['preyBP']]; #prey body part
-                    $container[$i][10] = $taxonData[$headerPositions['preyPS']]; #prey physiological state
-                }else { # standard case where all relationships can be returned to the UI
-                    $container[$i][9] = $taxonData[$headerPositions[$source . 'BP']]; 
-                    $container[$i][10] = $taxonData[$headerPositions[$target . 'BP']];
-                    $container[$i][11] = $taxonData[$headerPositions[$source . 'PS']];
-                    $container[$i][12] = $taxonData[$headerPositions[$target . 'PS']];  
-                }*/
                 $i+=1;
             }
             return $container;
@@ -331,6 +308,10 @@ class TrophicServiceREST implements TrophicService
         return $this->finalURL;
     }
 
+    public function getURLPrefix()
+    {
+        return self::URL_PREFIX;
+    }
 
 }
 
