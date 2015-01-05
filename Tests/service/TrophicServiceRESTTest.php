@@ -42,18 +42,18 @@ class TrophicServiceRESTTest extends PHPUnit_Framework_TestCase
         $interactionFilter = array('prey' => 'Callinectes sapidus');
         $trophicService = new TrophicServiceREST();
         $trophicService->findObservedPreyForPredator('Scomberomorus cavalla', $interactionFilter, null, null);
-        $expected = TrophicServiceREST::getURLPrefix() . "taxon/Scomberomorus%20cavalla/preysOn/Callinectes%20sapidus?includeObservations=true&nw_lat=30.28&nw_lng=-97.89&se_lat=18.04&se_lng=-80.61";
+        $expected = $trophicService->getURLPrefix() . "taxon/Scomberomorus%20cavalla/preysOn/Callinectes%20sapidus?includeObservations=true&nw_lat=30.28&nw_lng=-97.89&se_lat=18.04&se_lng=-80.61";
         $this->assertEquals($expected, $trophicService->getURL());
     }
     public function testRawDataDownloadURL()
     {
         $trophicService = new TrophicServiceREST();
         $trophicService->findObservedPreyForPredator('Ariopsis felis', null, null, "CSV");
-        $expected = TrophicServiceREST::getURLPrefix() . "taxon/Ariopsis%20felis/preysOn?includeObservations=true&nw_lat=30.28&nw_lng=-97.89&se_lat=18.04&se_lng=-80.61&type=csv";
+        $expected = $trophicService->getURLPrefix() . "taxon/Ariopsis%20felis/preysOn?includeObservations=true&nw_lat=30.28&nw_lng=-97.89&se_lat=18.04&se_lng=-80.61&type=csv";
         $this->assertEquals($expected, $trophicService->getURL());
 
         $trophicService->findObservedPredatorsForPrey('Ariopsis felis', null, null, "CSV");
-        $expected = TrophicServiceREST::getURLPrefix() . "taxon/Ariopsis%20felis/preyedUponBy?includeObservations=true&nw_lat=30.28&nw_lng=-97.89&se_lat=18.04&se_lng=-80.61&type=csv";
+        $expected = $trophicService->getURLPrefix() . "taxon/Ariopsis%20felis/preyedUponBy?includeObservations=true&nw_lat=30.28&nw_lng=-97.89&se_lat=18.04&se_lng=-80.61&type=csv";
         $this->assertEquals($expected, $trophicService->getURL());
     }
     public function testFindSupportedInteractions()
