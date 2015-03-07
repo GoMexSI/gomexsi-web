@@ -34,7 +34,7 @@ class TrophicServiceRESTTest extends PHPUnit_Framework_TestCase
     {
         $trophicService = new TrophicServiceREST();
         $taxonURL = $trophicService->findExternalTaxonURL('Homo sapiens');
-        $this->assertStringStartsWith('http', $taxonURL)
+        $this->assertStringStartsWith('http', $taxonURL);
     }
     public function testBuildInteractionFilterURL()
     {
