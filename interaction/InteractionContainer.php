@@ -5,7 +5,6 @@ class InteractionContainer implements Interaction
 {
 	private $source;
 	private $target;
-	private $interactionTitle;
 
 	public function __construct($title)
 	{

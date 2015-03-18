@@ -62,7 +62,7 @@ class TrophicServiceMock implements TrophicService
     }
     public function findObservedTargetForSource($predatorTaxon, $preyTaxon, $locationConstraints, $mimeType, $interaction)
     {
-        if($interaction->getInteractionTitle() == 'preyedUponBy') {
+        if($interaction->getInteractionTitle() == 'eatenBy') {
             $stringArray = array("Micropogonias undulatus", 28.645202, -96.099923, 0.0, "Rogers 1977", 923695200000, 1,
                                  "Actinopterygii",          28.645202, -96.099923, 0.0, "Senol Akin",  923695200000, 1,
                                  "Great White",             28.645202, -96.099923, 0.0, "John Mayer",  923695200000, 4,

@@ -15,13 +15,13 @@ class TrophicServiceREST implements TrophicService
     public function findPreyForPredator($srcTaxon)
     {
         $constraints['includeObservations'] = false;
-        return $this->queryBuilder($srcTaxon, 'preysOn', $constraints);
+        return $this->queryBuilder($srcTaxon, 'eats', $constraints);
     }
 
     public function findPredatorForPrey($srcTaxon)
     {
         $constraints['includeObservations'] = false;
-        return $this->queryBuilder($srcTaxon, 'preyedUponBy', $constraints);
+        return $this->queryBuilder($srcTaxon, 'eatenBy', $constraints);
     }
     // these functions should be disappearing as code is updated to allow for more types of interactions 
     // such as: Mutalists, Commensals, Amensals, Primary Hosts, Secondary Hosts
@@ -31,7 +31,7 @@ class TrophicServiceREST implements TrophicService
         $constraints['mime'] = ($mimeType == "CSV") ? "csv" : null; # if we ever add support for xml or other mime types probably just always include a "type=someMimeType", but for now only needed for type=csv
         $this->setInteractionFilters($interactionFilters['prey'], $constraints);
         $this->setLocationConstraints($locationConstraints, $constraints);
-        return $this->queryBuilder($srcTaxon, 'preysOn', $constraints);
+        return $this->queryBuilder($srcTaxon, 'eats', $constraints);
     }
     // these functions should be disappearing as code is updated to allow for more types of interactions 
     public function findObservedPredatorsForPrey($srcTaxon, $interactionFilters, $locationConstraints, $mimeType)
@@ -40,7 +40,7 @@ class TrophicServiceREST implements TrophicService
         $constraints['mime'] = ($mimeType == "CSV") ? "csv" : null; # if we ever add support for xml or other mime types probably just always include a "type=someMimeType", but for now only needed for type=csv
         $this->setInteractionFilters($interactionFilters['pred'], $constraints);
         $this->setLocationConstraints($locationConstraints, $constraints);
-        return $this->queryBuilder($srcTaxon, 'preyedUponBy', $constraints);
+        return $this->queryBuilder($srcTaxon, 'eatenBy', $constraints);
     }
     // new function to replace the above ones
     public function findObservedTargetForSource($srcTaxon, $interactionFilters, $locationConstraints, $mimeType, $interaction)
@@ -191,8 +191,8 @@ class TrophicServiceREST implements TrophicService
             or predator_physiological_state is returned to UI. We will remove them from the REST return at this point in
             the code. 
 
-            Case interaction_type == preyedUponBy -> then target represents predator; do not populate
-            Case interaction_type == preysOn -> then source represents predator; do not populate
+            Case interaction_type == eatenBy -> then target represents predator; do not populate
+            Case interaction_type == eats -> then source represents predator; do not populate
 
             source_taxon_name is what the user search is based on. IE if they type in 'Callinectes sapidus' then this will
             always be the source. The interaction_type will change based on what they want(this is subject to change down the line
@@ -233,7 +233,7 @@ class TrophicServiceREST implements TrophicService
 
                     case 'tmp_and_unique_source_specimen_id':
                         // note that this id is used to aggregate results.  
-                        // for preysOn interaction, the source specimen id is the predator specimen id.
+                        // for eats interaction, the source specimen id is the predator specimen id.
                         $headerPositions['id'] = $j;
                         break;
                     case 'source_specimen_life_stage':

@@ -7,7 +7,7 @@ class SupportedInteractions {
 
 	private $interactionObject;
 	private $trophicService;
-	private $interaactionTitleList;
+	private $interactionTitleList;
 
 	public function __construct()
 	{
@@ -20,6 +20,8 @@ class SupportedInteractions {
 	{
 		if(in_array($interaction, $this->interactionTitleList)) {
 			if($this->interactionObject[$interaction]['target'] == 'predator'){return 'pred';}
+			if($this->interactionObject[$interaction]['target'] == 'consumer'){return 'pred';}
+			if($this->interactionObject[$interaction]['target'] == 'food'){return 'prey';}
 			return $this->interactionObject[$interaction]['target'];
 		}else {
 			throw new NonSupportedInteractionType('Interaction type ' . $interaction . ' is not yet supported!');
@@ -30,6 +32,8 @@ class SupportedInteractions {
 	{
 		if(in_array($interaction, $this->interactionTitleList)) {
 			if($this->interactionObject[$interaction]['source'] == 'predator'){return 'pred';}
+			if($this->interactionObject[$interaction]['source'] == 'consumer'){return 'pred';}
+			if($this->interactionObject[$interaction]['source'] == 'food'){return 'prey';}
 			return $this->interactionObject[$interaction]['source'];
 		}else {
 			throw new NonSupportedInteractionType('Interaction type ' . $interaction . ' is not yet supported!');

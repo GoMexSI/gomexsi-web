@@ -43,11 +43,11 @@ class SearchRequestHandler
         $interactionFactory = new InteractionFactory();
         $interactionExists = false;
         if($this->parser->shouldIncludePrey()) {
-            array_push($this->interactionLisit, $interactionFactory->createInteractionOfType('preysOn'));
+            array_push($this->interactionLisit, $interactionFactory->createInteractionOfType('eats'));
             $interactionExists = true;
         }
         if($this->parser->shouldIncludePredators()) {
-            array_push($this->interactionLisit, $interactionFactory->createInteractionOfType('preyedUponBy'));
+            array_push($this->interactionLisit, $interactionFactory->createInteractionOfType('eatenBy'));
             $interactionExists = true;
         }
         if(!$interactionExists) {
