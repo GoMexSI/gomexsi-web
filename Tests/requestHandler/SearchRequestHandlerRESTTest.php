@@ -50,13 +50,13 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 	{
 		$expectedPredNames = array("Zalieutes mcgintyi", "Syacium gunteri", "Pomatoschistus microps", "Zoarces viviparus", "Pleuronectes platessa", "Paralichthyes albigutta", "Retusa obtusa");
 
-		$this->postRequest["subjectName"] = "Foraminiferida";
+		$this->postRequest["subjectName"] = "Foraminifera";
 		unset($this->postRequest["findPrey"]);
 		$this->postRequest["findPredators"] = "on";
 		$this->handler->parsePOST($this->postRequest);
 
 		$trophicService = $this->handler->getTrophicService();
-		$actualPredNames = $trophicService->findPredatorForPrey("Foraminiferida");
+		$actualPredNames = $trophicService->findPredatorForPrey("Foraminifera");
 
 		$this->assertActualContainsExpected($actualPredNames, $expectedPredNames);
 	}
@@ -81,11 +81,11 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 	public function testCreateJSONResponseRESTFindPredatorForPrey()
 	{
-		$this->postRequest["subjectName"] = "Foraminiferida";
+		$this->postRequest["subjectName"] = "Foraminifera";
 		unset($this->postRequest["findPrey"]);
 		$this->postRequest["findPredators"] = "on";
 
-		$expected = '[{"scientificName":"Foraminiferida","predInstances":[{"pred":["Zalieutes mcgintyi","Syacium gunteri","Pomatoschistus microps","Zoarces viviparus","Symphurus plagiusa","Prionotus roseus","Stenotomus caprinus","Syacium papillosum","Monolene sessilicauda","Fundulus similis","Trichopsetta ventralis","Opisthonema oglinum","Coelorinchus caribbaeus","Bembrops anatirostris","Bellator militaris","Pomatoschistus minutus","Leiostomus xanthurus","Crangon crangon","Platichthys flesus","Pleuronectes platessa","Decapterus punctatus","Paralichthyes albigutta","Retusa obtusa"]}]}]';
+		$expected = '[{"scientificName":"Foraminifera","predInstances":[{"pred":["Zalieutes mcgintyi","Syacium gunteri","Pomatoschistus microps","Zoarces viviparus","Symphurus plagiusa","Prionotus roseus","Stenotomus caprinus","Syacium papillosum","Monolene sessilicauda","Fundulus similis","Trichopsetta ventralis","Opisthonema oglinum","Coelorinchus caribbaeus","Bembrops anatirostris","Bellator militaris","Pomatoschistus minutus","Leiostomus xanthurus","Crangon crangon","Platichthys flesus","Pleuronectes platessa","Decapterus punctatus","Paralichthyes albigutta","Retusa obtusa"]}]}]';
 		
 		$actual = $this->handler->requestHandlerDriver($this->postRequest);
 
