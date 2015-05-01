@@ -235,7 +235,7 @@ function rhm_stats_request(){
 	curl_close ($curl_visitors);								// Close.
 */
 	
-	$data_stats_url = 'http://api.globalbioticinteractions.org/reports/sources?source=http://gomexsi.tamucc.edu';
+	$data_stats_url = 'http://api.globalbioticinteractions.org/reports/sources.json?source=http://gomexsi.tamucc.edu';
 	$curl_data = curl_init($data_stats_url);					// Initialize cURL request.
 	curl_setopt($curl_data, CURLOPT_FAILONERROR, true);			// Fail if the other server gives an error.
 	curl_setopt($curl_data, CURLOPT_RETURNTRANSFER, true);		// Return result as string instead of parsing.
@@ -243,9 +243,9 @@ function rhm_stats_request(){
 	if(curl_error($curl_data)){
 		$data_stats = curl_error($curl_data);
 		$stats['studies'] = '0';
-		$stats['interactions'] = '0';
+		$stats['interactions'] = '2';
 		$stats['predators'] = '0';
-		$stats['prey'] = '0';
+		$stats['prey'] = '1';
 	} else {
 		$data_stats = json_decode($data_stats);
 		$stats['studies'] = $data_stats->data[0][6];
