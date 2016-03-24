@@ -19,16 +19,16 @@ class ServiceObjectProcessor
 		$instanceElement = 0; # element where the tmp_and_unique_specimen_id will be stored
 		$instanceName = "nullName";
 		$interactionHelper = new SupportedInteractions();
-        $target = $interactionHelper->interactionToTarget($interaction->getInteractionTitle());
-        $source = $interactionHelper->interactionToSource($interaction->getInteractionTitle());
+    $target = $interactionHelper->interactionToTarget($interaction->getInteractionTitle());
+    $source = $interactionHelper->interactionToSource($interaction->getInteractionTitle());
 
 		if (empty($serviceObject)) { # if the service object is empty, dont do anything to the response object.
 			return;
-		}
+    }
 
 		foreach ($serviceObject as $instance) { 
 			$foundElement = array_search($instance[6], $instanceDictionary); # $instance[6] is the unique_specimen_id
-			#this allows variable names to use noun in place of source/target
+      #this allows variable names to use noun in place of source/target
 			$targetLifeStage 		   = $target . 'LifeStage';
 			$sourceLifeStage 		   = $source . 'LifeStage';
 			$targetBodyPart			   = $target . 'BodyPart';
@@ -44,7 +44,8 @@ class ServiceObjectProcessor
 	            $altitude               = $instance[3];
 	            $contributor            = $instance[4];
 	            $unixEpoch              = (!empty($instance[5])) ? $instance[5] : null;
-	            $uniqueID               = $instance[6];
+              $uniqueID               = $instance[6];
+              $footprintWKT           = $instance[7];
 	            $$targetLifeStage       = (!empty($instance[$target . 'LS']))  ? $instance[$target . 'LS']  : null; # $$ causes variable to be name whatever the value of the variable is
 	            $$sourceLifeStage       = (!empty($instance[$source . 'LS']))  ? $instance[$source . 'LS']  : null;
 	            $$targetBodyPart	    = (!empty($instance[$target . 'BP'])) ? $instance[$target . 'BP'] : null;
@@ -53,20 +54,6 @@ class ServiceObjectProcessor
 	            $$sourcePhysiologicalState = (!empty($instance[$source . 'PS'])) ? $instance[$source . 'PS'] : null; 
 
 				$instanceDictionary[$instanceElement] = $uniqueID;
-/*				switch ($interaction->getTargetTitle()) {
-                    case 'prey':
-                    	$instanceList = array($interaction->getTargetTitle() => $instanceName, 'preyLifeStage' => $preyLifeStage, 'preyBodyPart' => $preyBodyPart, 'preyPhysiologicalState' => $preyPhysiologicalState);
-                        $responseObject->preyInstances[$instanceElement] = array('preyData' => array($instanceList), 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
-                        break;
-                    case 'pred':
-                    	$instanceList = array($interaction->getTargetTitle() => $instanceName, 'predLifeStage' => $predLifeStage);
-                        $responseObject->predInstances[$instanceElement] = array('predData' => array($instanceList), 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
-                        break;
-                    default:
-                        throw new UnknownSpeciesClassificationTypeException('type [' . $interaction->getTargetTitle() . '] not recognized as valid parameter type');
-                    	break;
-				}*/
-				# new code
             	$instanceList = array($interaction->getTargetTitle() => $instanceName,
             						  $targetLifeStage => $$targetLifeStage,
             						  $sourceLifeStage => $$sourceLifeStage,
@@ -74,7 +61,7 @@ class ServiceObjectProcessor
             						  $sourceBodyPart => $$sourceBodyPart,
             						  $targetPhysiologicalState => $$targetPhysiologicalState,
             						  $sourcePhysiologicalState => $$sourcePhysiologicalState);
-                $responseObject->{$targetInstances}[$instanceElement] = array($interaction->getTargetTitle() . 'Data' => array($instanceList), 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor);
+                $responseObject->{$targetInstances}[$instanceElement] = array($interaction->getTargetTitle() . 'Data' => array($instanceList), 'date' => $unixEpoch, 'lat' => $latitude, 'long' => $longitude, 'alt' => $altitude, 'ref' => $contributor, 'footprintWKT' => $footprintWKT);
 				$instanceElement++;
 			}else { # if the ID already exists in the instanceDictionary, then just add the instance properties to the [$foundElement][0]
 /*				$instanceName           = $instance[0];

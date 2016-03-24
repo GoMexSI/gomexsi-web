@@ -224,6 +224,9 @@ class TrophicServiceREST implements TrophicService
                     case 'altitude':
                         $headerPositions['alt'] = $j;
                         break;
+                    case 'footprintWKT':
+                        $headerPositions['footprintWKT'] = $j;
+                        break;
                     case 'study_title':
                         $headerPositions['study'] = $j;
                         break;
@@ -290,6 +293,7 @@ class TrophicServiceREST implements TrophicService
                 $container[$i][4] = $taxonData[$headerPositions['study']]; #contributor
                 $container[$i][5] = $taxonData[$headerPositions['epoch']]; #unix epoch
                 $container[$i][6] = $taxonData[$headerPositions['id']]; #tmp_and_unique_specimen_id
+                $container[$i][7] = $taxonData[$headerPositions['footprintWKT']];
                 $container[$i][$target . 'LS']  = $taxonData[$headerPositions[$target . 'LS']];
                 $container[$i][$source . 'LS'] = $taxonData[$headerPositions[$source . 'LS']];
                 $container[$i][$target . 'BP']  = $taxonData[$headerPositions[$target . 'BP']]; 

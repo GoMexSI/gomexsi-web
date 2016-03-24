@@ -148,10 +148,10 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 
     $actualResponse = $this->handler->requestHandlerDriver($locationPost);
-
-    $firstPreyInstance = json_decode($actualResponse)[0]->preyInstances[0];
+    $firstPreyInstance = json_decode($actualResponse)[0]->{'preyInstances'}[0];
     $this->assertTrue(property_exists($firstPreyInstance, 'lat'));
     $this->assertTrue(property_exists($firstPreyInstance, 'long'));
+    $this->assertTrue(property_exists($firstPreyInstance, 'footprintWKT'), 'missing footprintWKT');
 		$somePredValues = array('Micropogonias undulatus', 'Parasite', 'Actinopterygii', 'Pectinariidae', 'Palaemonetes vulgaris');
 
 		foreach ($somePredValues as $pred) {
