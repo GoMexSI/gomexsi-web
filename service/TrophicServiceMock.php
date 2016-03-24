@@ -65,7 +65,7 @@ class TrophicServiceMock implements TrophicService
                                  "Mollusca",                8.645202,  -96.099923, 0.0, "Senol Akin",  923695200000, 4,"some WKT",
                                  "Velociraptor",            8.645202,  -96.099923, 0.0, "MichaelCas",  923695200000, 2,"some WKT",
                                  "Tiger Shark",             8.645202,  -96.099923, 0.0, "MichaelCas",  923695200000, 4, "some WKT");
-            return $this->arrayToContainer(i$stringArray);
+            return $this->arrayToContainer($stringArray);
         } else {
             $stringArray = array("Micropogonias undulatus",  28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 1,"some WKT",
                                  "Brevoortia patronus",      28.645202, -96.099923, 0.0, "Senol Akin", 923695200000, 3,"some WKT",
