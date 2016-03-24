@@ -95,7 +95,6 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 	private function assertSimilarResponse($actual, $expected, $instanceNames, $instanceName) {
 		$expectedResponse = json_decode($expected);
 		$actualResponse = json_decode($actual);
-
 		$this->assertEquals($expectedResponse[0]->{'scientificName'}, $actualResponse[0]->{'scientificName'});
 
 		$actualNames = $actualResponse[0]->{$instanceNames}[0]->{$instanceName};
@@ -131,7 +130,6 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		unset($this->observationPostRequestPred["findPrey"]);
 		$actualResponse = $this->handler->requestHandlerDriver($this->observationPostRequestPred);
 		$somePredValues = array('Micropogonias undulatus', 'Sciaenops ocellatus', 'Sciaenops ocellatus', 'Ariopsis felis', 'Menticirrhus littoralis');
-		
 		foreach ($somePredValues as $pred) {
 			$containsValue = (strpos($actualResponse, $pred) !== FALSE) ? true : false;
 			$this->assertTrue($containsValue, $pred . ' is missing from the observed pred list (from the REST service), for the predator Callinectes sapidus');
@@ -149,7 +147,11 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 			"boundWest" => -97.0);
 
 
-		$actualResponse = $this->handler->requestHandlerDriver($locationPost);
+    $actualResponse = $this->handler->requestHandlerDriver($locationPost);
+
+    $firstPreyInstance = json_decode($actualResponse)[0]->preyInstances[0];
+    $this->assertTrue(property_exists($firstPreyInstance, 'lat'));
+    $this->assertTrue(property_exists($firstPreyInstance, 'long'));
 		$somePredValues = array('Micropogonias undulatus', 'Parasite', 'Actinopterygii', 'Pectinariidae', 'Palaemonetes vulgaris');
 
 		foreach ($somePredValues as $pred) {
