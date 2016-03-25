@@ -10,7 +10,7 @@ function rhm_child_theme_setup(){
 	add_filter( 'default_content', 'rhm_override_comment_default', 10, 2 );
 	
 	// Ajax registration action.
-	add_action( 'wp_ajax_nopriv_rhm_ajax_register', 'rhm_ajax_register' );
+	//add_action( 'wp_ajax_nopriv_rhm_ajax_register', 'rhm_ajax_register' );
 
 	// Ajax login action.
 	add_action( 'wp_ajax_nopriv_rhm_ajax_login', 'rhm_ajax_login' );
@@ -18,6 +18,10 @@ function rhm_child_theme_setup(){
 	// Ajax data query.
 	add_action( 'wp_ajax_nopriv_rhm_data_query', 'rhm_data_query' );
 	add_action( 'wp_ajax_rhm_data_query', 'rhm_data_query' );
+
+	// Ajax data locations.
+	add_action( 'wp_ajax_nopriv_rhm_data_locations', 'rhm_data_locations' );
+	add_action( 'wp_ajax_rhm_data_locations', 'rhm_data_locations' );
 
 	// Ajax reference tags.
 	add_action( 'wp_ajax_nopriv_rhm_ref_tag', 'rhm_ref_tag' );
@@ -79,66 +83,139 @@ function rhm_logout_redirect($logouturl, $redirect){
 
 // Handles registering a new user.
 // Based on function in wp-login.php.
-function rhm_ajax_register(){
-	$user_login = '';
-	$user_email = '';
+//function rhm_ajax_register(){
+//	$user_login = '';
+//	$user_email = '';
+//
+//	extract($_POST);  // Should include $user_login and $user_email.
+//
+//	$errors = new WP_Error();
+//
+//	$sanitized_user_login = sanitize_user( $user_login );
+//	$user_email = apply_filters( 'user_registration_email', $user_email );
+//
+//	// Check the username
+//	if ( $sanitized_user_login == '' ) {
+//		$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Please enter a username.' ) );
+//	} elseif ( ! validate_username( $user_login ) ) {
+//		$errors->add( 'invalid_username', __( '<strong>ERROR</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.' ) );
+//		$sanitized_user_login = '';
+//	} elseif ( username_exists( $sanitized_user_login ) ) {
+//		$errors->add( 'username_exists', __( '<strong>ERROR</strong>: This username is already registered. Please choose another one.' ) );
+//	}
+//
+//	// Check the e-mail address
+//	if ( $user_email == '' ) {
+//		$errors->add( 'empty_email', __( '<strong>ERROR</strong>: Please type your e-mail address.' ) );
+//	} elseif ( ! is_email( $user_email ) ) {
+//		$errors->add( 'invalid_email', __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.' ) );
+//		$user_email = '';
+//	} elseif ( email_exists( $user_email ) ) {
+//		$errors->add( 'email_exists', __( '<strong>ERROR</strong>: This email is already registered, please choose another one.' ) );
+//	}
+//
+//	do_action( 'register_post', $sanitized_user_login, $user_email, $errors );
+//
+//	$errors = apply_filters( 'registration_errors', $errors, $sanitized_user_login, $user_email );
+//
+//	if ( $errors->get_error_code() ) {
+//		echo $errors->get_error_message();
+//		die();
+//	}
+//
+//	$user_pass = wp_generate_password( 12, false);
+//	$user_id = wp_create_user( $sanitized_user_login, $user_pass, $user_email );
+//	if ( ! $user_id ) {
+//		$errors->add( 'registerfail', sprintf( __( '<strong>ERROR</strong>: Couldn&#8217;t register you... please contact the <a href="mailto:%s">webmaster</a> !' ), get_option( 'admin_email' ) ) );
+//		echo $errors->get_error_message();
+//		die();
+//	}
+//
+//	update_user_option( $user_id, 'default_password_nag', true, true ); //Set up the Password change nag.
+//
+//	wp_new_user_notification( $user_id, $user_pass );
+//
+//	echo '<strong>Success!</strong> Your registration is complete. A randomly-generated password has been emailed to you.';
+//	
+//	die();
+//}
 
-	extract($_POST);  // Should include $user_login and $user_email.
-
-	$errors = new WP_Error();
-
-	$sanitized_user_login = sanitize_user( $user_login );
-	$user_email = apply_filters( 'user_registration_email', $user_email );
-
-	// Check the username
-	if ( $sanitized_user_login == '' ) {
-		$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Please enter a username.' ) );
-	} elseif ( ! validate_username( $user_login ) ) {
-		$errors->add( 'invalid_username', __( '<strong>ERROR</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.' ) );
-		$sanitized_user_login = '';
-	} elseif ( username_exists( $sanitized_user_login ) ) {
-		$errors->add( 'username_exists', __( '<strong>ERROR</strong>: This username is already registered. Please choose another one.' ) );
-	}
-
-	// Check the e-mail address
-	if ( $user_email == '' ) {
-		$errors->add( 'empty_email', __( '<strong>ERROR</strong>: Please type your e-mail address.' ) );
-	} elseif ( ! is_email( $user_email ) ) {
-		$errors->add( 'invalid_email', __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.' ) );
-		$user_email = '';
-	} elseif ( email_exists( $user_email ) ) {
-		$errors->add( 'email_exists', __( '<strong>ERROR</strong>: This email is already registered, please choose another one.' ) );
-	}
-
-	do_action( 'register_post', $sanitized_user_login, $user_email, $errors );
-
-	$errors = apply_filters( 'registration_errors', $errors, $sanitized_user_login, $user_email );
-
-	if ( $errors->get_error_code() ) {
-		echo $errors->get_error_message();
-		die();
-	}
-
-	$user_pass = wp_generate_password( 12, false);
-	$user_id = wp_create_user( $sanitized_user_login, $user_pass, $user_email );
-	if ( ! $user_id ) {
-		$errors->add( 'registerfail', sprintf( __( '<strong>ERROR</strong>: Couldn&#8217;t register you... please contact the <a href="mailto:%s">webmaster</a> !' ), get_option( 'admin_email' ) ) );
-		echo $errors->get_error_message();
-		die();
-	}
-
-	update_user_option( $user_id, 'default_password_nag', true, true ); //Set up the Password change nag.
-
-	wp_new_user_notification( $user_id, $user_pass );
-
-	echo '<strong>Success!</strong> Your registration is complete. A randomly-generated password has been emailed to you.';
+add_filter('wpmu_signup_user_notification', 'gomexsi_wpmu_signup_user_notification', 10, 4);
+function gomexsi_wpmu_signup_user_notification($user, $user_email, $key, $meta = '') {
+	$sitename = get_bloginfo('name');
+	$blog_id = get_current_blog_id();
 	
-	die();
+	// Send email with activation link.
+	$admin_email = get_option('admin_email');
+	$from_name = get_option('blogname') == '' ? $sitename : esc_html(get_option('blogname'));
+	$message_headers = "From: \"{$from_name}\" <{$admin_email}>\n" . "Content-Type: text/plain; charset=\"" . get_option('blog_charset') . "\"\n";
+	
+	$message = apply_filters(
+		'wpmu_signup_user_notification_email',
+		sprintf(
+			"Hi %s,\n\nThank you for registering with %s.\n\nTo activate your account, please click the following link:\n\n%s.",
+			$user,
+			$sitename,
+			site_url("?page=gf_activation&key=$key")
+		),
+		$user, $user_email, $key, $meta
+	);
+	
+	$subject = apply_filters(
+		'wpmu_signup_user_notification_subject',
+		sprintf(
+			'%s - Activate Your Account',
+			$sitename
+		),
+		$user, $user_email, $key, $meta
+	);
+	
+	wp_mail($user_email, $subject, $message, $message_headers);
+
+	return false;
+}
+
+function gomexsi_activate_page_action() {
+    add_filter('ngettext', 'gomexsi_activate_page_change_text');
+    add_filter('gettext', 'gomexsi_activate_page_change_text');
+}
+add_action('activate_header', 'gomexsi_activate_page_action');
+
+function gomexsi_activate_page_change_text($text){
+    $search_1 = '<a href="%1$s">Log in</a> or go back to the <a href="%2$s">homepage</a>.';
+    $replace_1 = '<a href="%2$s">Return to the home page</a> and click the login link in the upper right corner.';
+    $text = str_ireplace($search_1, $replace_1, $text);
+    $search_2 = '<a href="%1$s">log in</a>';
+    $replace_2 = 'log in';
+    $text = str_ireplace($search_2, $replace_2, $text);
+	return $text;
 }
 
 // Handle data query.
 function rhm_data_query(){
 	include 'data-query-logic.php';
+}
+
+// Get all data locations from GloBI.
+function rhm_data_locations(){
+	include 'data-query-all-locations.php';
+}
+
+// Mark a checkbox as checked depending on input value.
+function check_if($value_to_check, $check_against = null){
+	// If the value to check exists AND
+	//     there is nothing to check against OR
+	//     there is something to check against which is equivalent to the value to check.
+	if($value_to_check && (!$check_against || ($check_against && $value_to_check == $check_against))){
+		echo 'checked ';
+	}
+}
+
+// Mark a select option as selected depending on input value.
+function select_if($value_to_check, $check_against){
+	if($value_to_check && $value_to_check == $check_against){
+		echo 'selected';	
+	}
 }
 
 // Handle ref_tag click.
@@ -175,8 +252,9 @@ function rhm_ref_tag(){
 
 // Enque Google Maps API on template pages that need it.
 function rhm_enqueue_google_maps_api() {
-	if(is_page_template('data-query-taxonomic.php') || is_page_template('data-query-spatial.php')) {
+	if(is_page_template('data-query-taxonomic.php') || is_page_template('data-query-spatial.php') || is_page_template('data-query-universal.php')) {
 		wp_enqueue_script('rhm_google_maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCM9HegHcXZLQVXyODY7MdtXZ7BtvO_fyM&sensor=false');
+		wp_enqueue_script('rhm_marker_clusterer', get_stylesheet_directory_uri() . '/js/marker-clusterer/src/markerclusterer_compiled.js');
 	}
 }
 
@@ -193,7 +271,7 @@ function rhm_enqueue_child_scripts() {
 	wp_enqueue_script('rhm_js_child_plugins', get_stylesheet_directory_uri() . '/js/plugins.js');
 	
 	// Data Query Scripts
-	if(is_page_template('data-query-taxonomic.php') || is_page_template('data-query-spatial.php') || is_page_template('data-query-exploration.php')) {
+	if(is_page_template('data-query-taxonomic.php') || is_page_template('data-query-spatial.php') || is_page_template('data-query-universal.php') || is_page_template('data-query-exploration.php')) {
 		wp_enqueue_script('rhm_data_query', get_stylesheet_directory_uri() . '/js/data-query.js');
 	}
 }
