@@ -54,7 +54,7 @@
 
 						<h3>You must be logged in to query data.</h3>
 
-						<p>Existing users can <a href="#" class="login-link">log in</a> to continue. New users can <a href="#" class="registration-link">register now</a>&mdash;it's fast, easy, and free!</p>
+						<p>Existing users can <a href="#" class="login-link">log in</a> to continue. New users can <a href="/registration/" class="registration-link">register now</a>&mdash;it's fast, easy, and free!</p>
 					<?php endif; ?>
 				</article>
 			<?php endwhile; ?>

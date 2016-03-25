@@ -10,9 +10,10 @@
 				<p class="user-links"><a href="<?php echo get_edit_user_link(); ?>">My Account</a> | <a href="<?php echo wp_logout_url( get_permalink() ); ?>">Logout</a></p>
 			<?php else : ?>
 				<p class="welcome">Welcome!</p>
-				<p class="user-links"><a href="<?php echo wp_login_url( get_permalink() ); ?>" id="login-link" title="Login">Login</a> | <span id="registration-link"><?php wp_register('', ''); ?></span></p>
+				<p class="user-links"><a href="<?php echo wp_login_url( get_permalink() ); ?>" id="login-link" title="Login">Login</a> | <a href="/registration/" id="registration-link">Register</a></p>
 				<p class="for-db-access">For Database Access</p>
 				<?php wp_login_form(); ?>
+<?php /*?>
 				<form action="" method="post" id="registrationform">
 					<p class="registration-username">
 						<label for="user_login">Choose a Username</label>
@@ -27,6 +28,7 @@
 					<?php do_action('register_form'); ?>
 					<input type="submit" value="Register" id="register" /> 
 				</form>
+<?php */?>
 			<?php endif; ?>
 		</div>
 		<nav id="nav-main">

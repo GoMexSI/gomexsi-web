@@ -1,3 +1,12 @@
+// usage: log('inside coolFunc', this, arguments);
+// paulirish.com/2009/log-a-lightweight-wrapper-for-consolelog/
+window.log = function f(){ log.history = log.history || []; log.history.push(arguments); if(this.console) { var args = arguments, newarr; args.callee = args.callee.caller; newarr = [].slice.call(args); if (typeof console.log === 'object') log.apply.call(console.log, console, newarr); else console.log.apply(console, newarr);}};
+
+// make it safe to use console.log always
+(function(a){function b(){}for(var c="assert,count,debug,dir,dirxml,error,exception,group,groupCollapsed,groupEnd,info,log,markTimeline,profile,profileEnd,time,timeEnd,trace,warn".split(","),d;!!(d=c.pop());){a[d]=a[d]||b;}})
+(function(){try{console.log();return window.console;}catch(a){return (window.console={});}}());
+
+// Counting function for stats shortcode.
 function countUp(jQObject, currentValue, endValue, factor, delay){
 	var t = setTimeout(function(){
 		if(currentValue < endValue){
@@ -28,12 +37,12 @@ jQuery(document).ready(function($) {
 	});
 	
 	// Show the registration form when link is clicked.
-	$('#registration-link a, a.registration-link').click(function(e){
-		e.preventDefault();
-		$('#loginform').hide(250);
-		$('#registrationform').toggle(250);
-		$('#registrationform input#user_login').focus();
-	});
+//	$('#registration-link a, a.registration-link').click(function(e){
+//		e.preventDefault();
+//		$('#loginform').hide(250);
+//		$('#registrationform').toggle(250);
+//		$('#registrationform input#user_login').focus();
+//	});
 	
 	// Handle registration form submission.
 	$('form#registrationform').submit(function(e){
@@ -219,7 +228,6 @@ jQuery(document).ready(function($) {
 	/* =============================================================================
 	   Stats Counter Shortcode
 	   ========================================================================== */
-	console.log('Test.');
 	if($('.stats').length){
 		console.log('Stats container found.');
 		// POST to the WordPress Ajax system.
@@ -233,30 +241,6 @@ jQuery(document).ready(function($) {
 			
 			// Success callback function.
 			function(data, textStatus, jqXHR){
-				console.log(textStatus);
-				console.log(jqXHR);
-				console.log(data);
-				
-/*
-				$('.stats-visits').each(function(i){
-					var start = parseInt($(this).html());
-					var end = data.visits;
-					countUp($(this), start, end, .02, 1);
-				});
-				
-				$('.stats-predators').each(function(i){
-					var start = parseInt($(this).html());
-					var end = data.predators;
-					countUp($(this), start, end, .02, 1);
-				});
-				
-				$('.stats-prey').each(function(i){
-					var start = parseInt($(this).html());
-					var end = data.prey;
-					countUp($(this), start, end, .02, 1);
-				});
-*/
-				
 				$('.stats-studies').each(function(i){
 					var start = parseInt($(this).html());
 					var end = data.studies;
@@ -282,8 +266,7 @@ jQuery(document).ready(function($) {
 			
 		// Failure callback function.
 		).fail(function(jqXHR, textStatus, errorThrown){
-			console.log('Failed to retrieve stats.');
-			console.log(errorThrown);
+			// Do nothing.
 		});
 	}
 });
