@@ -6,6 +6,9 @@
 
 add_action( 'after_setup_theme', 'rhm_child_theme_setup' );
 function rhm_child_theme_setup(){
+	global $content_width;
+	$content_width = 660;
+	
 	// Override the default comments open preference for specified post-types (i.e., pages).
 	add_filter( 'default_content', 'rhm_override_comment_default', 10, 2 );
 	
@@ -253,7 +256,7 @@ function rhm_ref_tag(){
 // Enque Google Maps API on template pages that need it.
 function rhm_enqueue_google_maps_api() {
 	if(is_page_template('data-query-taxonomic.php') || is_page_template('data-query-spatial.php') || is_page_template('data-query-universal.php')) {
-		wp_enqueue_script('rhm_google_maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCM9HegHcXZLQVXyODY7MdtXZ7BtvO_fyM&sensor=false');
+		wp_enqueue_script('rhm_google_maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCM9HegHcXZLQVXyODY7MdtXZ7BtvO_fyM&sensor=false&libraries=geometry');
 		wp_enqueue_script('rhm_marker_clusterer', get_stylesheet_directory_uri() . '/js/marker-clusterer/src/markerclusterer_compiled.js');
 	}
 }
@@ -272,7 +275,16 @@ function rhm_enqueue_child_scripts() {
 	
 	// Data Query Scripts
 	if(is_page_template('data-query-taxonomic.php') || is_page_template('data-query-spatial.php') || is_page_template('data-query-universal.php') || is_page_template('data-query-exploration.php')) {
-		wp_enqueue_script('rhm_data_query', get_stylesheet_directory_uri() . '/js/data-query.js');
+		wp_enqueue_script('wicket', get_stylesheet_directory_uri() . '/js/wicket.js');
+		wp_enqueue_script('wicket_gmap3', get_stylesheet_directory_uri() . '/js/wicket-gmap3.js', array('wicket'));
+		wp_enqueue_script('rhm_data_query', get_stylesheet_directory_uri() . '/js/data-query.js', array('wicket'));
+		
+		// Pass the current language to javascript.
+		if(defined('QTRANSLATE_FILE')){
+			wp_localize_script('rhm_data_query', 'qtranx_language', qtranxf_getLanguage());
+		} else {
+			wp_localize_script('rhm_data_query', 'qtranx_language', 'en');
+		}
 	}
 }
 
@@ -285,9 +297,9 @@ function rhm_stats_handler( $atts, $content = null ) {
 /* 	$output .= '<div class="single-stat"><div class="stats-visits stats-number">0</div><div class="stats-label">Visits Since Launch</div></div>'; */
 /* 	$output .= '<div class="single-stat"><div class="stats-predators stats-number">0</div><div class="stats-label">Predators in Database</div></div>'; */
 /* 	$output .= '<div class="single-stat"><div class="stats-prey stats-number">0</div><div class="stats-label">Prey in Database</div></div>'; */
-	$output .= '<div class="single-stat first"><div class="stats-studies stats-number">0</div><div class="stats-label">References/Contributors</div></div>';
-	$output .= '<div class="single-stat"><div class="stats-interactors stats-number">0</div><div class="stats-label">Unique Interactors</div></div>';
-	$output .= '<div class="single-stat last"><div class="stats-interactions stats-number">0</div><div class="stats-label">Total Interactions</div></div>';
+	$output .= '<div class="single-stat first"><div class="stats-studies stats-number">0</div><div class="stats-label">'._q('References/Contributors', 'Referencias/Contribuciones').'</div></div>';
+	$output .= '<div class="single-stat"><div class="stats-interactors stats-number">0</div><div class="stats-label">'._q('Unique Interactors', 'Interactores Únicos').'</div></div>';
+	$output .= '<div class="single-stat last"><div class="stats-interactions stats-number">0</div><div class="stats-label">'._q('Total Interactions', 'Total de Interacciones').'</div></div>';
 	$output .= '</div>';
 	$output .= '</div>';
 	
@@ -338,4 +350,27 @@ function rhm_stats_request(){
 	//echo '{"studies": 49, "interactions": 69584, "predators": 273, "prey": 1247, "interactors": 1520}';
 	
 	die('');
+}
+
+// Translation function to return either an English or Spanish string.
+function _q($en, $es){
+	if(defined('QTRANSLATE_FILE')){
+		switch(qtranxf_getLanguage()){
+			case 'en':
+				return $en;
+				break;
+			case 'es':
+				return $es;
+				break;
+			default:
+				return $en;
+		}
+	} else {
+		return $en;	
+	}
+}
+
+// Translation function to echo either an English or Spanish string.
+function _qe($en, $es){
+	echo _q($en, $es);
 }

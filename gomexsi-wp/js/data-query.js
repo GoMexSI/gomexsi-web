@@ -7,8 +7,8 @@ jQuery(document).ready(function($) {
 	// Types of interactions available.
 	var types = {
 		// 'type' : ['singular', 'plural'],
-		'prey' : ['prey', 'prey'],
-		'pred' : ['predator', 'predators']
+		'prey' : [_q('prey', 'presa'), _q('prey', 'presas')],
+		'pred' : [_q('predator', 'predador'), _q('predators', 'predadores')]
 	};
 	
 	// Default mode for non-query pages.
@@ -18,6 +18,9 @@ jQuery(document).ready(function($) {
 		mode = 'taxonomic';
 	
 	if($('body.page-template-data-query-spatial-php').length)
+		mode = 'spatial';
+	
+	if($('body.page-template-data-query-universal-php').length)
 		mode = 'spatial';
 	
 	if($('body.page-template-data-query-exploration-php').length)
@@ -82,9 +85,32 @@ jQuery(document).ready(function($) {
 			return formatted;
 		}
 		
+		function arraysEqual(arr1, arr2) {
+			if(arr1.length !== arr2.length)
+				return false;
+			for(var i = arr1.length; i--;) {
+				if(arr1[i] !== arr2[i])
+					return false;
+			}
+			return true;
+		}
+		
+		function arrayContainsArray(containerArray, itemArray){
+			for(var i = containerArray.length; i--;){
+				if(arraysEqual(containerArray[i], itemArray)){
+					return true;
+				}
+			}
+			return false;
+		}
+		
 		/* ==============================
 		   Fuzzy Search Suggestions
 		   ============================*/
+		
+		// Handle for the suggestion setTimeout() function.
+		// Declared outside the function so it can be cancelled by a separate instance of the function.
+		var sugTimeout;
 		
 		// Fuzzy search suggestions.
 		$('input.taxonomic').keydown(function(e){
@@ -127,11 +153,10 @@ jQuery(document).ready(function($) {
 					$('ul.tax-suggestions').remove();
 				}
 			}
+			
+			// Don't trigger another set of suggestions when the input changes to the selected suggestion.
+			clearTimeout(sugTimeout);
 		});
-		
-		// Handle for the suggestion setTimeout() function.
-		// Declared outside the function so it can be cancelled by a separate instance of the function.
-		var sugTimeout;
 		
 		$('input.taxonomic').keyup(function(e){
 			// Which key was pressed? (Key code number.)
@@ -196,7 +221,7 @@ jQuery(document).ready(function($) {
 								}
 							}
 						);
-					}, 250); // 250 millisecond delay.
+					}, 100); // 100 millisecond delay.
 				} else {
 					// If we don't have a suggestion fragment (e.g., the user deleted all text from the input) remove the suggestion list.
 					$(taxWrap).find('ul.tax-suggestions').remove();
@@ -213,10 +238,13 @@ jQuery(document).ready(function($) {
 		function suggestionClickListener(){
 			$('li.tax-suggestion').click(function(e){
 				// Stop propagation so that this does not count as a body click (and thereby remove the list).
-				e.stopPropagation();
+				//e.stopPropagation();
 				$(this).parent().children().removeClass('selected');
 				var value = $(this).addClass('selected').text();
 				$(this).closest('.tax-wrapper').children('input.taxonomic').val(value);
+				
+				// Stop the suggestion function from triggering because the input changed.
+				clearTimeout(sugTimeout);
 			});
 		}
 		
@@ -229,21 +257,25 @@ jQuery(document).ready(function($) {
 		   Results
 		   ============================*/
 		
+		// We'll need this to keep track of all the locations where we have results.
+		var resultLocations = Array();
+		
 		function Results(data){
 			if(data){
 				try{
 					this.subjects = JSON && JSON.parse(data) || $.parseJSON(data);
-					log('JSON Parsed Results Object:'); log(this.subjects);
-					log('Processed Data Object:'); log(this);
+					//log('JSON Raw Results Object:'); log(data);
+					//log('JSON Parsed Results Object:'); log(this.subjects);
+					//log('Processed Data Object:'); log(this);
 				}
 				catch(err){
 					this.subjects = '';
-					log('Error message: ' + err.message);
-					log('Unparsed Results String:'); log(this);
+					//log('Error message: ' + err.message);
+					//log('Unparsed Results String:'); log(this);
 				}
 			} else {
 				this.subjects = '';
-				log('No data detected. Raw output from RequestHandler.php:'); log(data);
+				//log('No data detected. Raw output from RequestHandler.php:'); log(data);
 			}
 		}
 		
@@ -259,7 +291,7 @@ jQuery(document).ready(function($) {
 					subject[type + 'InstanceCount'] = 0;
 					subject[type + 'List'] = [];
 					
-					var instances = (typeof subject[type + 'Instances'] == 'object' ? subject[type + 'Instances'] : []);
+					var instances = (typeof subject[type + 'Instances'] === 'object' ? subject[type + 'Instances'] : []);
 					
 					$.each(instances, function(j){
 						var instance = instances[j];
@@ -267,6 +299,14 @@ jQuery(document).ready(function($) {
 						
 						subject[type + 'InstanceCount']++;
 						totalInstanceCount++;
+						
+						// Add this location to the list of results locations. This will later be used to color-code the markers on the map of the spatial query page.
+						var lat = ('lat' in instance ? instance.lat : false);
+						var long = ('long' in instance ? instance.long : false);
+						var instanceLatLong = [lat, long];
+						if(!arrayContainsArray(resultLocations, instanceLatLong)){
+							resultLocations.push(instanceLatLong);
+						}
 						
 						$.each(instance[type + 'Data'], function(k){
 							var singleTypeName = instance[type + 'Data'][k][type];
@@ -288,7 +328,45 @@ jQuery(document).ready(function($) {
 			});
 			
 			this.totalInstanceCount = totalInstanceCount;
-		}
+			
+			if(modeIs('spatial')){
+				log(resultLocations);
+				log(markersInGulf);
+				
+				var zIndex = markersInGulf.length;
+				
+				var north = parseFloat($('form#data-query input[name="boundNorth"]').val());
+				var east = parseFloat($('form#data-query input[name="boundEast"]').val());
+				var south = parseFloat($('form#data-query input[name="boundSouth"]').val());
+				var west = parseFloat($('form#data-query input[name="boundWest"]').val());
+				
+				var searchCoords = [
+					{lat: north, lng: east},
+					{lat: south, lng: east},
+					{lat: south, lng: west},
+					{lat: north, lng: west}
+				];
+				
+				var searchPoly = new google.maps.Polygon({paths: searchCoords});
+				
+				for(var i = markersInGulf.length; i--;){
+					var markerPosition = markersInGulf[i].getPosition();
+					
+					if(google.maps.geometry.poly.containsLocation(markerPosition, searchPoly)){
+						var markerPositionArray = [markerPosition.lat(), markerPosition.lng()];
+						if(arrayContainsArray(resultLocations, markerPositionArray)){
+							markersInGulf[i].setIcon('/wp-content/themes/gomexsi-wp/img/map_marker_dot_green.png');
+							zIndex++;
+							markersInGulf[i].setZIndex(zIndex);
+						} else {
+							markersInGulf[i].setIcon('/wp-content/themes/gomexsi-wp/img/map_marker_dot_gray_50.png');
+						}
+					} else {
+						markersInGulf[i].setIcon('/wp-content/themes/gomexsi-wp/img/map_marker_dot_red.png');
+					}
+				}
+			}
+		};
 		
 		// Make the subject blocks on the page.
 		Results.prototype.makeSubjects = function(){
@@ -318,7 +396,7 @@ jQuery(document).ready(function($) {
 					$('#' + subjectTitleID + ' .common-name').html(commonNamesText);
 				}
 				
-				for(type in types){
+				for(var type in types){
 					// Check to see if we have instances of this type.
 					if(subject[type + 'InstanceCount'] > 1){
 						// Results section for type.
@@ -331,11 +409,27 @@ jQuery(document).ready(function($) {
 						// Type summary.
 						$(resultsSection).children('.container').append('<div class="results-subsection ' + type + '-summary" />');
 						var typeSummary = $('#' + subject.baseID + ' .' + type + '-summary');
-						$(typeSummary).append('<form><label class="view-option toggle-summary-all"><input type="checkbox" /> Show All ' + formatType(type, true, true) + '</label> <div class="top-ten-note view-option">Top ten items shown.</div></form>');
-						$(typeSummary).append('<h4 class="subsection-title toggle">' + formatType(type, true, true) + ' Summary</h4>');
+						if(qtranx_language !== 'es'){
+							// English
+							$(typeSummary).append('<form><label class="view-option toggle-summary-all"><input type="checkbox" /> Show All ' + formatType(type, true, true) + '</label> <div class="top-ten-note view-option">Top ten items shown.</div></form>');
+						} else {
+							// Spanish
+							if(formatType(type) === 'presa'){
+								$(typeSummary).append('<form><label class="view-option toggle-summary-all"><input type="checkbox" /> Mostrar Todas las ' + formatType(type, true, true) + '</label> <div class="top-ten-note view-option">Se muestran los diez principales elementos.</div></form>');
+							} else if(formatType(type) === 'predador'){
+								$(typeSummary).append('<form><label class="view-option toggle-summary-all"><input type="checkbox" /> Mostrar Todos los ' + formatType(type, true, true) + '</label> <div class="top-ten-note view-option">Se muestran los diez principales elementos.</div></form>');
+							}
+						}
+						if(qtranx_language !== 'es'){
+							// English
+							$(typeSummary).append('<h4 class="subsection-title toggle">' + formatType(type, true, true) + ' Summary</h4>');
+						} else {
+							// Spanish
+							$(typeSummary).append('<h4 class="subsection-title toggle">Resumen de ' + formatType(type, true, true) + '</h4>');
+						}
 						$(typeSummary).append('<div class="container" />');
 						$(typeSummary).children('.container').append('<table class="summary"><tbody></tbody></table>');
-						$(typeSummary).children('.container').append('<div class="summary-description">Percent frequency of occurrence over all instances queried.</div>');
+						$(typeSummary).children('.container').append('<div class="summary-description">' + _q('Percent frequency of occurrence over all instances queried.', 'Percentage de frecuencia de ocurrencia de todos los elementos consultados.') + '</div>');
 						
 						// Sort the prey list by number of instances for a given prey. We must dump the prey list into an array so it can be sorted.
 						var typeList = subject[type + 'List'];
@@ -383,8 +477,18 @@ jQuery(document).ready(function($) {
 						var instanceDetailsID = subject.baseID + '-' + type + '-instance-details';
 						$(resultsSection).children('.container').append('<div id="' + instanceDetailsID + '" class="results-subsection instance-details" />');
 						var typeInstanceDetails = $('#' + instanceDetailsID);
-						$(typeInstanceDetails).append('<form><label class="view-option toggle-references"><input type="checkbox" /> References</label><label class="view-option toggle-stats"><input type="checkbox" /> ' + formatType(type, true, true) + ' Stats</label></form>');
-						$(typeInstanceDetails).append('<h4 class="subsection-title toggle">Instance Details</h4>');
+						if(qtranx_language != 'es'){
+							// English
+							$(typeInstanceDetails).append('<form><label class="view-option toggle-references"><input type="checkbox" /> References</label><label class="view-option toggle-stats"><input type="checkbox" /> ' + formatType(type, true, true) + ' Stats</label></form>');
+						} else {
+							// Spanish
+							if(formatType(type) == 'presa'){
+								$(typeInstanceDetails).append('<form><label class="view-option toggle-references"><input type="checkbox" /> Referencias</label><label class="view-option toggle-stats"><input type="checkbox" /> Estadísticas de las ' + formatType(type, true, true) + '</label></form>');
+							} else if(formatType(type) == 'predador'){
+								$(typeInstanceDetails).append('<form><label class="view-option toggle-references"><input type="checkbox" /> Referencias</label><label class="view-option toggle-stats"><input type="checkbox" /> Estadísticas de los ' + formatType(type, true, true) + '</label></form>');
+							}
+						}
+						$(typeInstanceDetails).append('<h4 class="subsection-title toggle">' + _q('Instance Details', 'Detalles de Elemento') + '</h4>');
 						$(typeInstanceDetails).append('<div class="container" />');
 						
 						$.each(subject[type + 'Instances'], function(i){
@@ -402,14 +506,15 @@ jQuery(document).ready(function($) {
 							if(instanceDate){
 								instanceDate = getDate(instanceDate);
 							} else {
-								instanceDate = 'Unknown';
+								instanceDate = _q('Unknown', 'Desconocida');
 							}
-							$(singleInstance).append('<div class="date"><h5 class="label">Date Collected:</h5> ' + instanceDate + '</div>');
+							$(singleInstance).append('<div class="date"><h5 class="label">' + _q('Date Collected:', 'Fecha de Colecta:') + '</h5> ' + instanceDate + '</div>');
 							
-							var instanceLocation = ('loc' in instance ? instance.loc : 'Unnamed Location');
+							var instanceLocation = ('loc' in instance ? instance.loc : _q('Unnamed Location', 'Lugar Desconocido'));
 							var lat = ('lat' in instance ? instance.lat : '');
 							var long = ('long' in instance ? instance.long : '');
-							$(singleInstance).append('<div class="location"><h5 class="label">Location:</h5> ' + instanceLocation + ' <a href="#map-canvas" class="map-link" data-lat="' + lat + '" data-lon="' + long + '">Map</a></div>');
+							var footprintWKT = ('footprintWKT' in instance ? instance.footprintWKT : '');
+							$(singleInstance).append('<div class="location"><h5 class="label">' + _q('Location:', 'Lugar:') + '</h5> ' + instanceLocation + ' <a href="#map-canvas" class="map-link" data-lat="' + lat + '" data-lon="' + long + '" data-footprintWKT="' + footprintWKT + '">' + _q('Map', 'Mapa') + '</a></div>');
 							
 							var instanceTypeListID = instanceID + '-' + type + '-list';
 							$(singleInstance).append('<div class="prey species-list"><h5 class="label">' + formatType(type, true, true) + ':</h5><ul id="' + instanceTypeListID + '"></ul></div>');
@@ -432,7 +537,7 @@ jQuery(document).ready(function($) {
 									singleDetails.push(singlePhysiologicalState);
 								}
 								if(singleDetails.length == 0){
-									singleDetails.push('No details.');
+									singleDetails.push(_q('No details.', 'Sin detalles.'));
 								}
 								
 								var li = '<li class="clearfix">';
@@ -464,159 +569,16 @@ jQuery(document).ready(function($) {
 		
 		// Populate the results header area.
 		Results.prototype.makeResultsHeader = function(){
-			$('#query-results-info').html('Returned ' + this.totalSubjectCount + ($(this.totalSubjectCount).length > 1 ? ' results' : ' result') + ' with ' + this.totalInstanceCount + ' instances recorded.');
+			if(qtranx_language != 'es'){
+				// English
+				$('#query-results-info').html('Returned ' + this.totalSubjectCount + ($(this.totalSubjectCount).length > 1 ? ' results' : ' result') + ' with ' + this.totalInstanceCount + ' instances recorded.');
+			} else {
+				// Spanish
+				$('#query-results-info').html(this.totalSubjectCount + ($(this.totalSubjectCount).length > 1 ? ' resultados encontrados' : ' resultado encontrado') + ' con ' + this.totalInstanceCount + ' casos registrados.');
+			}
 			$('#query-results-download, #nametip-instructions').removeClass('visuallyhidden');
 		}
 		
-		// Section toggles and name links.
-		Results.prototype.resultsListeners = function(){
-			$('.toggle').click(function(e){
-				$(this).parent().toggleClass('closed');
-			});
-			
-			$('.toggle-summary-all').click(function(e){
-				if($(this).children('input').prop('checked')){
-					$(this).closest('.results-subsection').find('.overflow').show();
-					$(this).closest('.results-subsection').find('.top-ten-note').hide();
-				} else {
-					$(this).closest('.results-subsection').find('.overflow').hide();
-					$(this).closest('.results-subsection').find('.top-ten-note').show();
-				}
-			});
-			
-			$('.toggle-stats').click(function(e){
-				if($(this).children('input').prop('checked')){
-					$(this).closest('.instance-details').find('.species-list').addClass('expanded');
-				} else {
-					$(this).closest('.instance-details').find('.species-list').removeClass('expanded');
-				}
-			});
-			
-			$('.toggle-references').click(function(e){
-				if($(this).children('input').prop('checked')){
-					$(this).closest('.instance-details').find('.reference').show();
-				} else {
-					$(this).closest('.instance-details').find('.reference').hide();
-				}
-			});
-			
-			$('.name-tip-link').click(function(e){
-				e.preventDefault();
-				e.stopPropagation();
-				
-				// Remove any existing name tip boxes.
-				$('.name-tip-box').remove();
-
-				var scientificName = $(this).html();
-				var wrapper = $(this).parent('.name-tip-wrapper');
-				$(wrapper).append('<div class="name-tip-box"><div class="container"><ul></ul></div><div class="bridge"></div></div>');
-				var linkList = $(wrapper).find('ul');
-				$(linkList).append('<li><a href="/query-database/exploration/" class="ex-link">View in Explorer Mode<form class="visuallyhidden" method="post" action="/query-database/exploration/"><input type="hidden" name="subjectName" value="' + scientificName + '" /></form></a></li>')
-				
-				var postData = {
-					url : 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php',
-					action : 'rhm_data_query',
-					deepLinks : scientificName,
-					serviceType: 'rest'
-				};
-				
-				// POST to the WordPress Ajax system.
-				$.post(
-					// URL to the WordPress Ajax system.
-					'/wp-admin/admin-ajax.php',
-					
-					// The object containing the POST data.
-					postData,
-					
-					// Success callback function.
-					function(data, textStatus, jqXHR){
-						var externalUrl = data['URL'];
-						
-						if(typeof externalUrl !== 'undefined'){
-							var externalSource = '';
-							
-							if(externalUrl.indexOf('eol.org') !== -1){
-								externalSource = 'Encyclopedia of Life';
-							} else if(externalUrl.indexOf('fishbase.org') !== -1){
-								externalSource = 'FishBase';
-							} else if(externalUrl.indexOf('gulfbase.org') !== -1){
-								externalSource = 'GulfBase';
-							} log(externalSource);
-							
-							if(externalSource !== ''){
-								$(linkList).append('<li><a href="' + externalUrl + '" class="external" target="_blank">' + externalSource + '</a></li>');
-							}
-						}
-					},
-					
-					// Expect JSON data.
-					'json'
-					
-				// Failure callback function.
-				).fail(function(jqXHR, textStatus, errorThrown){
-					
-				});
-			});
-			
-			$('.reference-link').click(function(e){
-				e.preventDefault();
-				
-				var refId = $(this).attr('href');
-				refId = refId.replace('#','');
-				var citation = $('#'+refId).html();
-				
-				$.fancybox({
-					type: 'inline',
-					href: '#'+refId,
-					onClosed: function(){
-						$('.fancybox-inline-tmp').html(citation).attr('id',refId).attr('style','').removeClass('fancybox-inline-tmp');
-					}
-				});
-			});
-			
-			$('body').click(function(e){
-				// If a name tip box is open, then clicking anywhere else will remove it.
-				$('.name-tip-box').remove();
-			});
-			
-			$('body').on('click','.ex-link',function(e){
-				e.preventDefault();
-				$(this).children('form').submit();
-			});
-		}
-		
-		Results.prototype.mapListner = function(){
-			$('.map-link').click(function(e){
-				e.preventDefault();
-				
-				var lat = $(this).attr('data-lat');
-				var lon = $(this).attr('data-lon');
-				var latLon = new google.maps.LatLng(lat, lon);
-				
-				if(lat && lon){
-					var mapOptions = {
-						center: latLon,
-						zoom: 8,
-						mapTypeId: google.maps.MapTypeId.TERRAIN
-					};
-					
-					var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-					
-					var marker = new google.maps.Marker({
-						position: latLon,
-						map: map
-					});
-					
-					$.fancybox({
-						'type': 'inline',
-						'href': '#map-canvas',
-						'onClosed': function(){
-							$('div#hideaway .fancybox-inline-tmp').attr('id', 'map-canvas').attr('style','').removeClass('fancybox-inline-tmp');
-						}
-					});
-				}
-			});
-		}
 		
 		// Exploration Mode
 		Results.prototype.clearExArea = function(){
@@ -656,7 +618,7 @@ jQuery(document).ready(function($) {
 			makeExPred(subject);
 			
 			var subjectID = 'subject-' + nameSafe(subject.scientificName);
-			$('#ex-area').append('<div id="' + subjectID + '" class="ex-subject ex-species gradient" data-sci-name="' + subject.scientificName + '">' + subject.scientificName + '</div>');
+			$('#ex-area').append('<div id="' + subjectID + '" class="ex-subject ex-species gradient" data-sci-name="' + subject.scientificName + '">' + nameTip(subject.scientificName) + '</div>');
 			
 			makeExPrey(subject);
 		}
@@ -671,7 +633,7 @@ jQuery(document).ready(function($) {
 				var pred = subject.predList[predKey];
 				var predID = 'pred-' + nameSafe(pred.scientificName);
 				
-				$(exArea).append('<div id="' + predID + '" class="ex-pred ex-species gradient" data-sci-name="' + pred.scientificName + '"><div class="ex-label">Predator</div>' + pred.scientificName + '</div>');
+				$(exArea).append('<div id="' + predID + '" class="ex-pred ex-species gradient" data-sci-name="' + pred.scientificName + '"><div class="ex-label">Predator</div>' + nameTip(pred.scientificName) + '<a class="ex-link" href="/query-database/exploration/?subjectName=' + encodeURI(pred.scientificName) + '&findPrey=on&findPredators=on&serviceType=rest&action=rhm_data_query">' + _q('Explore This', 'Explorar Este') + '</a></div>');
 			}
 		}
 		
@@ -685,7 +647,7 @@ jQuery(document).ready(function($) {
 				var prey = subject.preyList[preyKey];
 				var preyID = 'prey-' + nameSafe(prey.scientificName);
 				
-				$(exArea).append('<div id="' + preyID + '" class="ex-prey ex-species gradient" data-sci-name="' + prey.scientificName + '"><div class="ex-label">Prey</div>' + prey.scientificName + '</div>');
+				$(exArea).append('<div id="' + preyID + '" class="ex-prey ex-species gradient" data-sci-name="' + prey.scientificName + '"><div class="ex-label">Prey</div>' + nameTip(prey.scientificName) + '<a class="ex-link" href="/query-database/exploration/?subjectName=' + encodeURI(prey.scientificName) + '&findPrey=on&findPredators=on&serviceType=rest&action=rhm_data_query">Explore This</a></div>');
 			}
 		}
 		
@@ -774,23 +736,181 @@ jQuery(document).ready(function($) {
 			});
 		}
 		
-		Results.prototype.exListeners = function(){
-			$('.ex-species').click(function(e){
-				var sciName = $(this).attr('data-sci-name');
-				
-				$('form#data-query input[name="subjectName"]').val(sciName);
-				$('form#data-query').trigger('submit');
-			});
-		}
 		
+		$('body').on('click', '.toggle', function(e){
+			$(this).parent().toggleClass('closed');
+		});
+		
+		$('body').on('click', '.toggle-summary-all', function(e){
+			if($(this).children('input').prop('checked')){
+				$(this).closest('.results-subsection').find('.overflow').show();
+				$(this).closest('.results-subsection').find('.top-ten-note').hide();
+			} else {
+				$(this).closest('.results-subsection').find('.overflow').hide();
+				$(this).closest('.results-subsection').find('.top-ten-note').show();
+			}
+		});
+		
+		$('body').on('click', '.toggle-stats', function(e){
+			if($(this).children('input').prop('checked')){
+				$(this).closest('.instance-details').find('.species-list').addClass('expanded');
+			} else {
+				$(this).closest('.instance-details').find('.species-list').removeClass('expanded');
+			}
+		});
+		
+		$('body').on('click', '.toggle-references', function(e){
+			if($(this).children('input').prop('checked')){
+				$(this).closest('.instance-details').find('.reference').show();
+			} else {
+				$(this).closest('.instance-details').find('.reference').hide();
+			}
+		});
+		
+		$('body').on('click', '.reference-link', function(e){
+			e.preventDefault();
+			
+			var refId = $(this).attr('href');
+			refId = refId.replace('#','');
+			var citation = $('#'+refId).html();
+			
+			$.fancybox({
+				type: 'inline',
+				href: '#'+refId,
+				onClosed: function(){
+					$('.fancybox-inline-tmp').html(citation).attr('id',refId).attr('style','').removeClass('fancybox-inline-tmp');
+				}
+			});
+		});
+		
+		$('body').on('click', '.name-tip-link', function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			
+			// Remove any existing name tip boxes.
+			$('.name-tip-box').remove();
+
+			var scientificName = $(this).html();
+			var wrapper = $(this).parent('.name-tip-wrapper');
+			$(wrapper).append('<div class="name-tip-box"><div class="container"><ul></ul></div><div class="bridge"></div></div>');
+			var linkList = $(wrapper).find('ul');
+			if(!modeIs('exploration')){
+				$(linkList).append('<li><a href="/query-database/exploration/?subjectName=' + encodeURI(scientificName) + '&findPrey=on&findPredators=on&serviceType=rest&action=rhm_data_query">' + _q('View in Explorer Mode', 'Ver en Modo de Exploración') + '</a></li>');
+			}
+			if(modeIs('exploration')){
+				$(linkList).append('<li><a href="/query-database/taxonomic/?subjectName=' + encodeURI(scientificName) + '&findPrey=on&findPredators=on&serviceType=rest&action=rhm_data_query">' + _q('Taxonomic Query', 'Consulta Taxonómica') + '</a></li>');
+			}
+			
+			var postData = {
+				url : 'http://gomexsi.tamucc.edu/gomexsi/requestHandler/RequestHandler.php',
+				action : 'rhm_data_query',
+				deepLinks : scientificName,
+				serviceType: 'rest'
+			};
+			
+			// POST to the WordPress Ajax system.
+			$.post(
+				// URL to the WordPress Ajax system.
+				'/wp-admin/admin-ajax.php',
+				
+				// The object containing the POST data.
+				postData,
+				
+				// Success callback function.
+				function(data, textStatus, jqXHR){
+					var externalUrl = data['URL'];
+					
+					if(typeof externalUrl !== 'undefined'){
+						var externalSource = '';
+						
+						if(externalUrl.indexOf('eol.org') !== -1){
+							externalSource = _q('Encyclopedia of Life', 'Enciclopedia de la Vida');
+						} else if(externalUrl.indexOf('fishbase.org') !== -1){
+							externalSource = 'FishBase';
+						} else if(externalUrl.indexOf('gulfbase.org') !== -1){
+							externalSource = 'GulfBase';
+						} log(externalSource);
+						
+						if(externalSource !== ''){
+							$(linkList).append('<li><a href="' + externalUrl + '" class="external" target="_blank">' + externalSource + '</a></li>');
+						}
+					}
+				},
+				
+				// Expect JSON data.
+				'json'
+				
+			// Failure callback function.
+			).fail(function(jqXHR, textStatus, errorThrown){
+				
+			});
+		});
+		
+		$('body').click(function(e){
+			// If a name tip box is open, then clicking anywhere else will remove it.
+			$('.name-tip-box').remove();
+		});
+		
+		$('body').on('click', '.map-link', function(e){
+			e.preventDefault();
+			
+			var lat = $(this).attr('data-lat');
+			var lon = $(this).attr('data-lon');
+			var latLon = new google.maps.LatLng(lat, lon);
+			var polygonText = $(this).attr('data-footprintWKT');
+			if(polygonText != 'null' && polygonText != ''){
+				var wkt = new Wkt.Wkt();
+				wkt.read(polygonText);
+				var footprintWKT = wkt.toObject({
+					strokeColor: '#FFFF00',
+					strokeOpacity: 0.5,
+					strokeWeight: 1,
+					fillColor: '#FFFF00',
+					fillOpacity: 0.1
+				});
+			}
+			
+			if(lat && lon){
+				var mapOptions = {
+					center: latLon,
+					zoom: 8,
+					mapTypeId: google.maps.MapTypeId.TERRAIN
+				};
+				
+				var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+				
+				var marker = new google.maps.Marker({
+					position: latLon,
+					map: map
+				});
+				
+				if(polygonText != 'null' && polygonText != ''){
+					footprintWKT.setMap(map);
+				}
+				
+				$.fancybox({
+					'type': 'inline',
+					'href': '#map-canvas',
+					'onClosed': function(){
+						$('div#hideaway .fancybox-inline-tmp').attr('id', 'map-canvas').attr('style','').removeClass('fancybox-inline-tmp');
+					}
+				});
+			}
+		});
+
 		
 		/* ==============================
 		   Query Form
 		   ============================*/
 		
-		// Conditional switch.
+		// Conditional switch listener.
 		$('.switch').click(function(e){
 			toggleSwitch($(this));
+		});
+		
+		// Run this on the initial page load in case "switches" are set by the URL.
+		$('.switch').each(function(i, e){
+			toggleSwitch(e);
 		});
 		
 		function toggleSwitch(theSwitch){
@@ -807,9 +927,9 @@ jQuery(document).ready(function($) {
 			}
 		}
 
-		// Master checkbox.
+		// Master checkbox listener.
 		$('.master-checkbox').click(function(e){
-			var section = $(this).closest('.form-section');
+			var section = $($(this)).closest('.form-section');
 			var checkboxes = checkboxCheck(section);
 			
 			if(checkboxes.unchecked > 0){
@@ -828,7 +948,12 @@ jQuery(document).ready(function($) {
 		});
 		
 		$('input[type="checkbox"]').not('.master-checkbox').click(function(e){
-			var section = $(this).closest('.form-section');
+			setMasterCheckbox($(this).closest('.form-section'));
+		});
+		
+		setMasterCheckbox($('#form-section-find'));
+		
+		function setMasterCheckbox(section){
 			var checkboxes = checkboxCheck(section);
 			
 			if(checkboxes.checked && checkboxes.unchecked){
@@ -840,7 +965,7 @@ jQuery(document).ready(function($) {
 				$(section).find('.master-checkbox').prop('indeterminate', false);
 				$(section).find('.master-checkbox').prop('checked', false);
 			}
-		});
+		}
 		
 		function checkboxCheck(section){
 			var checked = 0;
@@ -859,9 +984,11 @@ jQuery(document).ready(function($) {
 			return checkboxes;
 		}
 		
-		
 		// Query Map
 		if(modeIs('spatial')){
+			// This will be used later.
+			var markersInGulf = Array();
+			
 			var qMapLatLon = new google.maps.LatLng(25, -90);
 			
 			var qMapOptions = {
@@ -875,8 +1002,14 @@ jQuery(document).ready(function($) {
 			var qShape;
 			
 			var qShapeBounds = new google.maps.LatLngBounds(
-				new google.maps.LatLng(20, -100),
-				new google.maps.LatLng(30, -80)
+				new google.maps.LatLng(
+					parseFloat($('form#data-query input[name="boundSouth"]').val()),
+					parseFloat($('form#data-query input[name="boundWest"]').val())
+				),
+				new google.maps.LatLng(
+					parseFloat($('form#data-query input[name="boundNorth"]').val()),
+					parseFloat($('form#data-query input[name="boundEast"]').val())
+				)
 			);
 			
 			qShape = new google.maps.Rectangle({
@@ -887,7 +1020,7 @@ jQuery(document).ready(function($) {
 				strokeOpacity: 1,
 				strokeWeight: 1,
 				fillColor: "#ffff00",
-				fillOpacity: 0.1
+				fillOpacity: 0.1,
 			});
 			
 			function updateBounds(bounds){
@@ -907,6 +1040,28 @@ jQuery(document).ready(function($) {
 			google.maps.event.addListener(qShape, 'bounds_changed', function() {
 				updateBounds(qShape.bounds);
 			});
+			
+			// POST to the WordPress Ajax system.
+			$.post(
+				'/wp-admin/admin-ajax.php',
+				'action=rhm_data_locations',
+				function(data, textStatus, jqXHR){
+					log(data);
+					$.each(data, function(i, point){
+						var latLon = new google.maps.LatLng(point[0], point[1]);
+						
+						var marker = new google.maps.Marker({
+							position: latLon,
+							icon: '/wp-content/themes/gomexsi-wp/img/map_marker_dot_red.png',
+							map: qMap
+						});
+						markersInGulf.push(marker);
+					});
+				},
+				'json'
+			).fail(function(jqXHR, textStatus, errorThrown){
+				log(errorThrown);
+			});
 		}
 		
 		// Data query form submit action.
@@ -916,7 +1071,14 @@ jQuery(document).ready(function($) {
 			e.preventDefault();
 			
 			// The query object that we'll submit via POST.
+			log($(this));
 			var queryString = $(this).serialize();
+			
+			// Update the page URL.
+			var pathArray = window.location.pathname.split('?');
+			var newPath = pathArray[0]+'?'+queryString;
+			log(newPath);
+			window.history.pushState({}, '', newPath);
 			
 			// Make sure there is a valid query.
 			var validInteraction = false;
@@ -955,7 +1117,7 @@ jQuery(document).ready(function($) {
 			// Clear the status container.
 			$('#status').removeClass('success failure');
 			$('#status').addClass('loading');
-			$('#status').html('Loading...');
+			$('#status').html(_q('Loading...', 'Descargando...'));
 			
 			log('Query String:'); log(queryString);
 			
@@ -980,19 +1142,17 @@ jQuery(document).ready(function($) {
 					if(modeIs('taxonomic') || modeIs('spatial')){
 						r.makeSubjects();
 						r.makeResultsHeader();
-						r.resultsListeners();
-						r.mapListner();
+						//r.mapListner();
 					} else if(modeIs('exploration')) {
 						r.clearExArea();
 						r.makeExArea();
 						r.makeExLines();
-						r.exListeners();
 					}
 					
 					// Show status on page.
 					$('#status').removeClass('loading failure');
 					$('#status').addClass('success');
-					$('#status').html('Query complete.');
+					$('#status').html(_q('Query complete.', 'Consulta finalizada.'));
 					
 					// Build the raw data download link.
 					$('#query-results-download').attr('href', 'http://gomexsi.tamucc.edu/gomexsi/gomexsi-wp/data-query-raw.php?' + r.queryString);

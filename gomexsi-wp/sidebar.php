@@ -6,12 +6,12 @@
 					global $current_user;
 					get_currentuserinfo();
 				?>
-				<p class="welcome">Hi, <?php echo $current_user->display_name; ?>.</p>
-				<p class="user-links"><a href="<?php echo get_edit_user_link(); ?>">My Account</a> | <a href="<?php echo wp_logout_url( get_permalink() ); ?>">Logout</a></p>
+				<p class="welcome"><?php _qe('Hi', 'Hola'); ?>, <?php echo $current_user->display_name; ?>.</p>
+				<p class="user-links"><a href="<?php echo get_edit_user_link(); ?>"><?php _qe('My Account', 'Mi Cuenta'); ?></a> | <a href="<?php echo wp_logout_url( get_permalink() ); ?>"><?php _qe('Logout', 'Salir'); ?></a></p>
 			<?php else : ?>
-				<p class="welcome">Welcome!</p>
-				<p class="user-links"><a href="<?php echo wp_login_url( get_permalink() ); ?>" id="login-link" title="Login">Login</a> | <a href="/registration/" id="registration-link">Register</a></p>
-				<p class="for-db-access">For Database Access</p>
+				<p class="welcome"><?php _qe('Welcome!', '¡Bienvenido!'); ?></p>
+				<p class="user-links"><a href="<?php echo wp_login_url( get_permalink() ); ?>" id="login-link" title="<?php _qe('Login', 'Ingresar'); ?>"><?php _qe('Login', 'Ingresar'); ?></a> | <a href="/registration/" id="registration-link"><?php _qe('Register', 'Registrar'); ?></a></p>
+				<p class="for-db-access"><?php _qe('For Database Access', 'Para Acceder a las<br />Bases de Datos'); ?></p>
 				<?php wp_login_form(); ?>
 <?php /*?>
 				<form action="" method="post" id="registrationform">
@@ -32,7 +32,7 @@
 			<?php endif; ?>
 		</div>
 		<nav id="nav-main">
-			<h3>Menu</h3>
+			<h3><?php _qe('Menu', 'Menú'); ?></h3>
 			<?php wp_nav_menu(array('theme_location' => 'primary_navigation', 'container_class' => 'main-menu')); ?>
 		</nav>
 		<aside id="sidebar-widgets" role="complementary">

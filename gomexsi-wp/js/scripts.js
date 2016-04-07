@@ -18,6 +18,19 @@ function countUp(jQObject, currentValue, endValue, factor, delay){
 	}, delay);
 }
 
+// Translation function to return either an English or Spanish string.
+function _q(en, es){
+	switch(qtranx_language){
+		case 'en':
+			return en;
+			break;
+		case 'es':
+			return es;
+			break;
+		default:
+			return en;
+	}
+}
 
 jQuery(document).ready(function($) {
 	
@@ -184,11 +197,11 @@ jQuery(document).ready(function($) {
 				$(box).removeClass('loading');
 				
 				if(typeof externalUrl !== 'undefined'){
-					$(linkList).append('<li><a href="' + externalUrl + '" class="external" target="_blank">Details of Study (FWC)</a></li>');
+					$(linkList).append('<li><a href="' + externalUrl + '" class="external" target="_blank">' + _q('Details of Study', 'Detalles del Estudio') + ' (FWC)</a></li>');
 				} else {
-					$(linkList).append('<li>Details of Study Unavailable</li>');
+					$(linkList).append('<li>' + _q('Details of Study Unavailable', 'Detalles del Estudio No Disponibles') + '</li>');
 					if($(wrapper).closest('.tablepress').length == 0){
-						$(linkList).append('<li>See <em>Data References</em> in the menu for full citation.</li>');
+						$(linkList).append('<li>' + _q('See <em>Data References</em> in the menu for full citation.', 'Ver <em>Referencias de Datos</em> en el menú principal para obtener la cita completa.') + '</li>');
 					}
 				}
 			},
@@ -270,5 +283,3 @@ jQuery(document).ready(function($) {
 		});
 	}
 });
-
-

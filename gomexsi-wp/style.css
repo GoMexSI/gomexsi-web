@@ -11,69 +11,13 @@
 
 @import url('../rhm-framework/style.css');
 
-
-/* =============================================================================
-   Fonts
-   ========================================================================== */
-
-@font-face {
-    font-family: 'Colaborate';
-    src: url('fonts/ColabThi-webfont.eot');
-    src: url('fonts/ColabThi-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/ColabThi-webfont.woff') format('woff'),
-         url('fonts/ColabThi-webfont.ttf') format('truetype'),
-         url('fonts/ColabThi-webfont.svg#ColaborateThinRegular') format('svg');
-    font-weight: 100;
-}
-
-@font-face {
-    font-family: 'Colaborate';
-    src: url('fonts/ColabLig-webfont.eot');
-    src: url('fonts/ColabLig-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/ColabLig-webfont.woff') format('woff'),
-         url('fonts/ColabLig-webfont.ttf') format('truetype'),
-         url('fonts/ColabLig-webfont.svg#ColaborateLightRegular') format('svg');
-    font-weight: 200;
-}
-
-@font-face {
-    font-family: 'Colaborate';
-    src: url('fonts/ColabReg-webfont.eot');
-    src: url('fonts/ColabReg-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/ColabReg-webfont.woff') format('woff'),
-         url('fonts/ColabReg-webfont.ttf') format('truetype'),
-         url('fonts/ColabReg-webfont.svg#ColaborateRegular') format('svg');
-    font-weight: 400;
-}
-
-@font-face {
-    font-family: 'Colaborate';
-    src: url('fonts/ColabMed-webfont.eot');
-    src: url('fonts/ColabMed-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/ColabMed-webfont.woff') format('woff'),
-         url('fonts/ColabMed-webfont.ttf') format('truetype'),
-         url('fonts/ColabMed-webfont.svg#ColaborateMediumRegular') format('svg');
-    font-weight: 700;
-}
-
-@font-face {
-    font-family: 'Colaborate';
-    src: url('fonts/ColabBol-webfont.eot');
-    src: url('fonts/ColabBol-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/ColabBol-webfont.woff') format('woff'),
-         url('fonts/ColabBol-webfont.ttf') format('truetype'),
-         url('fonts/ColabBol-webfont.svg#ColaborateBoldRegular') format('svg');
-    font-weight: 900;
-}
-
-
 /* =============================================================================
    Base
    ========================================================================== */
 
 html {
 	height: 100%;
-	font-family: 'Colaborate', 'Helvetica';
+	font-family: 'Helvetica Neue', 'Helvetica', 'Arial';
 	background: #101010 url('img/bg-space.jpg') no-repeat right bottom fixed;
 }
 
@@ -124,8 +68,16 @@ a.external:after {
 }
 
 #tamucc-logo img,
-#gomexsi-logo img {
+#gomexsi-logo img,
+#gomexsi-logo-2 img {
 	display: block;
+}
+
+#gomexsi-logo-2 img {
+	position: absolute;
+	right: 185px;
+	width: 125px;
+	height: 100px;
 }
 
 
@@ -171,7 +123,7 @@ a.external:after {
 }
 
 #content > .mid-layer > .container {
-	padding: 40px 70px 40px 90px;
+	padding: 40px 70px/* 40px 90px*/;
 	background: #e6e6e6;
 }
 
@@ -219,10 +171,10 @@ body.search #content article.page {
 
 .entry-content,
 .entry-footer {
-	margin-left: 20px;
+/*	margin-left: 20px;
 	padding-left: 30px;
 	border-left: 20px #dcdcdc solid;
-}
+*/}
 
 .entry-content {
 	padding-bottom: 1em;
@@ -253,7 +205,7 @@ body.search #content article.page {
 .entry-content .alignleft,
 .entry-content embed,
 .entry-content .video-js {
-	margin-left: -100px;
+	/*margin-left: -100px;*/
 }
 
 #content .video-js {
@@ -298,7 +250,7 @@ table thead {
 
 .dataTables_wrapper {
 	width: 640px;
-	margin-left: -100px !important;
+	/*margin-left: -100px !important;*/
 	background: #e6e6e6;
 }
 
@@ -313,7 +265,8 @@ table thead {
 /* Stats shortcode */
 
 .stats {
-	margin: 15px 0 15px -100px;
+	/*margin: 15px 0 15px -100px;*/
+	margin: 15px 0;
 	padding: 5px;
 	box-shadow: 0 4px 4px rgba(0,0,0,.1);
 	background: #808080;
@@ -689,6 +642,10 @@ hr.section-break {
 	font-weight: 400;
 }
 
+.view-option:first-child {
+	margin-right: 0;
+}
+
 /* Results Subject Title */
 
 .query-results h2.subject-name {
@@ -834,7 +791,7 @@ hr.section-break {
 .query-results .instance-details .date {
 	float: left;
 	padding: 8px 0;
-	width: 169px;
+	width: 189px;
 	border-right: 1px #bfbfbf solid;
 	border-bottom: 1px #bfbfbf solid;
 }
@@ -842,7 +799,7 @@ hr.section-break {
 .query-results .instance-details .location {
 	float: left;
 	padding: 8px 0 8px 10px;
-	width: 418px;
+	width: 398px;
 	border-bottom: 1px #bfbfbf solid;
 }
 
@@ -1054,7 +1011,7 @@ a.ref-tag-link {
 	display: inline-block;
 	position: relative;
 	margin: 15px;
-	padding: 23px 10px 17px;
+	padding: 23px 10px 23px;
 	width: 160px;
 	font-size: 13px;
 	background: #fff;
@@ -1062,6 +1019,7 @@ a.ref-tag-link {
 	box-shadow: 0 10px 20px rgba(0,0,0,.25);
 	text-shadow: 1px 1px 0 rgba(255,255,255,.5);
 	font-weight: 400;
+	line-height: 1;
 	z-index: 1;
 	cursor: pointer;
 
@@ -1080,6 +1038,16 @@ a.ref-tag-link {
 	text-transform: uppercase;
 }
 
+.ex-species .ex-link {
+	display: block;
+	position: absolute;
+	bottom: 7px;
+	left: 50%;
+	margin-left: -90px;
+	width: 100%;
+	font-size: 12px;
+}
+
 .ex-pred {
 	border: 2px #990014 solid;
 	background: #f2b5bd; /* Old browsers */
@@ -1095,6 +1063,10 @@ a.ref-tag-link {
 }
 
 .ex-pred .ex-label {
+	color: #990014;
+}
+
+.ex-pred .ex-link {
 	color: #990014;
 }
 
@@ -1130,6 +1102,10 @@ a.ref-tag-link {
 }
 
 .ex-prey .ex-label {
+	color: #2e9900;
+}
+
+.ex-prey {
 	color: #2e9900;
 }
 
@@ -1866,7 +1842,7 @@ ul.menu li:hover > ul {
   color: red;
   text-indent: 60px;
   color: #007abf;
-  font-family: 'Colaborate', 'Helvetica';
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial';
   
   font-size: 42px;
   font-weight: 700;
@@ -1877,7 +1853,7 @@ ul.menu li:hover > ul {
   color: blue;
   text-indent: 50px;
   color: #007abf;
-  font-family: 'Colaborate', 'Helvetica';
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial';
   
   font-size: 42px;
   font-weight: 700;
@@ -1887,7 +1863,7 @@ ul.menu li:hover > ul {
 #updateNum3 {
   color: green;
   color: #007abf;
-  font-family: 'Colaborate', 'Helvetica';
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial';
 
   font-size: 42px;
   font-weight: 700;
@@ -1919,20 +1895,20 @@ ul.menu li:hover > ul {
 }
 
 #row1 {
-  font-family: 'Colaborate', 'Helvetica';
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial';
   padding-left: 10px;
   font-size: 15px;
   color: #007abf;
 }
 #row2 {
-  font-family: 'Colaborate', 'Helvetica';
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial';
   padding-left: 13px;
   font-size: 15px;
   color: #007abf;
 }
 
 #row3 {
-  font-family: 'Colaborate', 'Helvetica';
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial';
   padding-left: 40px;
   font-size: 15px;
   color: #007abf;
@@ -2020,7 +1996,7 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
   margin: 0;
   overflow: visible;
   padding: .5em 1em;
-  font-family: 'Colaborate', 'Helvetica';
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial';
 }
 
 .pure-table td:first-child,

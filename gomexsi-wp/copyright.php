@@ -1,1 +1,1 @@
-<div class="copyright">&copy;<?php echo date('Y'); ?> Center for Coastal Studies. All Rights Reserved. <a href="http://www.tamucc.edu/about/privacy.html" target="_blank">TAMUCC Privacy Policy</a>.</div>
+<div class="copyright">&copy;<?php echo date('Y'); ?> Center for Coastal Studies. <?php _qe('All Rights Reserved. <a href="http://www.tamucc.edu/about/privacy.html" target="_blank">TAMUCC Privacy Policy</a>.', 'Todos los Derechos Reservados. <a href="http://www.tamucc.edu/about/privacy.html" target="_blank">Política de Privacidad</a> TAMUCC.'); ?></div>

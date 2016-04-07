@@ -39,6 +39,7 @@
 			<div class="container">
 				<a id="tamucc-logo" href="http://www.tamucc.edu/" target="_blank"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/tamucc-logo.png" /></a>
 				<a id="gomexsi-logo" href="<?php echo home_url(); ?>/"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/gomexsi-logo.png" /></a>
+				<a id="gomexsi-logo-2" href="<?php echo home_url(); ?>/"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/gomexsi-logo-2.png" /></a>
 			</div>
 		</header>
 		<section id="content-wrapper">
