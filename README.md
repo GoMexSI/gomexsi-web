@@ -30,4 +30,4 @@ OK (23 tests, 85 assertions)
 ## Backup
 A wordpress site consists of two parts: (1) a mysql database and (2) a bunch of files. A backup needs to capture a dump of the mysql database and create an archive of the files. With this dump and archive, the wordpress site can be restore  on the same server or migrated to a new server. Please visit official wordpress documentation for details on the procedure.
 
-An example backup script (linux) can be found at [./backup.sh](../blob/master/backup.sh).
+An example backup script (linux) can be found at [./backup.sh](../master/backup.sh).
