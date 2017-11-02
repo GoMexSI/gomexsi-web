@@ -158,7 +158,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 		foreach ($somePredValues as $pred) {
 			$containsValue = (strpos($actualResponse, $pred) !== FALSE) ? true : false;
-			$this->assertTrue($containsValue, $pred . ' is missing from the observed pred list (from the REST service), for the predator Callinectes sapidus');
+			$this->assertTrue($containsValue, $pred . ' is missing from the observed pred list (from the REST service), for the predator Ariopsis felis');
 		}
 	}
 
