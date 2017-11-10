@@ -224,7 +224,7 @@ function select_if($value_to_check, $check_against){
 // Handle ref_tag click.
 function rhm_ref_tag(){
 	// REST URL, including the reference tag text.
-	$url = 'http://api.globalbioticinteractions.org/findExternalUrlForStudy/' . rawurlencode($_POST['ref_tag']);
+	$url = 'https://api.globalbioticinteractions.org/findExternalUrlForStudy/' . rawurlencode($_POST['ref_tag']);
 	
 	// Initialize cURL request.
 	$curl = curl_init($url);
@@ -325,7 +325,7 @@ function rhm_stats_request(){
 	curl_close ($curl_visitors);								// Close.
 */
 	
-	$data_stats_url = 'http://api.globalbioticinteractions.org/reports/sources?type=json&source=http://gomexsi.tamucc.edu';
+	$data_stats_url = 'https://api.globalbioticinteractions.org/reports/sources?type=json&source=http://gomexsi.tamucc.edu';
 	$curl_data = curl_init($data_stats_url);					// Initialize cURL request.
 	curl_setopt($curl_data, CURLOPT_FAILONERROR, true);			// Fail if the other server gives an error.
 	curl_setopt($curl_data, CURLOPT_RETURNTRANSFER, true);		// Return result as string instead of parsing.

@@ -8,7 +8,7 @@ class UnsupportedInteractionTypeException extends Exception {}
 
 class TrophicServiceREST implements TrophicService 
 {
-    const URL_PREFIX = 'http://api.globalbioticinteractions.org/';
+    const URL_PREFIX = 'https://api.globalbioticinteractions.org/';
 
     private $finalURL;
 

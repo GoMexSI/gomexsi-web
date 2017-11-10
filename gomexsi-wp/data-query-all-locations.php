@@ -9,7 +9,7 @@
 header('Content-Type: application/json; charset=utf-8');
 
 // Target URL, which will give the results.
-$url = 'http://api.globalbioticinteractions.org/locations?accordingTo=gomexsi';
+$url = 'https://api.globalbioticinteractions.org/locations?accordingTo=gomexsi';
 
 // Initialize cURL request.
 $curl = curl_init($url);
