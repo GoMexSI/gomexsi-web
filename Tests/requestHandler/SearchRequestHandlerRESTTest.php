@@ -33,7 +33,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 	public function testGetTrophicServiceRESTFindPreyForPredator()
 	{
 		$trophicResultString = array();
-		$expectedPreyNames = array("Goniadella", "Goniada maculata", "Teleostei", "Crustacea", "Animalia", "Rhachotropis", "Paraonidae", "Phyllodoce arenae", "Opheliidae", "Ophiodromus", "Spionidae", "Amphipoda", "Nematoda", "Lumbrineridae", "Onuphidae", "Anchialina typica", "Nemertea", "Bathymedon", "Sediment", "Xanthoidea");
+		$expectedPreyNames = array("Goniadella", "Goniada maculata", "Teleostei", "Crustacea", "Animalia", "Rhachotropis", "Paraonidae", "Phyllodoce arenae", "Opheliidae", "Ophiodromus", "Spionidae", "Amphipoda", "Nematoda", "Lumbrineridae", "Onuphidae", "Anchialina typica", "Nemertea", "Bathymedon", "Sediment (Silt)", "Xanthoidea");
 
 		$this->postRequest["subjectName"] = "Zalieutes mcgintyi";
 		$this->postRequest["findPrey"] = "on";
