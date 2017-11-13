@@ -24,7 +24,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 	public function testRequestHandlerDriver()
 	{
-		$expected = '[{"scientificName":"Zalieutes mcgintyi","preyInstances":[{"prey":["Goniadella","Goniada maculata","Teleostei","Crustacea","Animalia","Rhachotropis","Paraonidae","Phyllodoce arenae","Opheliidae","Ophiodromus","Spionidae","Amphipoda","Nematoda","Lumbrineridae","Onuphidae","Anchialina typica","Nemertea","Bathymedon","Sediment","Xanthoidea"]}]}]';
+		$expected = '[{"scientificName":"Zalieutes mcgintyi","preyInstances":[{"prey":["Goniadella","Goniada maculata","Teleostei","Crustacea","Animalia","Rhachotropis","Paraonidae","Phyllodoce arenae","Opheliidae","Ophiodromus","Spionidae","Amphipoda","Nematoda","Lumbrineridae","Onuphidae","Anchialina typica","Nemertea","Bathymedon","Sediment (Silt)","Xanthoidea"]}]}]';
 		$actual = $this->handler->requestHandlerDriver($this->postRequest);
 
 		$this->assertSimilarResponse($actual, $expected, "preyInstances", "prey");
@@ -72,7 +72,7 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 		$this->postRequest["findPrey"] = "on";
 		unset($this->postRequest["findPredators"]);
 
-		$expected = '[{"scientificName":"Zalieutes mcgintyi","preyInstances":[{"prey":["Goniadella","Goniada maculata","Teleostei","Crustacea","Animalia","Rhachotropis","Paraonidae","Phyllodoce arenae","Opheliidae","Ophiodromus","Spionidae","Amphipoda","Nematoda","Lumbrineridae","Onuphidae","Anchialina typica","Nemertea","Bathymedon","Sediment","Xanthoidea"]}]}]';
+		$expected = '[{"scientificName":"Zalieutes mcgintyi","preyInstances":[{"prey":["Goniadella","Goniada maculata","Teleostei","Crustacea","Animalia","Rhachotropis","Paraonidae","Phyllodoce arenae","Opheliidae","Ophiodromus","Spionidae","Amphipoda","Nematoda","Lumbrineridae","Onuphidae","Anchialina typica","Nemertea","Bathymedon","Sediment (Silt)","Xanthoidea"]}]}]';
 	
 		$actual = $this->handler->requestHandlerDriver($this->postRequest);
 
