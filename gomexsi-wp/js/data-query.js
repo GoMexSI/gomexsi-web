@@ -822,22 +822,23 @@ jQuery(document).ready(function ($) {
 
                     if (typeof externalUrls !== 'undefined') {
                         var externalUrlToListItem = function (externalUrl) {
-                            var externalSource = '';
+                            var mapping = {
+                                'eol.org': _q('Encyclopedia of Life', 'Enciclopedia de la Vida')
+                                , 'fishbase.org': 'Fishbase'
+                                , 'sealifebase.org' : 'SeaLifeBase'
+                                , 'gulfbase.org' : 'GulfBase'
+                                , 'gbif.org' : 'GBIF'
+                                , 'inaturalist.org' : 'iNaturalist'
+                                , 'itis.org' : 'ITIS'
+                                , 'marine.csiro.au' : 'IRMNG'
+                                , 'opentreeoflife.org' : 'Open Tree of Life'
+                                , 'marinespecies.org' : 'WoRMS'};
 
-                            if (externalUrl.indexOf('eol.org') !== -1) {
-                                externalSource = _q('Encyclopedia of Life', 'Enciclopedia de la Vida');
-                            } else if (externalUrl.indexOf('fishbase.org') !== -1) {
-                                externalSource = 'FishBase';
-                            } else if (externalUrl.indexOf('sealifebase.org') !== -1) {
-                                externalSource = 'SeaLifeBase';
-                            } else if (externalUrl.indexOf('gulfbase.org') !== -1) {
-                                externalSource = 'GulfBase';
-                            } else {
-                                externalSource = 'other';
-                            }
+                            var keySelected = Object.keys(mapping).filter(function(key) { return externalUrl.indexOf(key) !== -1; });
+                            var externalSource = keySelected.length === 0 ? 'link' : mapping[keySelected];
 
                             return '<li><a href="' + externalUrl + '" class="external" target="_blank">' + externalSource + '</a></li>';
-                        }
+                        };
                         $(linkList).append(externalUrls.map(externalUrlToListItem));
                     }
                 },
