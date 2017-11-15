@@ -78,7 +78,7 @@ class TrophicServiceMock implements TrophicService
     }
     public function findExternalTaxonURL($taxonName)
     {
-        return "http://eol.org/pages/327955";
+        return array("http://eol.org/pages/223038", "http://fishbase.org/summary/947");
     }
 
 }

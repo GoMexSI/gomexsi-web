@@ -818,23 +818,32 @@ jQuery(document).ready(function($) {
 				
 				// Success callback function.
 				function(data, textStatus, jqXHR){
-					var externalUrl = data['URL'];
+					var externalUrls = data['URL'];
 					
-					if(typeof externalUrl !== 'undefined'){
-						var externalSource = '';
+					if(typeof externalUrls !== 'undefined'){
+                                                var externalUrlToListItem = function(externalUrl) {
+						    var externalSource = '';
 						
-						if(externalUrl.indexOf('eol.org') !== -1){
+						    if(externalUrl.indexOf('eol.org') !== -1){
 							externalSource = _q('Encyclopedia of Life', 'Enciclopedia de la Vida');
-						} else if(externalUrl.indexOf('fishbase.org') !== -1){
+						    } else if(externalUrl.indexOf('fishbase.org') !== -1){
 							externalSource = 'FishBase';
-						} else if(externalUrl.indexOf('gulfbase.org') !== -1){
+						    } else if(externalUrl.indexOf('sealifebase.org' !== -1) {
+                                                        externalSource = 'SeaLifeBase';
+                                                    } else if(externalUrl.indexOf('gulfbase.org') !== -1){
 							externalSource = 'GulfBase';
-						} log(externalSource);
-						
-						if(externalSource !== ''){
-							$(linkList).append('<li><a href="' + externalUrl + '" class="external" target="_blank">' + externalSource + '</a></li>');
-						}
-					}
+						    } else {
+                                                        externalSource = 'other';
+                                                    }
+					
+                                                    var listItem = '';
+						    if(externalSource !== ''){
+							listItem '<li><a href="' + externalUrl + '" class="external" target="_blank">' + externalSource + '</a></li>';
+	        				    } 
+                                                    return listItem;
+                                                }
+                                                $(linkList).append(externalUrls.map(externalUrlToListItem));
+					    }
 				},
 				
 				// Expect JSON data.

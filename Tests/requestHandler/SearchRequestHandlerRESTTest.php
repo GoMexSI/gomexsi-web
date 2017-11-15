@@ -206,12 +206,12 @@ class SearchRequestHandlerRESTTest extends PHPUnit_Framework_TestCase
 
 	public function testFindExternalTaxonURLREST()
 	{
-		$post = array("serviceType" => "rest", "deepLinks" => "Homo sapiens");
+		$post = array("serviceType" => "rest", "deepLinks" => "Ariopsis felis");
 		$this->handler->parsePOST($post);
 
 		$this->handler->getTrophicService();
 		$jsonObject = $this->handler->createMimeResponse();
-		$this->assertStringStartsWith('{"scientificName":"Homo sapiens","URL":"http', $jsonObject);
+		$this->assertStringStartsWith('{"scientificName":"Ariopsis felis","URL":["http', $jsonObject);
 	}
 	public function testRawDataDowloadCSV()
 	{

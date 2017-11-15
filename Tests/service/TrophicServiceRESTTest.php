@@ -33,8 +33,8 @@ class TrophicServiceRESTTest extends PHPUnit_Framework_TestCase
     public function testFindExternalTaxonURL()
     {
         $trophicService = new TrophicServiceREST();
-        $taxonURL = $trophicService->findExternalTaxonURL('Homo sapiens');
-        $this->assertStringStartsWith('http', $taxonURL);
+        $taxonURL = $trophicService->findExternalTaxonURL('Ariopsis felis');
+        $this->assertContains('http://fishbase.org/summary/947', $taxonURL);
     }
     public function testBuildInteractionFilterURL()
     {

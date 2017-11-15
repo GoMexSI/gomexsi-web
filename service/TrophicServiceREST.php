@@ -58,7 +58,7 @@ class TrophicServiceREST implements TrophicService
 
     public function findExternalTaxonURL($taxonName)
     {
-        return $this->query('findExternalUrlForTaxon', $taxonName, null);
+        return $this->query('taxonLinks', $taxonName, null);
     }
     public function findSupportedInteractions()
     {
@@ -138,8 +138,8 @@ class TrophicServiceREST implements TrophicService
             return $this->observationalSearchContainerPopulator($response);
         } elseif ((strpos($operation, 'Observations') !== FALSE) && (strpos($operation, 'csv') !== FALSE)) { # Observational query, with non JSON response(csv)
             return $undecodedResponse; // used for anything returned from the rest non JSON encoded
-        } elseif ($method == 'findExternalUrlForTaxon') {  # External URL lookup query
-            return $response->{'url'};
+        } elseif ($method == 'taxonLinks') {  # External URL lookup query
+            return $arrayResponse;
         } elseif (isset($operation)) { # exhaustive list return
             $columns = $response->{'columns'};
             $i = 0;
