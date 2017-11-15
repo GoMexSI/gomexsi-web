@@ -829,7 +829,8 @@ jQuery(document).ready(function ($) {
                                 , 'gulfbase.org' : 'GulfBase'
                                 , 'gbif.org' : 'GBIF'
                                 , 'inaturalist.org' : 'iNaturalist'
-                                , 'itis.org' : 'ITIS'
+                                , 'itis.gov' : 'ITIS'
+                                , 'ncbi.nlm.nih.gov' : 'NCBI'
                                 , 'marine.csiro.au' : 'IRMNG'
                                 , 'opentreeoflife.org' : 'Open Tree of Life'
                                 , 'marinespecies.org' : 'WoRMS'};
