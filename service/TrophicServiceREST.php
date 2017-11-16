@@ -71,15 +71,10 @@ class TrophicServiceREST implements TrophicService
             if(!isset($locationConstraints['nw_lat']) || !isset($locationConstraints['nw_lng']) || !isset($locationConstraints['se_lat']) || !isset($locationConstraints['se_lng'])) {
                 throw new NonValidLocationParameterException('Missing parameter(s) for location constraints');
             }
-            $constraints['nw_lat'] =  $locationConstraints['nw_lat'];
-            $constraints['nw_lng'] =  $locationConstraints['nw_lng'];
-            $constraints['se_lat'] =  $locationConstraints['se_lat'];
-            $constraints['se_lng'] =  $locationConstraints['se_lng'];
+            $constraints['bbox'] =  $locationConstraints['nw_lng'] . ',' . $locationConstraints['se_lat'] . ',' . $locationConstraints['se_lng'] . ',' . $locationConstraints['nw_lat'];
         }else { //else set default polygon parameters
-            $constraints['nw_lat'] =  30.28;    # currently these four represent a rectangular approximation of the gulf
-            $constraints['nw_lng'] =  -97.89;   # These can be changed for a better fit, will be updated to a polygon later down the line  
-            $constraints['se_lat'] =  18.04;
-            $constraints['se_lng'] =  -80.61;
+            $constraints['bbox'] =  '-97.89,18.04,-80.61,30.28';    # currently these four represent a rectangular approximation of the gulf
+            # These can be changed for a better fit, will be updated to a polygon later down the line
         }
     }
     // each call will pass in the relevant filter one at a time, must do it this way because each findObserved* is treated as a unique rest call and needs a unique URL
@@ -99,8 +94,8 @@ class TrophicServiceREST implements TrophicService
         }
         if ($constraints['includeObservations']) {
             $operation = $operation . '?includeObservations=true';
-            if(isset($constraints['nw_lat'])) {
-                $operation = $operation . '&nw_lat=' . $constraints['nw_lat'] . '&nw_lng=' . $constraints['nw_lng'] . '&se_lat=' . $constraints['se_lat'] . '&se_lng=' . $constraints['se_lng'];
+            if(isset($constraints['bbox'])) {
+                $operation = $operation . '&bbox=' . rawurlencode($constraints['bbox']);
             }
         }
         if(!empty($constraints['mime'])) {
