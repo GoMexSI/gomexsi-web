@@ -15,7 +15,6 @@
 						<h1 class="page-title"><?php the_title(); ?></h1>
 						<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . 'Pages:', 'after' => '</p></nav>' )); ?>
 					</header>
-					<?php if(is_user_logged_in()) : ?>
 						<p><strong><?php _qe('Note: Some features are not yet finalized. If you run into any issues, <a href="/feedback/">please give us feedback</a>.', 'Nota: algunas aplicaciones están aun en construcción. Si se te presenta algún problema, <a href="/feedback/">por favor notifícanos</a>.'); ?></strong></p>
 						<form action="" method="post" id="data-query" class="clearfix">
 							<div class="query-inputs">
@@ -98,14 +97,6 @@
 						</div>
 						
 						<div id="results-area"></div>
-						
-					<?php else : ?>
-						<hr style="margin: 1em 0 2em;" />
-
-						<h3><?php _qe('You must be logged in to query data.', 'Debes ingresar para consultar las bases de datos.'); ?></h3>
-
-						<p><?php _qe('Existing users can <a href="#" class="login-link">log in</a> to continue. New users can <a href="/registration/" class="registration-link">register now</a>&mdash;it\'s fast, easy, and free!', 'Usarios registrados pueden <a href="#" class="login-link">ingresar</a> para continuar. Nuevos usarios pueden <a href="/registration/" class="registration-link">registrarse ahora</a> &ndash; es rápido, fácil, y gratis.'); ?></p>
-					<?php endif; ?>
 				</article>
 			<?php endwhile; ?>
 			<?php get_template_part('copyright'); ?>
