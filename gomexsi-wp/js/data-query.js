@@ -264,7 +264,7 @@ jQuery(document).ready(function ($) {
             if (data) {
                 try {
                     this.subjects = JSON && JSON.parse(data) || $.parseJSON(data);
-                    //log('JSON Raw Results Object:'); log(data);
+                    log('JSON Raw Results Object:'); log(data);
                     //log('JSON Parsed Results Object:'); log(this.subjects);
                     //log('Processed Data Object:'); log(this);
                 }
