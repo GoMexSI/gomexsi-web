@@ -256,7 +256,7 @@ function rhm_ref_tag(){
 // Enque Google Maps API on template pages that need it.
 function rhm_enqueue_google_maps_api() {
 	if(is_page_template('data-query-taxonomic.php') || is_page_template('data-query-spatial.php') || is_page_template('data-query-universal.php')) {
-		wp_enqueue_script('rhm_google_maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCM9HegHcXZLQVXyODY7MdtXZ7BtvO_fyM&sensor=false&libraries=geometry');
+		wp_enqueue_script('rhm_google_maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCM9HegHcXZLQVXyODY7MdtXZ7BtvO_fyM&libraries=geometry');
 		wp_enqueue_script('rhm_marker_clusterer', get_stylesheet_directory_uri() . '/js/marker-clusterer/src/markerclusterer_compiled.js');
 	}
 }
