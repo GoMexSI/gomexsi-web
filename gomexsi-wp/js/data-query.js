@@ -377,7 +377,7 @@ jQuery(document).ready(function ($) {
             $.each(subjects, function (i) {
                 var subject = subjects[i];
 
-                subject.baseID = safeName(subject.scientificName);
+                subject.baseID = nameSafe(subject.scientificName);
                 $('#results-area').append('<div id="' + subject.baseID + '" class="query-results" />');
                 var subjectTitleID = subject.baseID + '-title';
                 $('#' + subject.baseID).append('<h2 id="' + subjectTitleID + '" class="subject-name">' + nameTip(subject.scientificName) + ' <span class="common-name"></span></h2>');
