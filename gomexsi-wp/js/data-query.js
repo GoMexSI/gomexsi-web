@@ -384,7 +384,7 @@ jQuery(document).ready(function ($) {
 
                 $.get( 'https://api.globalbioticinteractions.org/imagesForName/' + encodeURI(subject.scientificName), function(data) {
                     if (data.scientificName) {
-                        $( '#' + subjectTitleID).html( nameTip(data.scientificName) + '<span class="common-name">' + data.commonName + '</span>' );
+                        $( '#' + subjectTitleID).html( nameTip(data.scientificName) + ' <span class="common-name">' + data.commonName + '</span>' );
                     }
                 });
 
