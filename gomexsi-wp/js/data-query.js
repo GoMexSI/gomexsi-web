@@ -382,6 +382,12 @@ jQuery(document).ready(function ($) {
                 var subjectTitleID = subject.baseID + '-title';
                 $('#' + subject.baseID).append('<h2 id="' + subjectTitleID + '" class="subject-name">' + nameTip(subject.scientificName) + ' <span class="common-name"></span></h2>');
 
+                $.get( 'https://api.globalbioticinteractions.org/imagesForName/' + encodeURI(subject.scientificName), function(data) {
+                    if (data.scientificName) {
+                        $( '#' + subjectTitleID).html( nameTip(data.scientificName) + '<span class="common-name">' + data.commonName + '</span>' );
+                    }
+                });
+
                 if ('commonNames' in subject) {
                     var commonNames = subject.commonNames;
                     var commonNamesText = '&nbsp;&ndash;&nbsp; ';
@@ -793,10 +799,9 @@ jQuery(document).ready(function ($) {
             var wrapper = $(this).parent('.name-tip-wrapper');
             $(wrapper).append('<div class="name-tip-box"><div class="container"><ul></ul></div><div class="bridge"></div></div>');
             var linkList = $(wrapper).find('ul');
-            if (!modeIs('exploration')) {
-                $(linkList).append('<li><a href="/query-database/exploration/?subjectName=' + encodeURI(scientificName) + '&findPrey=on&findPredators=on&serviceType=rest&action=rhm_data_query">' + _q('View in Explorer Mode', 'Ver en Modo de Exploración') + '</a></li>');
-            }
             if (modeIs('exploration')) {
+                $(linkList).append('<li><a href="/query-database/exploration/?subjectName=' + encodeURI(scientificName) + '&findPrey=on&findPredators=on&serviceType=rest&action=rhm_data_query">' + _q('View in Explorer Mode', 'Ver en Modo de Exploración') + '</a></li>');
+            } else {
                 $(linkList).append('<li><a href="/query-database/taxonomic/?subjectName=' + encodeURI(scientificName) + '&findPrey=on&findPredators=on&serviceType=rest&action=rhm_data_query">' + _q('Taxonomic Query', 'Consulta Taxonómica') + '</a></li>');
             }
 
