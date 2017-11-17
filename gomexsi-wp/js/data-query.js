@@ -37,6 +37,10 @@ jQuery(document).ready(function ($) {
         return false;
     }
 
+    function nameSafe(name) {
+        return name.replace(/[^a-zA-Z0-9-_.]/g, '_').toLowerCase();
+    }
+
     // Start by checking to see if we're on the data query page template.
     if (modeIs('query')) {
         var subjectNameInput = $('form#data-query input[name="subjectName"]');
@@ -47,11 +51,6 @@ jQuery(document).ready(function ($) {
 
         function nameTip(scientificName) {
             return '<div class="name-tip-wrapper"><a href="#" class="name-tip-link">' + scientificName + '</a></div>';
-        }
-
-        function nameSafe(name) {
-            var safeName = name.replace(' ', '_').toLowerCase();
-            return safeName;
         }
 
         function formatType(type, plural, capitalized) {
@@ -378,7 +377,7 @@ jQuery(document).ready(function ($) {
             $.each(subjects, function (i) {
                 var subject = subjects[i];
 
-                subject.baseID = subject.scientificName.replace(' ', '-').toLowerCase();
+                subject.baseID = safeName(subject.scientificName);
                 $('#results-area').append('<div id="' + subject.baseID + '" class="query-results" />');
                 var subjectTitleID = subject.baseID + '-title';
                 $('#' + subject.baseID).append('<h2 id="' + subjectTitleID + '" class="subject-name">' + nameTip(subject.scientificName) + ' <span class="common-name"></span></h2>');
