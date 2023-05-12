@@ -2,13 +2,13 @@
 
  require_once 'requestHandler/RequestParser.php';
 
- class RequestParserTest extends PHPUnit_Framework_TestCase
+ class RequestParserTest extends PHPUnit\Framework\TestCase
  {
  	private $requestParse;
  	private $postRequest;
  	private $observationPostRequest;
 
- 	public function setUp()
+ 	protected function setUp(): void
  	{
  		$this->requestParse = new RequestParser();
  		$this->postRequest = array("serviceType" => "mock",

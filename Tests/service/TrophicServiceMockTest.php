@@ -1,6 +1,6 @@
 <?php
 
-class TrophicServiceMockTest extends PHPUnit_Framework_TestCase 
+class TrophicServiceMockTest extends PHPUnit\Framework\TestCase 
 {
     public function testFindPreyForPredatorMock() 
     {

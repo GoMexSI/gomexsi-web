@@ -2,7 +2,7 @@
 
 require_once 'service/TrophicServiceFactory.php';
 
-class TrophicServiceFactoryTest extends PHPUnit_Framework_TestCase 
+class TrophicServiceFactoryTest extends PHPUnit\Framework\TestCase 
 {
 
     public function testValidTypes() 

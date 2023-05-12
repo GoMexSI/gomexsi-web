@@ -2,14 +2,14 @@
 
 require_once 'requestHandler/SearchRequestHandler.php';
 
-class SearchRequestHandlerMockTest extends PHPUnit_Framework_TestCase
+class SearchRequestHandlerMockTest extends PHPUnit\Framework\TestCase
 {
 	private $handler;
 	private $postRequest;
 	private $observationPostRequest;
 	private $observationPostRequestPred;
 
-	public function setUp()
+	protected function setUp(): void
     {
     	$this->handler = new SearchRequestHandler();
     	$this->postRequest = array("serviceType" => "mock",
